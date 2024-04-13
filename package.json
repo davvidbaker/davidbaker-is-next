@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@flambe/logo": "^0.1.12",
+    "marked": "^12.0.1",
     "next": "14.2.1",
     "react": "^18",
     "react-dom": "^18",

@@ -1,7 +1,5 @@
 'use client'
 import React from 'react';
-// import Link from 'gatsby-link';
-// import Helmet from 'react-helmet';
 import styled from 'styled-components';
 import Head from 'next/head'
 import Link from 'next/link'
@@ -12,10 +10,6 @@ const Div = styled.div`
         font-weight: bold;
     }
 
-    a {
-        color: rgb(0, 102, 192);
-    }
-    
   main {
     margin: 0 auto;
     padding: 0 20px;
