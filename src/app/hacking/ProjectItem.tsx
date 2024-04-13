@@ -4,10 +4,6 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Image from 'next/image'
 
-/* ⚠️ rather haphazard to do this 🤷 */
-import FlambeLogo from '@flambe/logo';
-// import Router from 'next/router';
-
 import { ExternalLinks } from '../../components/ExternalLinks';
 import { Status } from '../../components/Status';
 
@@ -105,10 +101,10 @@ export const ProjectItem = ({
             <p className="tagline">{tagline}</p>
             {(name === 'flambé' || name === 'Udder Space') && (
                 <Teaser>
-                    {name === 'flambé' && <Image fill src="/images/flambe-wide.png"  style={{objectFit: "contain"}}
-                    alt="" />}
-                    {name === 'Udder Space' && <Image fill src="/images/ribeye.png"  style={{objectFit: "contain"}}
-                    alt="" />}
+                    {name === 'flambé' && <Image fill src="/images/flambe-wide.png" style={{ objectFit: "contain" }}
+                        alt="" />}
+                    {name === 'Udder Space' && <Image fill src="/images/ribeye.png" style={{ objectFit: "contain" }}
+                        alt="" />}
                 </Teaser>
             )}
             {description ? <Link href={`/${path}`}>Read more...</Link> : null}
