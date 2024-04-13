@@ -224,124 +224,130 @@ const Div = styled.div`
   }
 `;
 
-export const ProjectPage = ({
-    name = '[Name Here]',
-    status,
-    description,
-    year,
-    link,
-    linkToSource,
-    linkToTrello,
-    callToAction = 'Check it out',
-    videos,
-    images,
-    keywords,
-    teammates,
-    logo,
-    agency,
-}: Project) => (
-    <Div id="additional-info">
-        <div className="heading">
-            <div>
-                <h1 style={{ marginRight: '5px', transform: 'translateY(3px)' }}>
-                    {name} <span>{year && formatYears(year)}</span>
-                </h1>
-            </div>
-            <div
-                style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'flex-end',
-                }}
-            >
-                {status && <Status status={status} />}
+export const ProjectPage = (props: Project) => {
+    console.log('props', props)
 
-                <ExternalLinks
-                    {...{ link, linkToSource, linkToTrello, callToAction }}
-                />
-            </div>
-        </div>
+    const {
+        name = '[Name Here]',
+        status,
+        description,
+        year,
+        link,
+        linkToSource,
+        linkToTrello,
+        callToAction = 'Check it out',
+        videos,
+        images,
+        keywords,
+        teammates,
+        logo,
+        agency,
+    } = props
 
-        <section className="about-project">
-            <div className="description-and-gallery">
-                {description ? (
-                    <p className="description">
-                        {logo && <img className="logo" src={logo} alt={`${name} logo`} />}
-                        <span
-                            className="markdown"
-                            dangerouslySetInnerHTML={{ __html: marked(description) }}
-                        />
-                    </p>
-                ) : null}
+    return (
+        <Div id="additional-info" >
+            <div className="heading">
+                <div>
+                    <h1 style={{ marginRight: '5px', transform: 'translateY(3px)' }}>
+                        {name} <span>{year && formatYears(year)}</span>
+                    </h1>
+                </div>
+                <div
+                    style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'flex-end',
+                    }}
+                >
+                    {status && <Status status={status} />}
 
-                <div className="gallery">
-                    {images &&
-                        images.map(image => (
-                            <img
-                                key={image}
-                                src={`/${image.replace('-noShadow', '')}`}
-                                alt={image}
-                                style={
-                                    image.match(/-noShadow$/) ? { boxShadow: '0 0 white' } : undefined
-                                }
-                            />
-                        ))}
-                    {videos &&
-                        videos.map(video => (
-                            <video
-                                loop
-                                controls
-                                muted
-                                autoPlay
-                                src={video}
-                                key={video}
-                            />
-                        ))}
+                    <ExternalLinks
+                        {...{ link, linkToSource, linkToTrello, callToAction }}
+                    />
                 </div>
             </div>
-            <div className="bonus-blocks">
-                {keywords && (
-                    <div className="bonus-block keywords-container">
-                        <h3>Buzz Words 🐝</h3>
-                        <ul className="keywords flex-list">
-                            {keywords.map(word => (
-                                <li key={word}>
-                                    <span>{word.replace(/\s/, ' ')}</span>
-                                </li>
+
+            <section className="about-project">
+                <div className="description-and-gallery">
+                    {description ? (
+                        <p className="description">
+                            {logo && <img className="logo" src={logo} alt={`${name} logo`} />}
+                            <span
+                                className="markdown"
+                                dangerouslySetInnerHTML={{ __html: marked(description) }}
+                            />
+                        </p>
+                    ) : null}
+
+                    <div className="gallery">
+                        {images &&
+                            images.map(image => (
+                                <img
+                                    key={image}
+                                    src={`/${image.replace('-noShadow', '')}`}
+                                    alt={image}
+                                    style={
+                                        image.match(/-noShadow$/) ? { boxShadow: '0 0 white' } : undefined
+                                    }
+                                />
                             ))}
-                        </ul>
+                        {videos &&
+                            videos.map(video => (
+                                <video
+                                    loop
+                                    controls
+                                    muted
+                                    autoPlay
+                                    src={video}
+                                    key={video}
+                                />
+                            ))}
                     </div>
-                )}
-                {teammates && (
-                    <div className="bonus-block teammates-container">
-                        <h3>Teammates 🍻</h3>
-                        <ul className="teammates flex-list">
-                            {teammates.map(teammate => (
-                                <li key={teammate.name}>
-                                    <a href={teammate.link}>
-                                        <span>{teammate.name.replace(/\s/, ' ')}</span>
+                </div>
+                <div className="bonus-blocks">
+                    {keywords && (
+                        <div className="bonus-block keywords-container">
+                            <h3>Buzz Words 🐝</h3>
+                            <ul className="keywords flex-list">
+                                {keywords.map(word => (
+                                    <li key={word}>
+                                        <span>{word.replace(/\s/, ' ')}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
+                    {teammates && (
+                        <div className="bonus-block teammates-container">
+                            <h3>Teammates 🍻</h3>
+                            <ul className="teammates flex-list">
+                                {teammates.map(teammate => (
+                                    <li key={teammate.name}>
+                                        <a href={teammate.link}>
+                                            <span>{teammate.name.replace(/\s/, ' ')}</span>
+                                        </a>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
+                    {agency && (
+                        <div className="bonus-block agency-container">
+                            <h3>Agency 🏢</h3>
+                            <ul className="agency flex-list">
+                                <li>
+                                    <a href={agency.link}>
+                                        <span>{agency.name.replace(/\s/, ' ')}</span>
                                     </a>
                                 </li>
-                            ))}
-                        </ul>
-                    </div>
-                )}
-                {agency && (
-                    <div className="bonus-block agency-container">
-                        <h3>Agency 🏢</h3>
-                        <ul className="agency flex-list">
-                            <li>
-                                <a href={agency.link}>
-                                    <span>{agency.name.replace(/\s/, ' ')}</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                )}
-            </div>
-        </section>
-    </Div>
-);
+                            </ul>
+                        </div>
+                    )}
+                </div>
+            </section>
+        </Div >
+    )
+}
 ProjectPage.propTypes = {
     name: PropTypes.string.isRequired,
     tagline: PropTypes.string,
