@@ -6,6 +6,29 @@ import projectsJson from './projects.json';
 import Head from 'next/head';
 import { ProjectItem } from './ProjectItem';
 
+
+export interface Project {
+    name: string,
+    status?: string | string[],
+    description?: string,
+    year: number[],
+    link?: string,
+    linkToTrello?: string,
+    linkToSource?: string,
+    callToAction?: string,
+    videos?: string[]
+    keywords?: string[],
+    images?: string[]
+    teammates?: { name: string, link: string }[]
+    logo?: string,
+    agency?: { name: string, link: string }
+    tagline?: string
+    highlight?: boolean
+    path: string,
+    gridRow?: string,
+    gridColumn?: string
+}
+
 const Main = styled.main`
   margin: 2.5vw;
 
@@ -55,8 +78,7 @@ const UL = styled.ul`
 `;
 
 
-const compareYears = (a, b) => {
-    console.log('❤️‍🔥 a, b', a, b);
+const compareYears = (a: Project, b: Project) => {
 
     if (Math.max(...a.year) > Math.max(...b.year)) {
         return -1;
@@ -79,7 +101,7 @@ const compareYears = (a, b) => {
     return 0;
 };
 
-const ProjectList = ({ projects }) => console.log('here', projects) || (
+const ProjectList = ({ projects }: { projects: Project[] }) => (
     // <ul className={showingAdditionalInfo ? 'hidden' : 'visible'}>
     <UL>
         {projects.sort(compareYears).map(project => {
@@ -107,7 +129,7 @@ const ProjectList = ({ projects }) => console.log('here', projects) || (
 );
 
 
-const ProjectsIndex = ({ data, location }) => {
+const ProjectsIndex = () => {
 
     console.log(projectsJson)
     return <div>

@@ -22,15 +22,15 @@ const Wrapper = styled.div`
     border-radius: 0 2px 2px 0;
   }
 `;
-export const Status = ({ status, focused }: { status: string, focused: boolean }) => (
-    <Wrapper style={{ opacity: focused ? 1 : 0.3 }}>
-        <span className="status-key">status</span>
-        <span
-            className="status-value"
-            style={{ background: status[1] ? status[1] : 'black' }}
-        >
-            {status[0].replace(/\s/g, '\u00A0')}
-        </span>
-    </Wrapper>
+export const Status = ({ status, /* focused */ }: { status: string | string[], /* focused: boolean */ }) => (
+  <Wrapper /* style={{ opacity: focused ? 1 : 0.3 }} */>
+    <span className="status-key">status</span>
+    <span
+      className="status-value"
+      style={{ background: status[1] ? status[1] : 'black' }}
+    >
+      {status[0].replace(/\s/g, '\u00A0')}
+    </span>
+  </Wrapper>
 );
 

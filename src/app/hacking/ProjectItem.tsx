@@ -5,7 +5,8 @@ import styled from 'styled-components';
 import Image from 'next/image'
 
 import { ExternalLinks } from '../../components/ExternalLinks';
-import { Status } from '../../components/Status';
+import { Status } from '../../components/Status'
+import { Project } from './page';
 
 const Teaser = styled.div`
   flex: 2;
@@ -15,7 +16,7 @@ const Teaser = styled.div`
   position: relative
 `;
 
-const LI = styled.li`
+const LI = styled.li<{ gridColumn?: string, gridRow?: string }>`
   display: flex;
   flex-direction: column;
   border: solid #cecece 1px;
@@ -64,7 +65,7 @@ const LI = styled.li`
 `;
 
 /* Replaces the comma with a Unicode no-breaking hypen */
-const formatYears = (years: string) => String(years).replace(',', '‑');
+const formatYears = (years: number[]) => String(years).replace(',', '‑');
 
 export const ProjectItem = ({
     name = '[Name Here]',
@@ -78,26 +79,26 @@ export const ProjectItem = ({
     linkToSource,
     linkToTrello,
     callToAction = 'Check it out',
-    focused,
-    focus,
-    unfocus,
-    showAdditionalInfo,
+    // focused,
+    // focus,
+    // unfocus,
+    // showAdditionalInfo,
     agency,
     gridColumn,
     gridRow,
-}) => {
+}: Project) => {
     return (
         <LI
             className={`project ${highlight && 'highlight-project'}`}
-            onMouseEnter={focus}
-            onMouseLeave={unfocus}
+            // onMouseEnter={focus}
+            // onMouseLeave={unfocus}
             /* ⚠️ Idk If I like this pattern */
             {...{ gridRow, gridColumn }}
         >
             <h1>
                 {name} <span>{year && formatYears(year)}</span>
             </h1>
-            {status && <Status status={status} focused={focused} />}
+            {status && <Status status={status} /* focused={focused} */ />}
             <p className="tagline">{tagline}</p>
             {(name === 'flambé' || name === 'Udder Space') && (
                 <Teaser>
@@ -111,17 +112,4 @@ export const ProjectItem = ({
             <ExternalLinks {...{ link, linkToSource, linkToTrello, callToAction }} />
         </LI>
     );
-};
-
-ProjectItem.propTypes = {
-    name: PropTypes.string.isRequired,
-    path: PropTypes.string.isRequired,
-    tagline: PropTypes.string,
-    status: PropTypes.arrayOf(PropTypes.string),
-    description: PropTypes.string,
-    year: PropTypes.arrayOf(PropTypes.number),
-    callToAction: PropTypes.string,
-    link: PropTypes.string,
-    linkToSource: PropTypes.string,
-    linkToTrello: PropTypes.string,
 };

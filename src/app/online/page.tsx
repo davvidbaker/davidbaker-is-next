@@ -66,7 +66,7 @@ const Main = styled.main`
   }
 `;
 
-const IndexPage = ({ location }) => <div>
+const IndexPage = () => <div>
   <Main><header>
     <h1>David Baker</h1>
     <h2>graduate student in advanced energy systems</h2>
@@ -103,7 +103,8 @@ const IndexPage = ({ location }) => <div>
       <h3>Here are some things you might want to know about me.</h3>
       <ul className="about-list">
         <CycleItems
-          title="I believe in"
+          // @ts-ignore
+          start="I believe in"
           items={[
             'humanity.',
             'engineering.',
@@ -115,7 +116,8 @@ const IndexPage = ({ location }) => <div>
           ]}
         />
         <CycleItems
-          title="I would like to work"
+          // @ts-ignore
+          start="I would like to work"
           items={[
             'alongside smart, talented people who are passionate about what they do.',
             'on projects that aim to combat climate change.',
@@ -124,7 +126,8 @@ const IndexPage = ({ location }) => <div>
           ]}
         />
         <CycleItems
-          title="I am interested in"
+          // @ts-ignore
+          start="I am interested in"
           items={[
             'distributed energy resources.',
             'pumped hydro storage.',
@@ -141,7 +144,8 @@ const IndexPage = ({ location }) => <div>
           ]}
         />
         <CycleItems
-          title="I am"
+          // @ts-ignore
+          start="I am"
           items={[
             'mistrustful of untested code.',
             'a sucker for @beesandbombs 🐝💣 GIFs.',

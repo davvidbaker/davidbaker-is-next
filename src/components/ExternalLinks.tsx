@@ -33,7 +33,7 @@ const UL = styled.ul`
     margin: 0;
   }
 `;
-export const ExternalLinks = ({ link, linkToSource, linkToTrello, callToAction }) => (
+export const ExternalLinks = ({ link, linkToSource, linkToTrello, callToAction }: { link?: string, linkToSource?: string, linkToTrello?: string, callToAction?: string }) => (
     <UL>
         <li className="project-link">
             <p>{link && <a href={link}>{callToAction || 'Check it out!'}</a>}</p>

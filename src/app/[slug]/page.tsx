@@ -13,7 +13,7 @@ console.log('❤️‍🔥 projectsJson', projectsJson);
 
 // Multiple versions of this page will be statically generated
 // using the `params` returned by `generateStaticParams`
-export default function Page({ params }) {
+export default function Page({ params }: any) {
     const { slug } = params
     return <ProjectPage {...params} />
 }

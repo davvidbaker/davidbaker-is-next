@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * This is not that React-y of a component. I am manipulating the DOM by hand, because dealing with state and render and timing was getting complicated.
  */
@@ -13,8 +14,12 @@ const LI = styled.li`
     font-weight: bold;
   }
 `;
+interface Props {
+  start: string
+  items: string[]
+}
 class CycleItems extends Component {
-  constructor(props) {
+  constructor(props: Props) {
     super(props);
 
     this.itemInd = 1;
@@ -103,7 +108,7 @@ class CycleItems extends Component {
     return (
       <LI>
         <p>
-          <span className="title">{this.props.title}</span>{' '}
+          <span className="title">{this.props.start}</span>{' '}
           <span
             ref={text => {
               this.text = text;

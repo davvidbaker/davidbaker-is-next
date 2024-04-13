@@ -6,7 +6,7 @@ import styled from 'styled-components';
 
 import { ExternalLinks } from '../../components/ExternalLinks';
 import { Status } from '../../components/Status';
-
+import { Project } from '../hacking/page'
 // class ProjectTemplate extends React.Component {
 //   render() {
 //     return <Layout location={this.props.location}><ProjectDetails {...this.props.data.projectsJson} /></Layout>;
@@ -14,7 +14,7 @@ import { Status } from '../../components/Status';
 // }
 
 /* Replaces the comma with a Unicode no-breaking hypen */
-const formatYears = years => String(years).replace(',', '‑');
+const formatYears = (years: number[]) => String(years).replace(',', '‑');
 
 const Div = styled.div`
   display: flex;
@@ -223,6 +223,7 @@ const Div = styled.div`
     }
   }
 `;
+
 export const ProjectPage = ({
     name = '[Name Here]',
     status,
@@ -237,10 +238,9 @@ export const ProjectPage = ({
     keywords,
     teammates,
     logo,
-    hideAdditionalInfo,
     agency,
-}) => console.log(name, status, description) || (
-    <Div id="additional-info" onClick={hideAdditionalInfo}>
+}: Project) => (
+    <Div id="additional-info">
         <div className="heading">
             <div>
                 <h1 style={{ marginRight: '5px', transform: 'translateY(3px)' }}>
@@ -254,7 +254,7 @@ export const ProjectPage = ({
                     alignItems: 'flex-end',
                 }}
             >
-                {status && <Status status={status} focused />}
+                {status && <Status status={status} />}
 
                 <ExternalLinks
                     {...{ link, linkToSource, linkToTrello, callToAction }}
@@ -282,7 +282,7 @@ export const ProjectPage = ({
                                 src={`/${image.replace('-noShadow', '')}`}
                                 alt={image}
                                 style={
-                                    image.match(/-noShadow$/) ? { boxShadow: '0 0 white' } : null
+                                    image.match(/-noShadow$/) ? { boxShadow: '0 0 white' } : undefined
                                 }
                             />
                         ))}
@@ -294,7 +294,6 @@ export const ProjectPage = ({
                                 muted
                                 autoPlay
                                 src={video}
-                                alt={`${name} video`}
                                 key={video}
                             />
                         ))}
