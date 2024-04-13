@@ -3,8 +3,6 @@ import { ProjectPage } from './ProjectPage'
 
 // Return a list of `params` to populate the [slug] dynamic segment
 export async function generateStaticParams() {
-console.log('❤️‍🔥 projectsJson', projectsJson);
-
     return projectsJson.map((project) => ({
         slug: project.path,
         ...project
@@ -15,5 +13,7 @@ console.log('❤️‍🔥 projectsJson', projectsJson);
 // using the `params` returned by `generateStaticParams`
 export default function Page({ params }: any) {
     const { slug } = params
+    console.log('❤️‍🔥 params', params);
+
     return <ProjectPage {...params} />
 }
