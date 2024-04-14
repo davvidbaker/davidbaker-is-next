@@ -291,6 +291,17 @@ export const Resume = ({ objective = baseObjective, relevantCoursework = baseCou
                     <section>
                         <h2>Work Experience</h2>
                         <h3>
+                            <a href="https://my.xcelenergy.com/s/">Xcel</a> - Power Operations Technical Intern <span>[January 2024 - May 2024]</span>
+                        </h3>
+                        <ul>
+                            <li>
+                                <p>Analyzed generation outage schedules to aid analysts in preparing for the MISO Planning Resource Auction.</p>
+                            </li>
+                            <li><p>Developed metrics tool in Databricks for exploring real time desk performance based on operations log.
+                            </p>
+                            </li>
+                        </ul>
+                        <h3>
                             <a href="https://www.workday.com/">Workday</a> - Software Engineer 3, 4 <span>[September 2019 - July 2023]</span>
                         </h3>
                         <ul>
