@@ -42,6 +42,14 @@ const Wrapper = styled.nav`
     cursor: default;
     color: #222;
   }
+  
+  @media print {
+    .print-hide,
+    .print-hide::before,
+    .print-hide::after {
+        display: none !important;
+    }
+}
 `;
 
 const activeStyle = {
