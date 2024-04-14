@@ -16,7 +16,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
+
     <html lang="en">
+      <link rel="icon" href="/images/favicon.png" sizes="any" />
       <body className={inter.className}>
         <Nav />
         <>
