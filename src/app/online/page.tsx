@@ -106,6 +106,7 @@ const IndexPage = () => <div>
           // @ts-ignore
           start="I believe in"
           items={[
+            "fuel cell EVs for heavy duty transport.",
             'humanity.',
             'engineering.',
             'design that serves a purpose.',

@@ -2,6 +2,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 const FadedLI = styled.li`
 opacity: 0.2;`
@@ -49,28 +50,40 @@ const activeStyle = {
 };
 
 /** 💁 root path was matching for all other paths, so I am not using activeStyle prop, but a class instead, for just that link */
-const Nav = ({ }) => (
-    <Wrapper>
+const Nav = ({ }) => {
+    const pathname = usePathname()
+
+    console.log('❤️‍🔥 pathname', pathname);
+
+    return (<Wrapper>
         <ul className='print-hide'>
             <li>
                 <Link
-                    // className={
-                    //     location.pathname === '/' || location.pathname === '/online'
-                    //         ? 'active'
-                    //         : undefined
-                    // }
+                    className={
+                        pathname === '/' || pathname === '/online'
+                            ? 'active'
+                            : undefined
+                    }
                     href="/online"
                 >
                     Home
                 </Link>
             </li>
             <li>
-                <Link href="/hacking">
+                <Link href="/hacking" className={
+                    pathname === '/hacking'
+                        ? 'active'
+                        : undefined
+                }>
                     Projects
                 </Link>
             </li>
             <li>
-                <Link href="/looking-for-work">
+                <Link href="/looking-for-work" className={
+                    pathname === '/looking-for-work'
+                        ? 'active'
+                        : undefined
+                }>
                     Résumé
                 </Link>
             </li>
@@ -81,7 +94,8 @@ const Nav = ({ }) => (
             </FadedLI>
         </ul>
     </Wrapper>
-);
+    )
+};
 
 // const Nav = () => <div>asdf</div>
 export default Nav;

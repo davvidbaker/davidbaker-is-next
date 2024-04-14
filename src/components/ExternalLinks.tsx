@@ -50,7 +50,7 @@ export const ExternalLinks = ({ link, linkToSource, linkToTrello, callToAction }
         {linkToTrello && (
             <li>
                 <a href={linkToTrello}>
-                    <Image width={24} height={24} src="/images/trello - mark - blue.svg" alt="Trello" />
+                    <Image width={24} height={24} src="/images/trello-mark-blue.svg" alt="Trello" />
                 </a>
             </li>
         )}

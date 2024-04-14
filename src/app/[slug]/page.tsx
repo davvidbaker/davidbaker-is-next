@@ -1,3 +1,4 @@
+import { Project } from '../hacking/page';
 import projectsJson from '../hacking/projects.json';
 import { ProjectPage } from './ProjectPage'
 
@@ -5,6 +6,7 @@ import { ProjectPage } from './ProjectPage'
 export async function generateStaticParams() {
     return projectsJson.map((project) => ({
         slug: project.path,
+        // doesn't seem to work
         ...project
     }))
 }
@@ -15,5 +17,9 @@ export default function Page({ params }: any) {
     const { slug } = params
     console.log('❤️‍🔥 params', params);
 
-    return <ProjectPage {...params} />
+    const project = projectsJson.find(({ path }) => path === slug) as unknown as Project
+
+    console.log('❤️‍🔥 project', project);
+
+    return <ProjectPage {...project} />
 }

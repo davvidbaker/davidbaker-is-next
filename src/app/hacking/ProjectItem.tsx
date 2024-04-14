@@ -16,7 +16,7 @@ const Teaser = styled.div`
   position: relative
 `;
 
-const LI = styled.li<{ gridColumn?: string, gridRow?: string }>`
+const LI = styled.li<{ $gridColumn?: string, $gridRow?: string }>`
   display: flex;
   flex-direction: column;
   border: solid #cecece 1px;
@@ -24,8 +24,8 @@ const LI = styled.li<{ gridColumn?: string, gridRow?: string }>`
   background: white;
   position: relative;
 
-  ${({ gridColumn }) => (gridColumn ? `grid-column: ${gridColumn}` : '')};
-  ${({ gridRow }) => (gridRow ? `grid-row: ${gridRow}` : '')};
+  ${({ $gridColumn }) => ($gridColumn ? `grid-column: ${$gridColumn}` : '')};
+  ${({ $gridRow }) => ($gridRow ? `grid-row: ${$gridRow}` : '')};
 
   &::after {
     content: '';
@@ -93,7 +93,7 @@ export const ProjectItem = ({
             // onMouseEnter={focus}
             // onMouseLeave={unfocus}
             /* ⚠️ Idk If I like this pattern */
-            {...{ gridRow, gridColumn }}
+            {...{ $gridRow: gridRow, $gridColumn: gridColumn }}
         >
             <h1>
                 {name} <span>{year && formatYears(year)}</span>
@@ -102,9 +102,12 @@ export const ProjectItem = ({
             <p className="tagline">{tagline}</p>
             {(name === 'flambé' || name === 'Udder Space') && (
                 <Teaser>
-                    {name === 'flambé' && <Image fill src="/images/flambe-wide.png" style={{ objectFit: "contain" }}
+                    {name === 'flambé' && <Image className="w-full h-auto" width="0"
+                        height="0" sizes="50vw" src="/images/flambe-wide.png"
+                        style={{ objectFit: "contain" }}
                         alt="" />}
-                    {name === 'Udder Space' && <Image fill src="/images/ribeye.png" style={{ objectFit: "contain" }}
+                    {name === 'Udder Space' && <Image className="w-full h-auto" width="0"
+                        height="0" sizes="25vw" src="/images/ribeye.png" style={{ objectFit: "contain" }}
                         alt="" />}
                 </Teaser>
             )}

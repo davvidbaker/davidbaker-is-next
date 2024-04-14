@@ -33,7 +33,7 @@
       "linkToSource": "https://github.com/davvidbaker/whoa",
       "linkToTrello": "https://trello.com/b/kDjPvwZq/dot-whoa",
       "description":
-        "This is my solution for drafting blog posts, some of the time.\n\nIt is basically **Markdown with some additional custom markup**. I write blog posts with the file extension `.whoa` and then parse these `.whoa` files with [remark](https://github.com/wooorm/remark) and transform the elements into components of different sorts.\n\nI've written more extensively about what it does for me [here](https://davidbaker.is/scribbling-about-whoa-and-blog-state/).",
+        "This is my solution for drafting blog posts, some of the time.\n\nIt is basically **Markdown with some additional custom markup**. I write blog posts with the file extension `.whoa` and then parse these `.whoa` files with [remark](https://github.com/wooorm/remark) and transform the elements into components of different sorts.\n\nI've written more extensively about what it does for me [here](https://davidbaker-is-dvrr3g2fc-davvidbaker.vercel.app/scribbling-about-whoa-and-blog-state).",
       "keywords": ["blog", "Markdown", "React", "Redux", "Remark", "Components"]
     },
     {

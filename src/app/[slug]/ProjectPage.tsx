@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import { ExternalLinks } from '../../components/ExternalLinks';
 import { Status } from '../../components/Status';
 import { Project } from '../hacking/page'
+import Image from 'next/image';
 // class ProjectTemplate extends React.Component {
 //   render() {
 //     return <Layout location={this.props.location}><ProjectDetails {...this.props.data.projectsJson} /></Layout>;
@@ -58,6 +59,8 @@ const Div = styled.div`
     margin: 1em 0;
     text-align: center;
     grid-column-end: 1;
+    height: auto;
+    min-height: 300px;
   }
 
   .gallery video {
@@ -279,16 +282,21 @@ export const ProjectPage = (props: Project) => {
                         </p>
                     ) : null}
 
-                    <div className="gallery">
+                    <div className="gallery" style={{ position: 'relative' }}>
                         {images &&
                             images.map(image => (
-                                <img
+                                <Image
+                                    className="w-full h-auto" 
+                                    width="0"
+                                    height="0"
+                                    sizes="50vw"
                                     key={image}
-                                    src={`/${image.replace('-noShadow', '')}`}
+                                    src={`/images/${image.replace('-noShadow', '')}`}
                                     alt={image}
-                                    style={
-                                        image.match(/-noShadow$/) ? { boxShadow: '0 0 white' } : undefined
-                                    }
+                                    style={{
+                                        ...(image.match(/-noShadow$/) ? { boxShadow: '0 0 white' } : undefined),
+                                        objectFit: 'contain'
+                                    }}
                                 />
                             ))}
                         {videos &&
@@ -298,7 +306,7 @@ export const ProjectPage = (props: Project) => {
                                     controls
                                     muted
                                     autoPlay
-                                    src={video}
+                                    src={`/images/${video}`}
                                     key={video}
                                 />
                             ))}
