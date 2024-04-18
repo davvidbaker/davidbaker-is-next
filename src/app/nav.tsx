@@ -95,11 +95,11 @@ const Nav = ({ }) => {
                     Résumé
                 </Link>
             </li>
-            <FadedLI>
+            {/* <FadedLI>
                 <Link href="https://davidbaker-is-dvrr3g2fc-davvidbaker.vercel.app/scribbling">
                     Old Scribbles
                 </Link>
-            </FadedLI>
+            </FadedLI> */}
         </ul>
     </Wrapper>
     )
