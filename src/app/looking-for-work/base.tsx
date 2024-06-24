@@ -188,6 +188,17 @@ const Div = styled.div`
   }
 
   @media print {
+
+    
+    h3 {
+        margin-bottom: 0.1rem;
+        margin-top: 0.1rem;
+    }
+    ul {
+        margin-top: 0.1rem;
+        margin-bottom: 0.1rem;
+    }
+
     .name {
       text-align: left !important;
       margin: 0;
@@ -218,6 +229,9 @@ const Div = styled.div`
       max-width: 30% !important;
     }
 
+    .left {
+        width: unset;
+    }
     main {
       overflow: visible;
     }
@@ -326,27 +340,26 @@ export const Resume = ({ objective = baseObjective, relevantCoursework = baseCou
                         <ul className="print-hide">
                             <li>
                                 <p>
-                                    Have been mostly working on modernizing a legacy dojo single
+                                    Worked on modernizing a legacy dojo single
                                     page app, porting existing functionality and building new
                                     features with React.
                                 </p>
                             </li>
                             <li>
                                 <p>
-                                    Lots of writing tests. Unit tests. Functional component tests.
-                                    End to end tests. I make sure <strong>everything</strong> I am
-                                    writing has tests.
+                                    Wrote lots of tests. Unit tests. Functional component tests.
+                                    End to end tests.
                                 </p>
                             </li>
                             <li>
                                 <p>
-                                    Occasionally have worked on our backend which is basically a
+                                    Occasionally worked on backend which is basically a
                                     Ruby on Rails API that hooks up with Mongo.
                                 </p>
                             </li>
                         </ul>
                         <h3>
-                            <a href="http://click3x.com/">Click 3X</a> ― Senior Developer
+                            <a href="http://click3x.com/">Click 3X</a> - Senior Developer
                             <span>[June 2016 - December 2017]</span>
                         </h3>
                         <ul className='print-hide'>
@@ -380,11 +393,11 @@ export const Resume = ({ objective = baseObjective, relevantCoursework = baseCou
                         </ul>
 
                         <h3>
-                            <a href="http://xlab.upenn.edu/">xLAB</a> ― Embedded Systems
+                            <a href="http://xlab.upenn.edu/">xLAB</a> - Embedded Systems
                             Engineer
                             <span>[Summer 2015]</span>
                         </h3>
-                        <ul>
+                        <ul className="print-hide">
                             <li>
                                 <p>
                                     Researched electroacoustics and developed a{' '}
@@ -405,11 +418,11 @@ export const Resume = ({ objective = baseObjective, relevantCoursework = baseCou
                         </ul>
 
                         <h3>
-                            <a href="http://www.danisbassett.com/">Complex Systems Group</a> ―
+                            <a href="http://www.danisbassett.com/">Complex Systems Group</a> -
                             Research Assistant
                             <span>[Oct 2013 - May 2015]</span>
                         </h3>
-                        <ul>
+                        <ul className="print-hide">
                             <li>
                                 <p>
                                     Analyzed the structure, function, and controllability of the
@@ -425,7 +438,7 @@ export const Resume = ({ objective = baseObjective, relevantCoursework = baseCou
                         </ul>
 
                         <h3>
-                            <a href="https://www.alcoa.com/global/en/home.asp">Alcoa</a> ―
+                            <a href="https://www.alcoa.com/global/en/home.asp">Alcoa</a> -
                             Metallurgical & Quality Systems Intern
                             <span>[Summer 2013]</span>
                         </h3>
@@ -453,7 +466,7 @@ export const Resume = ({ objective = baseObjective, relevantCoursework = baseCou
                             >
                                 M&TSI
                             </a>{' '}
-                            ― Teaching Assistant<span>[Summer 2015]</span>
+                            - Teaching Assistant<span>[Summer 2015]</span>
                         </h3>
                         <ul className='print-hide'>
                             <li>
@@ -472,7 +485,7 @@ export const Resume = ({ objective = baseObjective, relevantCoursework = baseCou
                             >
                                 SAAST
                             </a>
-                            <span className='print-hide'>*</span> ― Residential Teaching Assistant
+                            <span className='print-hide'>*</span> - Residential Teaching Assistant
                             <span>[Summer 2014]</span>
                         </h3>
                         <ul className='print-hide'>
@@ -492,7 +505,7 @@ export const Resume = ({ objective = baseObjective, relevantCoursework = baseCou
                     </section>
                 </div>
 
-                <div className="right">
+                <div className="right print-hide">
                     <section className="print-hide">
                         <h2>Contact Info</h2>
                         <ul>
@@ -515,7 +528,8 @@ export const Resume = ({ objective = baseObjective, relevantCoursework = baseCou
                         </ul>
                     </section>
 
-                    <section>
+                    <section className="print-hide">
+
                         <h2>Honors</h2>
 
                         <h3>
@@ -549,7 +563,7 @@ export const Resume = ({ objective = baseObjective, relevantCoursework = baseCou
                         </ul>
                     </section>
 
-                    <section>
+                    <section className="print-hide">
                         <h2>Skills</h2>
                         <div id="skills">
                             <div>
