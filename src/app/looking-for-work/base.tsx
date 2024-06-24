@@ -291,6 +291,14 @@ export const Resume = ({ objective = baseObjective, relevantCoursework = baseCou
                     <section>
                         <h2>Work Experience</h2>
                         <h3>
+                            <a href="https://ulteig.com">Ulteig</a> - Substation Engineering Intern <span>[Summer 2024]</span>
+                        </h3>
+                        <ul>
+                            <li>
+                                <p>Performed detailed design work on a handful of utility substation projects, including design calculations, drawing review, and outage sequencing.</p>
+                            </li>
+                        </ul>
+                        <h3>
                             <a href="https://my.xcelenergy.com/s/">Xcel</a> - Power Operations Technical Intern <span>[January 2024 - May 2024]</span>
                         </h3>
                         <ul>
