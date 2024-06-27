@@ -309,7 +309,7 @@ export const Resume = ({ objective = baseObjective, relevantCoursework = baseCou
                         </h3>
                         <ul>
                             <li>
-                                <p>Performed detailed design work on a handful of utility substation projects, including design calculations, drawing review, and outage sequencing.</p>
+                                <p>Performed detailed design work on utility substation projects, including design calculations, drawing review, and outage sequencing.</p>
                             </li>
                         </ul>
                         <h3>
