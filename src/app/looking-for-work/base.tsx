@@ -295,7 +295,7 @@ export const Resume = ({ objective = baseObjective, relevantCoursework = baseCou
                             </li>
                             <li>
                                 <p>
-                                    <a title="transcript" href="/unofficial-transcript.png">
+                                    <a title="transcript" href="/images/unofficial-transcript.png">
                                         Cumulative GPA: 3.78/4.00
                                     </a>
                                 </p>
