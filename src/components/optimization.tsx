@@ -1,8 +1,9 @@
 "use client"
-import { ReactNode } from "react"
+import { PropsWithChildren, ReactNode } from "react"
 import styled from "styled-components"
 import hljs from "highlight.js"
 import { TemplateString } from "next/dist/lib/metadata/types/metadata-types"
+// @ts-ignore
 import { get_color as xkcd } from 'xkcd-colors'
 import { MathJax } from "better-react-mathjax"
 
@@ -18,7 +19,7 @@ margin-top: 4px;
 }
 `
 
-export const k = (s: TemplateString) => s.raw[0]
+export const k = (s: any) => s.raw[0]
 
 
 export const Parameters = ({ params }: { params: { variable: ReactNode, description: ReactNode, units: ReactNode }[] }) => <>
@@ -46,8 +47,8 @@ export const SetsAndIndices = () => <>
     </Grid>
 </>
 
-export const Math = ({children}) => {
-    return <MathJax style={{display: 'inline'}} suppressHydrationWarning>{children}</MathJax>
+export const Math = ({ children }: PropsWithChildren) => {
+    return <MathJax style={{ display: 'inline' }} suppressHydrationWarning>{children}</MathJax>
 }
 
 export const TwoColumnEquations = styled.div`
@@ -102,7 +103,9 @@ align-items: center;
 
 `
 export const CodeSnippet = ({ rawStr }: { rawStr: string }) => {
-    const html = hljs.highlightAuto(rawStr).value
+    const html = hljs.highlight(rawStr, { language: "GAMS" }).value
+    // const html = '<div>Hey</div>'
+
 
     return (
         <Wrapper>

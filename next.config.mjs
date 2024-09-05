@@ -2,6 +2,8 @@ import createMDX from '@next/mdx'
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+    transpilePackages: ['highlight.js'],
+
     webpack: (config, options) => {
         config.module.rules.push({
             test: /\.gms/,
