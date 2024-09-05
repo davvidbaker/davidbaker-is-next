@@ -9,10 +9,7 @@ export const k = (s) => s.raw[0]
 
 
 const Page = () => <div><Heading /><SetsAndIndices />
-    <Parameters params={[
-    />
-        < Constraints />
-        <CodeSnippet rawStr={codeBlock} />
+
 </div>
 
 export default Page
