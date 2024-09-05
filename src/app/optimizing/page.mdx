@@ -1,0 +1,39 @@
+import MdxLayout from '../../components/mdx-layout'
+import { Heading } from '../../components/heading'
+import { Math, Helper, TwoColumnEquations, k, Parameters, DecisionVariables, SetsAndIndices, CodeSnippet } from '@/components/optimization'
+import codeBlock from "@/../public/images/optimizing/q1.gms"
+
+<Heading />
+
+# Problem 1
+
+![](/images/optimizing/p1.png)
+
+<SetsAndIndices />
+
+<Parameters params={[
+    { variable: <Math>\[r_i\]</Math>, description: <div>Revenue per item <Math>\[i\]</Math></div>, units: "$/item" },
+    { variable: <Math>\[c_i\]</Math>, description: <div>Cost per item <Math>\[i\]</Math></div>, units: "$/item" },
+    { variable: <Math>\[h_i\]</Math>, description: <div>Time per item <Math>\[i\]</Math></div>, units: "hours/item" },
+    { variable: <Math>{(s=>s.raw)`\[\bar{h}\]`[0]}</Math>, description: "Maximum hours in a week", units: "hours" },]}
+/>
+
+<DecisionVariables params={
+    [{ variable: <Math>\[X_i\]</Math>, description: <div>Quantity of baked good <Math>\[i\]</Math> baked</div>, units: "items" }]
+} />
+
+
+**Objective:** Maximize profits over a week [$]
+
+<TwoColumnEquations>
+    <Math>{(s=>s.raw)`\[\sum_{i \in \mathcal{I}} (r_i - c_i) X_i\]`[0]}</Math>
+      (working hours in a week)
+</TwoColumnEquations>
+
+<CodeSnippet rawStr={codeBlock}/>
+
+
+export default function MDXPage({ children }) {
+    return <MdxLayout>{children}</MdxLayout>
+
+}

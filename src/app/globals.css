@@ -39,3 +39,16 @@ body {
     }
   }
 }
+
+.katex-html {
+  display: none;
+}
+
+mtext {
+  font-family: sans-serif;
+}
+
+
+mjx-container {
+  display: inline !important;
+}
