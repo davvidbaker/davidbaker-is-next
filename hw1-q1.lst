@@ -1,0 +1,123 @@
+GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/06/24 14:23:47 Page 1
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+C o m p i l a t i o n
+
+
+   2   
+   3  set i /rolls, croissants, bread_loafs/;
+   4   
+   5  parameters
+   6      r(i) "revenue [$/item]"
+   7      /
+   8      rolls 2
+   9      croissants 5
+  10      bread_loafs 10
+  11      /
+  12   
+  13      c(i) "cost per item [$/item]"
+  14      /
+  15      rolls 1.5
+  16      croissants 2
+  17      bread_loafs 5
+  18      /
+  19   
+  20      h(i) "time per item [hours/item]"
+  21      /
+  22      rolls 1
+  23      croissants 2
+  24      bread_loafs 5
+  25      /
+  26  ;
+  27   
+  28  scalar
+  29      hbar "maximum working hours in a week [hours]"
+  30      /40/
+  31  ;
+  32   
+  33  positive variables 🚀(i) "quantity of baked good i baked [items]";
+****                     $2   $195,96
+****   2  Identifier expected
+****  96  Blank needed between identifier and text
+****        (-or- illegal character in identifier)
+****        (-or- check for missing ';' on previous line)
+**** 195  Symbol redefined with a different type
+  34   
+  35  variables Z "objective function value";
+  36   
+  37  equations
+  38      objfn "target of our optimization",
+  39      eq_hourlimit "can only work so many hours in a week",
+  40      eq_combo "rolls production must be greater than or equal to croissant production"
+  41  ;
+  42   
+  43  scalar sw_combo "boolean switch to turn on and off the combo constraint (rolls and croissants)" /0/ ;
+  44   
+  45  objfn.. Z =e= sum(i, (r(i) - c(i)) * 🚀(i) ) ;
+****                                       $119  $148
+**** 119  Number (primary) expected
+**** 148  Dimension different - The symbol is referenced with more/less
+****         indices as declared
+  46   
+  47  eq_hourlimit.. hbar =g= sum(i, h(i) * 🚀(i) ) ;
+****                                        $119  $148
+**** 119  Number (primary) expected
+**** 148  Dimension different - The symbol is referenced with more/less
+****         indices as declared
+  48  eq_combo$sw_combo.. 🚀("rolls") =g= 🚀("croissants") ;
+****                      $119 $119 $140,8,37,409
+****   8  ')' expected
+****  37  '=l=' or '=e=' or '=g=' operator expected
+**** 119  Number (primary) expected
+**** 140  Unknown symbol
+**** 409  Unrecognizable item - skip to find a new statement
+****        looking for a ';' or a key word to get started again
+  49   
+  50  model bakery /all/;
+  51   
+  52  parameters rep_x, rep_z;
+  53   
+  54  solve bakery using lp maximizing Z;
+****                                    $257
+**** 257  Solve statement not checked because of previous errors
+  55  * adding 0.0000001 so the value still gets exported
+  56  rep_x(i, "business as usual") =🚀.l(i) + 0.0000001;
+****                                 $119 $140
+**** 119  Number (primary) expected
+**** 140  Unknown symbol
+  57  rep_z("business as usual") = Z.l;
+****                                 $141
+**** 141  Symbol declared but no values have been assigned. Check for missing
+****         data definition, assignment, data loading or implicit assignment
+****         via a solve statement. Suppress with $onImplicitAssign.
+****         A wild shot: You may have spurious commas in the explanatory
+****         text of a declaration. Check symbol reference list.
+  58   
+  59  sw_combo = 1;
+  60  solve bakery using lp maximizing Z;
+****                                    $257
+**** 257  Solve statement not checked because of previous errors
+  61  * adding 0.0000001 so the value still gets exported
+  62  rep_x(i, "combo") = 🚀.l(i) + 0.0000001;
+****                      $119
+**** 119  Number (primary) expected
+  63  rep_z("combo") = Z.l;
+  64   
+  65  execute_unload 'gams-output/bakery.gdx' ;
+
+**** 19 ERROR(S)   0 WARNING(S)
+
+
+COMPILATION TIME     =        0.004 SECONDS      3 MB  45.4.0 19dc3313 DAX-DAC
+
+
+USER: GAMS Community License for David Baker         G240815|0002AO-GEN
+      Colorado School of Mines, Department of Electrical EngineeCL17297
+      License for teaching and research at degree granting institutions
+
+
+**** FILE SUMMARY
+
+Input      /Users/david/code/davidbaker-is-next/public/gams/hw1-q1.gms
+Output     /Users/david/code/davidbaker-is-next/hw1-q1.lst
+
+**** USER ERROR(S) ENCOUNTERED

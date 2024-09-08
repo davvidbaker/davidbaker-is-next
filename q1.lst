@@ -1,0 +1,357 @@
+GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/05/24 23:57:10 Page 1
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+C o m p i l a t i o n
+
+
+   2   
+   3  set i /rolls, croissants, bread_loafs/;
+   4   
+   5  parameters
+   6      r(i) "revenue [$/item]"
+   7      /
+   8      rolls 2
+   9      croissants 5
+  10      bread_loafs 10
+  11      /
+  12   
+  13      c(i) "cost per item [$/item]"
+  14      /
+  15      rolls 1.5
+  16      croissants 2
+  17      bread_loafs 5
+  18      /
+  19   
+  20      h(i) "time per item [hours/item]"
+  21      /
+  22      rolls 1
+  23      croissants 2
+  24      bread_loafs 5
+  25      /
+  26  ;
+  27   
+  28  scalar
+  29      hbar "maximum working hours in a week [hours]"
+  30      /40/
+  31  ;
+  32   
+  33  positive variables X(i) "quantity of baked good i baked [items]";
+  34   
+  35  variables Z "objective function value";
+  36   
+  37  equations
+  38      objfn "target of our optimization",
+  39      eq_hourlimit "can only work so many hours in a week",
+  40      eq_combo "rolls production must be greater than or equal to croissant production"
+  41  ;
+  42   
+  43  scalar sw_combo "boolean switch to turn on and off the combo constraint (rolls and croissants)" /0/ ;
+  44   
+  45  objfn.. Z =e= sum(i, (r(i) - c(i)) * X(i) ) ;
+  46   
+  47  eq_hourlimit.. hbar =g= sum(i, h(i) * X(i) ) ;
+  48  eq_combo$sw_combo.. X("rolls") =g= X("croissants") ;
+  49   
+  50  model bakery /all/;
+  51   
+  52  parameters rep_x, rep_z;
+  53   
+  54  solve bakery using lp maximizing Z;
+  55  * adding 0.0000001 so the value still gets exported
+  56  rep_x(i, "business as usual") = X.l(i) + 0.0000001;
+  57  rep_z("business as usual") = Z.l;
+  58   
+  59  sw_combo = 1;
+  60  solve bakery using lp maximizing Z;
+  61  * adding 0.0000001 so the value still gets exported
+  62  rep_x(i, "combo") = X.l(i) + 0.0000001;
+  63  rep_z("combo") = Z.l;
+  64   
+  65  execute_unload 'gams-output/bakery.gdx' ;
+
+
+COMPILATION TIME     =        0.000 SECONDS      3 MB  45.4.0 19dc3313 DAX-DAC
+GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/05/24 23:57:10 Page 2
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Equation Listing    SOLVE bakery Using LP From line 54
+
+
+---- objfn  =E=  target of our optimization
+
+objfn..  - 0.5*X(rolls) - 3*X(croissants) - 5*X(bread_loafs) + Z =E= 0 ; (LHS = 0)
+     
+
+---- eq_hourlimit  =G=  can only work so many hours in a week
+
+eq_hourlimit..  - X(rolls) - 2*X(croissants) - 5*X(bread_loafs) =G= -40 ; (LHS = 0)
+     
+
+---- eq_combo  =G=  rolls production must be greater than or equal to croissant production
+
+                NONE
+
+GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/05/24 23:57:10 Page 3
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Column Listing      SOLVE bakery Using LP From line 54
+
+
+---- X  quantity of baked good i baked [items]
+
+X(rolls)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+       -0.5     objfn
+       -1       eq_hourlimit
+
+X(croissants)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+       -3       objfn
+       -2       eq_hourlimit
+
+X(bread_loafs)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+       -5       objfn
+       -5       eq_hourlimit
+
+
+---- Z  objective function value
+
+Z
+                (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
+        1       objfn
+
+GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/05/24 23:57:10 Page 4
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Range Statistics    SOLVE bakery Using LP From line 54
+
+
+RANGE STATISTICS (ABSOLUTE NON-ZERO FINITE VALUES)
+
+RHS       [min, max] : [ 4.000E+01, 4.000E+01] - Zero values observed as well
+Bound     [min, max] : [        NA,        NA] - Zero values observed as well
+Matrix    [min, max] : [ 5.000E-01, 5.000E+00]
+
+GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/05/24 23:57:10 Page 5
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Model Statistics    SOLVE bakery Using LP From line 54
+
+
+MODEL STATISTICS
+
+BLOCKS OF EQUATIONS           3     SINGLE EQUATIONS            2
+BLOCKS OF VARIABLES           2     SINGLE VARIABLES            4
+NON ZERO ELEMENTS             7
+
+
+GENERATION TIME      =        0.005 SECONDS      4 MB  45.4.0 19dc3313 DAX-DAC
+GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/05/24 23:57:10 Page 6
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Solution Report     SOLVE bakery Using LP From line 54
+
+
+               S O L V E      S U M M A R Y
+
+     MODEL   bakery              OBJECTIVE  Z
+     TYPE    LP                  DIRECTION  MAXIMIZE
+     SOLVER  CPLEX               FROM LINE  54
+
+**** SOLVER STATUS     1 Normal Completion
+**** MODEL STATUS      1 Optimal
+**** OBJECTIVE VALUE               60.0000
+
+ RESOURCE USAGE, LIMIT          0.005 10000000000.000
+ ITERATION COUNT, LIMIT         0    2147483647
+*** This solver runs with a community license. No commercial use.
+--- GMO setup time: 0.00s
+--- GMO memory 0.50 Mb (peak 0.50 Mb)
+--- Dictionary memory 0.00 Mb
+--- Cplex 22.1.1.0 link memory 0.00 Mb (peak 0.00 Mb)
+--- Starting Cplex
+
+
+--- LP status (1): optimal.
+--- Cplex Time: 0.00sec (det. 0.00 ticks)
+
+
+Optimal solution found
+Objective:           60.000000
+
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- EQU objfn               .              .              .             1.0000      
+---- EQU eq_hourli~       -40.0000       -40.0000        +INF           -1.5000      
+---- EQU eq_combo                  (EMPTY)
+
+  objfn  target of our optimization
+  eq_hourlimit  can only work so many hours in a week
+  eq_combo  rolls production must be greater than or equal to croissant production
+
+---- VAR X  quantity of baked good i baked [items]
+
+                   LOWER          LEVEL          UPPER         MARGINAL
+
+rolls                .              .            +INF           -1.0000      
+croissants           .            20.0000        +INF             .          
+bread_loafs          .              .            +INF           -2.5000      
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- VAR Z                 -INF           60.0000        +INF             .          
+
+  Z  objective function value
+
+
+**** REPORT SUMMARY :        0     NONOPT
+                             0 INFEASIBLE
+                             0  UNBOUNDED
+GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/05/24 23:57:10 Page 7
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Equation Listing    SOLVE bakery Using LP From line 60
+
+
+---- objfn  =E=  target of our optimization
+
+objfn..  - 0.5*X(rolls) - 3*X(croissants) - 5*X(bread_loafs) + Z =E= 0 ; (LHS = 0)
+     
+
+---- eq_hourlimit  =G=  can only work so many hours in a week
+
+eq_hourlimit..  - X(rolls) - 2*X(croissants) - 5*X(bread_loafs) =G= -40 ; (LHS = -40)
+     
+
+---- eq_combo  =G=  rolls production must be greater than or equal to croissant production
+
+eq_combo..  X(rolls) - X(croissants) =G= 0 ; (LHS = -20, INFES = 20 ****)
+     
+GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/05/24 23:57:10 Page 8
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Column Listing      SOLVE bakery Using LP From line 60
+
+
+---- X  quantity of baked good i baked [items]
+
+X(rolls)
+                (.LO, .L, .UP, .M = 0, 0, +INF, -1)
+       -0.5     objfn
+       -1       eq_hourlimit
+        1       eq_combo
+
+X(croissants)
+                (.LO, .L, .UP, .M = 0, 20, +INF, 0)
+       -3       objfn
+       -2       eq_hourlimit
+       -1       eq_combo
+
+X(bread_loafs)
+                (.LO, .L, .UP, .M = 0, 0, +INF, -2.5)
+       -5       objfn
+       -5       eq_hourlimit
+
+
+---- Z  objective function value
+
+Z
+                (.LO, .L, .UP, .M = -INF, 60, +INF, 0)
+        1       objfn
+
+GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/05/24 23:57:10 Page 9
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Range Statistics    SOLVE bakery Using LP From line 60
+
+
+RANGE STATISTICS (ABSOLUTE NON-ZERO FINITE VALUES)
+
+RHS       [min, max] : [ 4.000E+01, 4.000E+01] - Zero values observed as well
+Bound     [min, max] : [        NA,        NA] - Zero values observed as well
+Matrix    [min, max] : [ 5.000E-01, 5.000E+00]
+
+GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/05/24 23:57:10 Page 10
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Model Statistics    SOLVE bakery Using LP From line 60
+
+
+MODEL STATISTICS
+
+BLOCKS OF EQUATIONS           3     SINGLE EQUATIONS            3
+BLOCKS OF VARIABLES           2     SINGLE VARIABLES            4
+NON ZERO ELEMENTS             9
+
+
+GENERATION TIME      =        0.001 SECONDS      4 MB  45.4.0 19dc3313 DAX-DAC
+GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/05/24 23:57:10 Page 11
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Solution Report     SOLVE bakery Using LP From line 60
+
+
+               S O L V E      S U M M A R Y
+
+     MODEL   bakery              OBJECTIVE  Z
+     TYPE    LP                  DIRECTION  MAXIMIZE
+     SOLVER  CPLEX               FROM LINE  60
+
+**** SOLVER STATUS     1 Normal Completion
+**** MODEL STATUS      1 Optimal
+**** OBJECTIVE VALUE               46.6667
+
+ RESOURCE USAGE, LIMIT          0.001 10000000000.000
+ ITERATION COUNT, LIMIT         0    2147483647
+*** This solver runs with a community license. No commercial use.
+--- GMO setup time: 0.00s
+--- GMO memory 0.50 Mb (peak 0.50 Mb)
+--- Dictionary memory 0.00 Mb
+--- Cplex 22.1.1.0 link memory 0.00 Mb (peak 0.00 Mb)
+--- Starting Cplex
+
+
+--- LP status (1): optimal.
+--- Cplex Time: 0.00sec (det. 0.00 ticks)
+
+
+Optimal solution found
+Objective:           46.666667
+
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- EQU objfn               .              .              .             1.0000      
+---- EQU eq_hourli~       -40.0000       -40.0000        +INF           -1.1667      
+---- EQU eq_combo            .              .            +INF           -0.6667      
+
+  objfn  target of our optimization
+  eq_hourlimit  can only work so many hours in a week
+  eq_combo  rolls production must be greater than or equal to croissant production
+
+---- VAR X  quantity of baked good i baked [items]
+
+                   LOWER          LEVEL          UPPER         MARGINAL
+
+rolls                .            13.3333        +INF             .          
+croissants           .            13.3333        +INF             .          
+bread_loafs          .              .            +INF           -0.8333      
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- VAR Z                 -INF           46.6667        +INF             .          
+
+  Z  objective function value
+
+
+**** REPORT SUMMARY :        0     NONOPT
+                             0 INFEASIBLE
+                             0  UNBOUNDED
+GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/05/24 23:57:10 Page 12
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+E x e c u t i o n
+
+
+EXECUTION TIME       =        0.050 SECONDS      4 MB  45.4.0 19dc3313 DAX-DAC
+
+
+USER: GAMS Community License for David Baker         G240815|0002AO-GEN
+      Colorado School of Mines, Department of Electrical EngineeCL17297
+      License for teaching and research at degree granting institutions
+
+
+**** FILE SUMMARY
+
+Input      /Users/david/code/davidbaker-is-next/public/images/optimizing/q1.gms
+Output     /Users/david/code/davidbaker-is-next/q1.lst

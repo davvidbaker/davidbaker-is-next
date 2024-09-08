@@ -2,11 +2,14 @@ import createMDX from '@next/mdx'
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    transpilePackages: ['highlight.js'],
 
     webpack: (config, options) => {
         config.module.rules.push({
             test: /\.gms/,
+            use: 'raw-loader'
+        })
+        config.module.rules.push({
+            test: /\.csv/,
             use: 'raw-loader'
         })
 

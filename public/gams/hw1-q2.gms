@@ -63,15 +63,15 @@ parameters rep_x, rep_z, rep_bean_totals;
 
 * CASE 1: business as usual
 solve jellybeans using LP maximizing Z;
-rep_bean_totals(b, "bau") = sum(m, X.l(m,b));
-rep_x(m,b, "bau") = X.l(m,b);
+rep_bean_totals(b, "bau") = sum(m, X.l(m,b)) + 0.000001;
+rep_x(m,b, "bau") = X.l(m,b) + 0.000001;
 rep_z("bau") = Z.l;
 
 * CASE 2: all bean production within 5%
 sw_fivepercent = 1;
 solve jellybeans using LP maximizing Z;
-rep_bean_totals(b, "5%") = sum(m, X.l(m,b));
-rep_x(m,b, "5%") = X.l(m,b);
+rep_bean_totals(b, "5%") = sum(m, X.l(m,b)) + 0.000001;
+rep_x(m,b, "5%") = X.l(m,b) + 0.000001;
 rep_z("5%") = Z.l;
 
 * CASE 3: machines are restricted on what colors they can produce
@@ -84,9 +84,9 @@ m_b("X2", "blue")$sw_coloredmachines = no;
 m_b("X2", "green")$sw_coloredmachines = no;
 
 solve jellybeans using LP maximizing Z;
-rep_bean_totals(b, "5% and color restrictions") = sum(m, X.l(m,b));
-rep_x(m,b, "5% and color restrictions") = X.l(m,b);
+rep_bean_totals(b, "5% and color restrictions") = sum(m, X.l(m,b)) + 0.000001;
+rep_x(m,b, "5% and color restrictions") = X.l(m,b) + 0.000001;
 rep_z("5% and color restrictions") = Z.l;
 
 
-execute_unload 'hw1/jellybeans.gdx' ; 
+execute_unload 'gams-output/jellybeans.gdx' ; 

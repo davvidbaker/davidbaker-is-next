@@ -1,15 +1,33 @@
 import MdxLayout from '@/components/mdx-layout'
 import { Heading } from '@/components/Heading'
 import { Math, Helper, TwoColumnEquations, k, Parameters, DecisionVariables, SetsAndIndices, CodeSnippet } from '@/components/optimization'
-import codeBlock from "@/../public/images/optimizing/q1.gms"
+import q1code from "@/../public/gams/hw1-q1.gms"
+import q2code from "@/../public/gams/hw1-q2.gms"
+import Image from 'next/image'
+import { Figure1, Figure2 } from './q1-figures'
+
 
 <Heading />
 
+<div>
 # Problem 1
+
+<img
+    sizes="100vw"
+    width={300}
+    style={{ height: 'auto', maxWidth: "80vw" }}
+    src={"/images/optimizing/benny.png"}
+/>
 
 ![](/images/optimizing/p1.png)
 
-<SetsAndIndices />
+<SetsAndIndices params={[
+    {
+        variable: <Math>{(s=>s.raw)`\[i\in \mathcal{I}\]`}</Math>, 
+        description: "baked goods",
+        set:<Math>{(s=>s.raw)`\[i \in \{\text{rolls}, \text{croissants}, \text{bread loafs}\}\]`}</Math>}
+    ]}
+/>
 
 <Parameters params={[
     { variable: <Math>\[r_i\]</Math>, description: <div>Revenue per item <Math>\[i\]</Math></div>, units: "$/item" },
@@ -27,11 +45,127 @@ import codeBlock from "@/../public/images/optimizing/q1.gms"
 
 <TwoColumnEquations>
     <Math>{(s=>s.raw)`\[\sum_{i \in \mathcal{I}} (r_i - c_i) X_i\]`[0]}</Math>
-      (working hours in a week)
+      (profit per item times number of that item)
 </TwoColumnEquations>
 
-<CodeSnippet rawStr={codeBlock}/>
 
+Subject to the following constraints:
+
+<TwoColumnEquations>
+    <Math>{(s=>s.raw)`\[\sum_{i \in \mathcal{I}} h_i  X_i \leq \bar{h}\]`[0]}</Math>
+      (working hours in a week)
+    <Math>{(s=>s.raw)`\[X_i \geq 0 \quad \forall \ i \in \mathcal{I}\]`[0]}</Math>
+    (non-negativity)
+</TwoColumnEquations>
+
+
+<br />
+<img
+    sizes="100vw"
+    width={700}
+    style={{ height: 'auto', maxWidth: "80vw" }}
+    src={"/images/optimizing/p1b.png"}
+/>
+
+For the counterfactual, we add the following constraint:
+
+<TwoColumnEquations>
+    <Math>{(s=>s.raw)`\[X_{rolls} \geq X_{croissants}\]`[0]}</Math>
+      (roll-croissant combo)
+</TwoColumnEquations>
+
+
+<br />
+
+<img
+    sizes="100vw"
+    width={700}
+    style={{ height: 'auto', maxWidth: "80vw" }}
+    src={"/images/optimizing/p1c.png"}
+/>
+
+<div style={{display: 'flex'}}>
+<Figure1 /><Figure2 />
+</div>
+
+- **Business as usual:** 20 croissants are produced with a profit of $60.
+- **Combo:** 13.3 croissants and 13.3 rolls are produced with a profit of $46.67.
+
+
+<CodeSnippet rawStr={q1code} filename="q1.gms"/>
+
+# Problem 2
+
+<img
+    sizes="100vw"
+    width={300}
+    style={{ height: 'auto', maxWidth: "80vw", borderRadius: "20px"}}
+    src={"/images/optimizing/june.webp"}
+/>
+
+![](/images/optimizing/p2.png)
+
+<SetsAndIndices params={[
+    {
+        variable: <Math>{(s=>s.raw)`\[m\in \mathcal{M}\]`}</Math>, 
+        description: "machines",
+        set:<Math>{(s=>s.raw)`\[m \in \{\text{X1}, \text{X2}\}\]`}</Math>
+    },
+    {
+        variable: <Math>{(s=>s.raw)`\[b\in \mathcal{B}\]`}</Math>, 
+        description: "jellybean colors",
+        set:<Math>{(s=>s.raw)`\[m \in \{\text{yellow}, \text{blue}, \text{green}, \text{orange}, \text{purple}\}\]`}</Math>
+    }
+    ]}
+/>
+
+<Parameters params={[
+    { variable: <Math>\[r_b\]</Math>, description: <div>Net revenue per jellybean of color  <Math>\[b\]</Math></div>, units: "$/bean" },
+    { variable: <Math>{(s=>s.raw)`\[\bar{h}\]`}</Math>, description: <div>Maximum hours a machine can run in a week</div>, units: "hours" },
+    { variable: <Math>{(s=>s.raw)`\[\bar{p}\]`}</Math>, description: <div>Maximum number of jellybeans produced by a machine over an hour</div>, units: "beans/hour" },
+]}
+/>
+
+<DecisionVariables params={
+    [{ variable: <Math>{(s=>s.raw)`\[X_{mb}\]`}</Math>, 
+    description: <div>Quantity of jellybean <Math>\[b\]</Math> produced by machine <Math>\[m\]</Math></div>, 
+    units: "beans" }]
+} />
+
+**Objective:** Maximize profits over a week [$]
+
+<TwoColumnEquations>
+    <Math>{(s=>s.raw)`\[\sum_{m \in \mathcal{M}} \sum_{b \in \mathcal{B}} (r_b) X_{mb}\]`[0]}</Math>
+      (net revenue over all beans and machines)
+</TwoColumnEquations>
+
+Subject to the following constraints:
+
+<TwoColumnEquations>
+    <Math>{(s=>s.raw)`\[\bar{h}\bar{p} \geq \sum_{b \in \mathcal{B}} X_{mb} \quad \forall \ m \in \mathcal{M}\]`[0]}</Math>
+      (jellybean production limit over a week for each machine)
+    <Math>{(s=>s.raw)`\[X_{mb} \geq 0 \quad \forall \ m \in \mathcal{M}, b \in \mathcal{B}\]`[0]}</Math>
+    (non-negativity)
+</TwoColumnEquations>
+
+<br />
+<img
+    sizes="100vw"
+    width={700}
+    style={{ height: 'auto', maxWidth: "80vw" }}
+    src={"/images/optimizing/p2b.png"}
+/>
+
+As we would expect, the profit maximizing production profile is for both machines to exclusively produdce green jellybeans. The profit is $8560.
+
+*(Code is at the end of this problem.)*
+
+![](/images/optimizing/p2c.png)
+
+<CodeSnippet rawStr={q2code} filename="q2.gms"/>
+
+
+</div>
 
 export default function MDXPage({ children }) {
     return <MdxLayout>{children}</MdxLayout>

@@ -50,12 +50,14 @@ model bakery /all/;
 parameters rep_x, rep_z;
 
 solve bakery using lp maximizing Z;
-rep_x(i, "business as usual") = X.l(i);
+* adding 0.0000001 so the value still gets exported
+rep_x(i, "business as usual") = X.l(i) + 0.0000001;
 rep_z("business as usual") = Z.l;
 
 sw_combo = 1;
 solve bakery using lp maximizing Z;
-rep_x(i, "combo") = X.l(i);
+* adding 0.0000001 so the value still gets exported
+rep_x(i, "combo") = X.l(i) + 0.0000001;
 rep_z("combo") = Z.l;
 
-execute_unload 'hw1/bakery.gdx' ; 
+execute_unload 'gams-output/bakery.gdx' ; 
