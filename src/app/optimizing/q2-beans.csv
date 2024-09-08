@@ -1,11 +1,30 @@
-machine,color,bau,5%,5% and color restrictions
-X1,yellow,1e-06,1e-06,737.864
-X1,blue,1e-06,1631.07,1631.07
-X1,green,4000,815.534,1631.07
-X1,orange,1e-06,1553.4,1e-06
-X1,purple,1e-06,1e-06,1e-06
-X2,yellow,1e-06,1631.07,893.204
-X2,blue,1e-06,1e-06,1e-06
-X2,green,4000,815.534,1e-06
-X2,orange,1e-06,1e-06,1553.4
-X2,purple,1e-06,1553.4,1553.4
+X1,yellow,5%,1e-06
+X2,yellow,5%,1631.07
+X1,purple,5%,1e-06
+X2,purple,5%,1553.4
+X1,orange,5%,1553.4
+X2,orange,5%,1e-06
+X1,green,5%,815.534
+X2,green,5%,815.534
+X1,blue,5%,1631.07
+X2,blue,5%,1e-06
+X1,yellow,5% and color restrictions,737.864
+X2,yellow,5% and color restrictions,893.204
+X1,purple,5% and color restrictions,1e-06
+X2,purple,5% and color restrictions,1553.4
+X1,orange,5% and color restrictions,1e-06
+X2,orange,5% and color restrictions,1553.4
+X1,green,5% and color restrictions,1631.07
+X2,green,5% and color restrictions,1e-06
+X1,blue,5% and color restrictions,1631.07
+X2,blue,5% and color restrictions,1e-06
+X1,yellow,bau,1e-06
+X2,yellow,bau,1e-06
+X1,purple,bau,1e-06
+X2,purple,bau,1e-06
+X1,orange,bau,1e-06
+X2,orange,bau,1e-06
+X1,green,bau,4000
+X2,green,bau,4000
+X1,blue,bau,1e-06
+X2,blue,bau,1e-06

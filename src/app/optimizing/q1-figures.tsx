@@ -78,13 +78,8 @@ export const Figure2 = () => {
                 data: flatCounts,
                 y: d => d.item,
             },
-            fy: {
-                // tickRotate: -45,
-                // padding: 0.8
-            },
             color: { legend: true },
             marks: [
-                // Plot.ruleY([0]),
                 Plot.barX(flatCounts, Plot.groupY({ x: 'identity' }, { y: "case", x: "value", fill: "case" })),
                 Plot.axisX({ label: "quantity baked" }),
             ]
