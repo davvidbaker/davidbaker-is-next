@@ -5,6 +5,7 @@ import q1code from "@/../public/gams/hw1-q1.gms"
 import q2code from "@/../public/gams/hw1-q2.gms"
 import Image from 'next/image'
 import { Figure1, Figure2 } from './q1-figures'
+import { Figure1 as BeansFigure1, Figure2 as BeansFigure2, FigureProfits } from './q2-figures'
 
 
 <Heading />
@@ -16,10 +17,10 @@ import { Figure1, Figure2 } from './q1-figures'
     sizes="100vw"
     width={300}
     style={{ height: 'auto', maxWidth: "80vw" }}
-    src={"/images/optimizing/benny.png"}
+    src={"/images/comp-econ-hw1/benny.png"}
 />
 
-![](/images/optimizing/p1.png)
+![](/images/comp-econ-hw1/p1.png)
 
 <SetsAndIndices params={[
     {
@@ -64,7 +65,7 @@ Subject to the following constraints:
     sizes="100vw"
     width={700}
     style={{ height: 'auto', maxWidth: "80vw" }}
-    src={"/images/optimizing/p1b.png"}
+    src={"/images/comp-econ-hw1/p1b.png"}
 />
 
 For the counterfactual, we add the following constraint:
@@ -81,7 +82,7 @@ For the counterfactual, we add the following constraint:
     sizes="100vw"
     width={700}
     style={{ height: 'auto', maxWidth: "80vw" }}
-    src={"/images/optimizing/p1c.png"}
+    src={"/images/comp-econ-hw1/p1c.png"}
 />
 
 <div style={{display: 'flex'}}>
@@ -100,10 +101,10 @@ For the counterfactual, we add the following constraint:
     sizes="100vw"
     width={300}
     style={{ height: 'auto', maxWidth: "80vw", borderRadius: "20px"}}
-    src={"/images/optimizing/june.webp"}
+    src={"/images/comp-econ-hw1/june.webp"}
 />
 
-![](/images/optimizing/p2.png)
+![](/images/comp-econ-hw1/p2.png)
 
 <SetsAndIndices params={[
     {
@@ -153,14 +154,28 @@ Subject to the following constraints:
     sizes="100vw"
     width={700}
     style={{ height: 'auto', maxWidth: "80vw" }}
-    src={"/images/optimizing/p2b.png"}
+    src={"/images/comp-econ-hw1/p2b.png"}
 />
 
 As we would expect, the profit maximizing production profile is for both machines to exclusively produdce green jellybeans. The profit is $8560.
 
 *(Code is at the end of this problem.)*
 
-![](/images/optimizing/p2c.png)
+![](/images/comp-econ-hw1/p2c.png)
+
+I am calling this case *5%*. Profits have dropped to $7962.72. June still produces 8000 jellybeans but as can be seen in the figures below, 
+machine X1 now produces blue, orange, and green jellybeans, while machine X2 produces yellow, purple, and green.
+
+<div style={{display: 'flex'}}>
+<BeansFigure1 /><BeansFigure2 />
+</div>
+
+<FigureProfits />
+
+![](/images/comp-econ-hw1/p2d.png)
+
+I am calling this case *5% and color restrictions*. Profits are the same as in the *5%* case, and total jellybeans by color has also not changed.
+The only difference is that the machine production profile has changed slightly, as shown above.
 
 <CodeSnippet rawStr={q2code} filename="q2.gms"/>
 

@@ -4,6 +4,7 @@ import * as d3 from "d3";
 import { useEffect, useRef, useState } from "react";
 // @ts-ignore
 import profits from './q1-profits.csv'
+// @ts-ignore
 import items from './q1-items.csv'
 // @ts-ignore
 import { get_color as xkcd } from 'xkcd-colors'
@@ -11,7 +12,7 @@ import styled from "styled-components";
 
 
 export const Figure1 = () => {
-    const containerRef = useRef();
+    const containerRef = useRef(null);
     const [data, setData] = useState(d3.csvParseRows(profits, (d, i) => ({
         case: d[0],
         profit: d[1]
@@ -35,6 +36,7 @@ export const Figure1 = () => {
                 Plot.axisY({ label: "profit [$]" }),
             ]
         });
+        // @ts-ignore
         containerRef?.current.append(plot);
         return () => plot.remove();
     }, [data]);
@@ -49,7 +51,9 @@ const counts = d3.csvParse(items, (d, i) => ({
 }));
 
 const flatCounts = counts.flatMap(d => [{
+    // @ts-ignore
     item: d.item, case: 'business as usual', value: d['business as usual']
+    // @ts-ignore
 }, { item: d.item, case: 'combo', value: d.combo }])
 
 const Container = styled.div`
@@ -57,7 +61,7 @@ padding: 30px;
 `
 
 export const Figure2 = () => {
-    const containerRef = useRef();
+    const containerRef = useRef(null);
     const [data, setData] = useState(counts);
 
     console.log('❤️‍🔥 data', data);
@@ -84,6 +88,7 @@ export const Figure2 = () => {
                 Plot.axisX({ label: "quantity baked" }),
             ]
         });
+        // @ts-ignore
         containerRef?.current.append(plot);
         return () => plot.remove();
     }, [data]);

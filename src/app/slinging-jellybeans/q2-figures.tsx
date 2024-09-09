@@ -5,6 +5,8 @@ import { useEffect, useRef, useState } from "react";
 // @ts-ignore
 import beans from './q2-beans.csv'
 // @ts-ignore
+import profitsRaw from './q2-profits.csv'
+// @ts-ignore
 import { get_color as xkcd } from 'xkcd-colors'
 import styled from "styled-components";
 
@@ -26,13 +28,12 @@ const counts = d3.csvParseRows(beans, (d) => ({
     stroke: d[0] == 'X1' ? 'black' : 'grey',
 }))
 
-console.log('❤️‍🔥 counts', counts);
 const Container = styled.div`
 padding: 30px;
 `
 
 export const Figure1 = () => {
-    const containerRef = useRef();
+    const containerRef = useRef(null);
     const [data, setData] = useState(counts);
 
     useEffect(() => {
@@ -43,7 +44,7 @@ export const Figure1 = () => {
     useEffect(() => {
         if (data === undefined) return;
         const plot = Plot.plot({
-            // marginLeft: 100,
+            marginLeft: 60,
             width: 400,
             y: { grid: true },
             x: {
@@ -56,10 +57,12 @@ export const Figure1 = () => {
             marks: [
                 Plot.barY(counts, Plot.groupX({ y: 'identity' }, { x: "machine", y: "value", fill: "bean" })),
                 Plot.axisX({ label: null }),
-                Plot.axisY({ label: "jellybeans produced" }),
+                Plot.axisY({ label: "jellybeans produced", labelAnchor: 'center' }),
+
 
             ]
         });
+        // @ts-ignore
         containerRef?.current.append(plot);
         return () => plot.remove();
     }, [data]);
@@ -69,7 +72,7 @@ export const Figure1 = () => {
 
 
 export const Figure2 = () => {
-    const containerRef = useRef();
+    const containerRef = useRef(null);
     const [data, setData] = useState(counts);
 
     useEffect(() => {
@@ -93,27 +96,69 @@ export const Figure2 = () => {
             marks: [
                 Plot.barY(counts, { x: 'bean', y: 'value', fill: 'bean', stroke: 'black' }), //, Plot.groupX({ y: 'sum' }, { x: "bean", y: "value", fill: "bean" })),
                 Plot.text(counts, {
+                    // @ts-ignore
                     x: 'bean', y: (d, _i, arr) => {
                         if (d.value < 10) return null;
 
                         if (d.machine === 'X1') return d.value / 2;
 
-                        console.log('❤️‍🔥 d, arr', d, arr);
-
-
+                        // @ts-ignore
                         const other = arr.find(a => { return a.case === d.case && a.bean === d.bean && a.machine === 'X1' })
-
-                        console.log('❤️‍🔥 other', other);
 
                         return d.value / 2 + (other?.value ?? 0)
 
-                    }, fill: 'black', text: 'machine', title: 'machine',
+                    }, fill: 'black', text: 'machine',
                 }), //, Plot.groupX({ y: 'sum' }, { x: "bean", y: "value", fill: "bean" })),
-                Plot.axisX({ ticks: [], label: "bean distribution" }),
+                Plot.axisX({ ticks: [], label: "bean production profile" }),
                 Plot.axisY({ label: "jellybeans produced", labelAnchor: 'center' }),
 
             ]
         });
+        // @ts-ignore
+        containerRef?.current.append(plot);
+        return () => plot.remove();
+    }, [data]);
+
+    return <Container><div ref={containerRef} /></Container>;
+}
+
+
+const profits = d3.csvParseRows(profitsRaw, (d) => ({
+    case: d[0],
+    value:Number(d[1])
+}));
+
+
+export const FigureProfits = () => {
+    const containerRef = useRef(null);
+    const [data, setData] = useState(counts);
+
+    useEffect(() => {
+        setData(counts)
+    }, []);
+
+
+    useEffect(() => {
+        if (data === undefined) return;
+        const plot = Plot.plot({
+            marginLeft: 80,
+            width: 400,
+            y: { grid: true, },
+            x: {
+                tickRotate: 90,
+            },
+            marks: [
+                Plot.barY(profits, { x: 'case', y: 'value', fill: xkcd('green blue')}),
+                Plot.text(profits, {
+                    x: 'case', y: d=>d.value + 140,
+                    fill: 'black', text: 'value',
+                }),
+                Plot.axisX({ label: null }),
+                Plot.axisY({ label: "Profits [$]", labelAnchor: 'center' }),
+
+            ]
+        });
+        // @ts-ignore
         containerRef?.current.append(plot);
         return () => plot.remove();
     }, [data]);
