@@ -2,7 +2,7 @@
     {
       "name": "flambé",
       "path": "a-busy-bee",
-      "status": ["coming soon!", "darkmagenta"],
+      "status": ["maybe I'll be back", "darkmagenta"],
       "tagline":
         "Chrome DevTools-inspired flame charts for keeping track of all your projects.",
       "year": [2017, 2018],
@@ -25,11 +25,11 @@
     {
       "name": "Whoa",
       "path": "aghast",
-      "status": ["active development", "darkmagenta"],
+      "status": ["mostly aborted", "darkmagenta"],
       "tagline": "An exploration of writing with custom markup and components.",
       "year": [2017],
       "callToAction": "See it in action!",
-      "link": "https://davidbaker.is/scribbling",
+      "link": "https://davidbaker-is-dvrr3g2fc-davvidbaker.vercel.app/scribbling",
       "linkToSource": "https://github.com/davvidbaker/whoa",
       "linkToTrello": "https://trello.com/b/kDjPvwZq/dot-whoa",
       "description":

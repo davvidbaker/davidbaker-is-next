@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Image from 'next/image'
 
-import { ExternalLinks } from '../../components/ExternalLinks';
-import { Status } from '../../components/Status'
+import { ExternalLinks } from '../../../components/ExternalLinks';
+import { Status } from '../../../components/Status'
 import { Project } from './page';
 
 const Teaser = styled.div`

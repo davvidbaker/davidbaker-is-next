@@ -4,7 +4,7 @@ import Link from 'next/link';
 import styled from 'styled-components';
 import Image from "next/image";
 
-import CycleItems from '../../components/CycleItems';
+import CycleItems from '../../../components/CycleItems';
 
 const Main = styled.main`
   max-width: 50rem;

@@ -4,8 +4,8 @@ import { marked } from 'marked';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-import { ExternalLinks } from '../../components/ExternalLinks';
-import { Status } from '../../components/Status';
+import { ExternalLinks } from '../../../components/ExternalLinks';
+import { Status } from '../../../components/Status';
 import { Project } from '../hacking/page'
 import Image from 'next/image';
 // class ProjectTemplate extends React.Component {
