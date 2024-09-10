@@ -52,10 +52,10 @@ equations
 
 objfn.. Z =e= sum((m,b)$m_b(m,b), r(b)*X(m,b));
 
-eq_weekly_machine_production(m).. hbar*pbar =g= sum(b, X(m,b));
+eq_weekly_machine_production(m).. hbar*pbar =g= sum(b$m_b(m,b), X(m,b));
 
-eq_prodlimit_lower(b,bb)$sw_fivepercent.. sum(m, X(m,b)) =g= 0.95*sum(m, X(m, bb));
-eq_prodlimit_upper(b,bb)$sw_fivepercent.. sum(m, X(m,b)) =l= 1.05*sum(m, X(m, bb));
+eq_prodlimit_lower(b,bb)$sw_fivepercent.. sum(m$m_b(m,b), X(m,b)) =g= 0.95*sum(m$m_b(m,bb), X(m, bb));
+eq_prodlimit_upper(b,bb)$sw_fivepercent.. sum(m$m_b(m,b), X(m,b)) =l= 1.05*sum(m$m_b(m,bb), X(m, bb));
 
 model jellybeans /all/;
 
@@ -63,15 +63,15 @@ parameters rep_x, rep_z, rep_bean_totals;
 
 * CASE 1: business as usual
 solve jellybeans using LP maximizing Z;
-rep_bean_totals(b, "bau") = sum(m, X.l(m,b)) + 0.000001;
-rep_x(m,b, "bau") = X.l(m,b) + 0.000001;
+rep_bean_totals(b, "bau") = sum(m, X.l(m,b));
+rep_x(m,b, "bau") = X.l(m,b);
 rep_z("bau") = Z.l;
 
 * CASE 2: all bean production within 5%
 sw_fivepercent = 1;
 solve jellybeans using LP maximizing Z;
-rep_bean_totals(b, "5%") = sum(m, X.l(m,b)) + 0.000001;
-rep_x(m,b, "5%") = X.l(m,b) + 0.000001;
+rep_bean_totals(b, "5%") = sum(m, X.l(m,b));
+rep_x(m,b, "5%") = X.l(m,b);
 rep_z("5%") = Z.l;
 
 * CASE 3: machines are restricted on what colors they can produce
@@ -84,8 +84,8 @@ m_b("X2", "blue")$sw_coloredmachines = no;
 m_b("X2", "green")$sw_coloredmachines = no;
 
 solve jellybeans using LP maximizing Z;
-rep_bean_totals(b, "5% and color restrictions") = sum(m, X.l(m,b)) + 0.000001;
-rep_x(m,b, "5% and color restrictions") = X.l(m,b) + 0.000001;
+rep_bean_totals(b, "5% and color restrictions") = sum(m, X.l(m,b));
+rep_x(m,b, "5% and color restrictions") = X.l(m,b);
 rep_z("5% and color restrictions") = Z.l;
 
 
