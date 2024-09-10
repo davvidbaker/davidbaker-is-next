@@ -279,7 +279,7 @@ export const Resume = ({ objective = baseObjective, relevantCoursework = baseCou
                     <section>
                         <h2>Education</h2>
                         <h3><a href="https://www.mines.edu/">Colorado School of Mines</a>
-                            <span>[2023 - graduating December 2024]</span><span>— <a title="transcript" href="/images/mines-unoffical-transcript.pdf">GPA: 4.00/4.00
+                            <span>[2023 - graduating December 2024]</span><span>— <a title="transcript" href="/images/mines-unoffical-transcript.png">GPA: 4.00/4.00
                             </a></span></h3>
                         <ul>
                             <li><p>Master of Science in Advanced Energy Systems</p></li>
