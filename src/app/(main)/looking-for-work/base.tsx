@@ -242,8 +242,10 @@ interface Props {
     relevantCoursework?: string
 }
 
-const baseObjective = "Experienced software engineer seeking electrical engineering internship in distributed energy resource field. Passionate about modernizing the grid and renewable energy sources."
-const baseCoursework = "Power Electronics, Power Systems Analysis, and Physics of Energy"
+const baseObjective = "Experienced software engineer seeking position in energy system modeling, planning, and analysis."
+
+
+const baseCoursework = "Power Systems Analysis, Power Quality, Energy for Transportation, Data Science, Computational Economics"
 export const Resume = ({ objective = baseObjective, relevantCoursework = baseCoursework }: Props) => (
     <Div>
         <Head>
@@ -259,7 +261,7 @@ export const Resume = ({ objective = baseObjective, relevantCoursework = baseCou
             <header>
                 <h1 className="name">David Baker</h1>
                 <p className="subtitle print-show">
-                    davidbaker.is/online<br />davvidbaker@gmail.com
+                    davidbaker.is/online<br />david_baker@mines.edu
                 </p>
                 <button
                     className="print-hide"
@@ -277,27 +279,23 @@ export const Resume = ({ objective = baseObjective, relevantCoursework = baseCou
                     <section>
                         <h2>Education</h2>
                         <h3><a href="https://www.mines.edu/">Colorado School of Mines</a>
-                            <span>[2023 - graduating December 2024]</span></h3>
+                            <span>[2023 - graduating December 2024]</span><span>— <a title="transcript" href="/images/mines-unoffical-transcript.pdf">GPA: 4.00/4.00
+                            </a></span></h3>
                         <ul>
                             <li><p>Master of Science in Advanced Energy Systems</p></li>
                             <li><p>Relevant coursework includes {relevantCoursework}</p></li>
                         </ul>
                         <h3>
                             <a href="https://www.upenn.edu">University of Pennsylvania</a>
-                            <span>[2011 - 2015]</span>
+                            <span>[2011 - 2015]</span><span>— <a title="transcript" href="/images/unofficial-transcript.png">GPA: 3.78/4.00
+                                    </a>
+                                </span>
                         </h3>
                         <ul>
                             <li>
                                 <p>
                                     Bachelor of Science in Engineering, Systems Science and
                                     Engineering, <em>magna cum laude</em>
-                                </p>
-                            </li>
-                            <li>
-                                <p>
-                                    <a title="transcript" href="/images/unofficial-transcript.png">
-                                        Cumulative GPA: 3.78/4.00
-                                    </a>
                                 </p>
                             </li>
                         </ul>
@@ -550,17 +548,9 @@ export const Resume = ({ objective = baseObjective, relevantCoursework = baseCou
                             Dean's List<span>[2011 - 12, 2013 - 14, 2014 - 15]</span>
                         </h3>
                         <h3>
-                            Glenbrook North High School Distinguished Boy Award
+                            Glenbrook North High School Distinguished Student Award
                             <span>[2011]</span>
                         </h3>
-                        <ul>
-                            <li>
-                                <p>
-                                    Highest honor awarded by school, voted on by staff and
-                                    students
-                                </p>
-                            </li>
-                        </ul>
                     </section>
 
                     <section className="print-hide">
@@ -569,6 +559,7 @@ export const Resume = ({ objective = baseObjective, relevantCoursework = baseCou
                             <div>
                                 <h3 className='print-hide'>Software</h3>
                                 <ul>
+                                    <li><p>GAMS</p></li>
                                     <li><p>Python</p></li>
                                     <li><p>Matlab, Simulink</p></li>
                                     <li>
