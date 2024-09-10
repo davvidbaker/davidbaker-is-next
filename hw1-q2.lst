@@ -1,4 +1,4 @@
-GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/07/24 21:57:54 Page 1
+GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/09/24 21:02:54 Page 1
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 C o m p i l a t i o n
 
@@ -57,10 +57,10 @@ C o m p i l a t i o n
   52   
   53  objfn.. Z =e= sum((m,b)$m_b(m,b), r(b)*X(m,b));
   54   
-  55  eq_weekly_machine_production(m).. hbar*pbar =g= sum(b, X(m,b));
+  55  eq_weekly_machine_production(m).. hbar*pbar =g= sum(b$m_b(m,b), X(m,b));
   56   
-  57  eq_prodlimit_lower(b,bb)$sw_fivepercent.. sum(m, X(m,b)) =g= 0.95*sum(m, X(m, bb));
-  58  eq_prodlimit_upper(b,bb)$sw_fivepercent.. sum(m, X(m,b)) =l= 1.05*sum(m, X(m, bb));
+  57  eq_prodlimit_lower(b,bb)$[sw_fivepercent$(not sameas(b,bb))].. sum(m$m_b(m,b), X(m,b)) =g= 0.95*sum(m$m_b(m,bb), X(m, bb));
+  58  eq_prodlimit_upper(b,bb)$[sw_fivepercent$(not sameas(b,bb))].. sum(m$m_b(m,b), X(m,b)) =l= 1.05*sum(m$m_b(m,bb), X(m, bb));
   59   
   60  model jellybeans /all/;
   61   
@@ -84,21 +84,19 @@ C o m p i l a t i o n
   79  * * Some combinations are not valid
   80  m_b("X1", "orange")$sw_coloredmachines = no;
   81  m_b("X1", "purple")$sw_coloredmachines = no;
-  82   
-  83  m_b("X2", "blue")$sw_coloredmachines = no;
-  84  m_b("X2", "green")$sw_coloredmachines = no;
-  85   
-  86  solve jellybeans using LP maximizing Z;
-  87  rep_bean_totals(b, "5% and color restrictions") = sum(m, X.l(m,b)) + 0.000001;
-  88  rep_x(m,b, "5% and color restrictions") = X.l(m,b) + 0.000001;
-  89  rep_z("5% and color restrictions") = Z.l;
-  90   
-  91   
-  92  execute_unload 'gams-output/jellybeans.gdx' ;
+  82  m_b("X2", "blue")  $sw_coloredmachines = no;
+  83  m_b("X2", "green") $sw_coloredmachines = no;
+  84   
+  85  solve jellybeans using LP maximizing Z;
+  86  rep_bean_totals(b, "5% and color restrictions") = sum(m, X.l(m,b)) + 0.000001;
+  87  rep_x(m,b, "5% and color restrictions") = X.l(m,b) + 0.000001;
+  88  rep_z("5% and color restrictions") = Z.l;
+  89   
+  90  execute_unload 'gams-output/jellybeans.gdx' ;
 
 
-COMPILATION TIME     =        0.001 SECONDS      3 MB  45.4.0 19dc3313 DAX-DAC
-GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/07/24 21:57:54 Page 2
+COMPILATION TIME     =        0.000 SECONDS      3 MB  45.4.0 19dc3313 DAX-DAC
+GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/09/24 21:02:54 Page 2
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 Equation Listing    SOLVE jellybeans Using LP From line 65
 
@@ -124,7 +122,7 @@ eq_weekly_machine_production(X2)..  - X(X2,yellow) - X(X2,blue) - X(X2,green) - 
 
                 NONE
 
-GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/07/24 21:57:54 Page 3
+GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/09/24 21:02:54 Page 3
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 Column Listing      SOLVE jellybeans Using LP From line 65
 
@@ -154,7 +152,7 @@ Z
                 (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
         1       objfn
 
-GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/07/24 21:57:54 Page 4
+GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/09/24 21:02:54 Page 4
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 Range Statistics    SOLVE jellybeans Using LP From line 65
 
@@ -165,7 +163,7 @@ RHS       [min, max] : [ 4.000E+03, 4.000E+03] - Zero values observed as well
 Bound     [min, max] : [        NA,        NA] - Zero values observed as well
 Matrix    [min, max] : [ 9.000E-01, 1.070E+00]
 
-GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/07/24 21:57:54 Page 5
+GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/09/24 21:02:54 Page 5
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 Model Statistics    SOLVE jellybeans Using LP From line 65
 
@@ -177,8 +175,8 @@ BLOCKS OF VARIABLES           2     SINGLE VARIABLES           11
 NON ZERO ELEMENTS            21
 
 
-GENERATION TIME      =        0.005 SECONDS      4 MB  45.4.0 19dc3313 DAX-DAC
-GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/07/24 21:57:54 Page 6
+GENERATION TIME      =        0.004 SECONDS      4 MB  45.4.0 19dc3313 DAX-DAC
+GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/09/24 21:02:54 Page 6
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 Solution Report     SOLVE jellybeans Using LP From line 65
 
@@ -193,7 +191,7 @@ Solution Report     SOLVE jellybeans Using LP From line 65
 **** MODEL STATUS      1 Optimal
 **** OBJECTIVE VALUE             8560.0000
 
- RESOURCE USAGE, LIMIT          0.006 10000000000.000
+ RESOURCE USAGE, LIMIT          0.000 10000000000.000
  ITERATION COUNT, LIMIT         0    2147483647
 *** This solver runs with a community license. No commercial use.
 --- GMO setup time: 0.00s
@@ -204,7 +202,7 @@ Solution Report     SOLVE jellybeans Using LP From line 65
 
 
 --- LP status (1): optimal.
---- Cplex Time: 0.01sec (det. 0.00 ticks)
+--- Cplex Time: 0.00sec (det. 0.00 ticks)
 
 
 Optimal solution found
@@ -259,7 +257,7 @@ X2.purple          .              .            +INF           -0.1700
 **** REPORT SUMMARY :        0     NONOPT
                              0 INFEASIBLE
                              0  UNBOUNDED
-GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/07/24 21:57:54 Page 7
+GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/09/24 21:02:54 Page 7
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 Equation Listing    SOLVE jellybeans Using LP From line 72
 
@@ -278,26 +276,26 @@ eq_weekly_machine_production(X2)..  - X(X2,yellow) - X(X2,blue) - X(X2,green) - 
 
 ---- eq_prodlimit_lower  =G=  production for bean b must be greater than or equal to than 95% of bb
 
-eq_prodlimit_lower(yellow,yellow)..  0.05*X(X1,yellow) + 0.05*X(X2,yellow) =G= 0 ; (LHS = 0)
-     
 eq_prodlimit_lower(yellow,blue)..  X(X1,yellow) - 0.95*X(X1,blue) + X(X2,yellow) - 0.95*X(X2,blue) =G= 0 ; (LHS = 0)
      
 eq_prodlimit_lower(yellow,green)..  X(X1,yellow) - 0.95*X(X1,green) + X(X2,yellow) - 0.95*X(X2,green) =G= 0 ; (LHS = -7600, INFES = 7600 ****)
      
-REMAINING 22 ENTRIES SKIPPED
+eq_prodlimit_lower(yellow,orange)..  X(X1,yellow) - 0.95*X(X1,orange) + X(X2,yellow) - 0.95*X(X2,orange) =G= 0 ; (LHS = 0)
+     
+REMAINING 17 ENTRIES SKIPPED
 
 
 ---- eq_prodlimit_upper  =L=  production for bean b must be less than or equal to than 105% of bb
 
-eq_prodlimit_upper(yellow,yellow)..  - 0.05*X(X1,yellow) - 0.05*X(X2,yellow) =L= 0 ; (LHS = 0)
-     
 eq_prodlimit_upper(yellow,blue)..  X(X1,yellow) - 1.05*X(X1,blue) + X(X2,yellow) - 1.05*X(X2,blue) =L= 0 ; (LHS = 0)
      
 eq_prodlimit_upper(yellow,green)..  X(X1,yellow) - 1.05*X(X1,green) + X(X2,yellow) - 1.05*X(X2,green) =L= 0 ; (LHS = -8400)
      
-REMAINING 22 ENTRIES SKIPPED
+eq_prodlimit_upper(yellow,orange)..  X(X1,yellow) - 1.05*X(X1,orange) + X(X2,yellow) - 1.05*X(X2,orange) =L= 0 ; (LHS = 0)
+     
+REMAINING 17 ENTRIES SKIPPED
 
-GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/07/24 21:57:54 Page 8
+GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/09/24 21:02:54 Page 8
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 Column Listing      SOLVE jellybeans Using LP From line 72
 
@@ -308,7 +306,6 @@ X(X1,yellow)
                 (.LO, .L, .UP, .M = 0, 0, +INF, -0.0700000000000001)
        -1       objfn
        -1       eq_weekly_machine_production(X1)
-        0.05    eq_prodlimit_lower(yellow,yellow)
         1       eq_prodlimit_lower(yellow,blue)
         1       eq_prodlimit_lower(yellow,green)
         1       eq_prodlimit_lower(yellow,orange)
@@ -317,7 +314,6 @@ X(X1,yellow)
        -0.95    eq_prodlimit_lower(green,yellow)
        -0.95    eq_prodlimit_lower(orange,yellow)
        -0.95    eq_prodlimit_lower(purple,yellow)
-       -0.05    eq_prodlimit_upper(yellow,yellow)
         1       eq_prodlimit_upper(yellow,blue)
         1       eq_prodlimit_upper(yellow,green)
         1       eq_prodlimit_upper(yellow,orange)
@@ -333,7 +329,6 @@ X(X1,blue)
        -1       eq_weekly_machine_production(X1)
        -0.95    eq_prodlimit_lower(yellow,blue)
         1       eq_prodlimit_lower(blue,yellow)
-        0.05    eq_prodlimit_lower(blue,blue)
         1       eq_prodlimit_lower(blue,green)
         1       eq_prodlimit_lower(blue,orange)
         1       eq_prodlimit_lower(blue,purple)
@@ -342,7 +337,6 @@ X(X1,blue)
        -0.95    eq_prodlimit_lower(purple,blue)
        -1.05    eq_prodlimit_upper(yellow,blue)
         1       eq_prodlimit_upper(blue,yellow)
-       -0.05    eq_prodlimit_upper(blue,blue)
         1       eq_prodlimit_upper(blue,green)
         1       eq_prodlimit_upper(blue,orange)
         1       eq_prodlimit_upper(blue,purple)
@@ -358,7 +352,6 @@ X(X1,green)
        -0.95    eq_prodlimit_lower(blue,green)
         1       eq_prodlimit_lower(green,yellow)
         1       eq_prodlimit_lower(green,blue)
-        0.05    eq_prodlimit_lower(green,green)
         1       eq_prodlimit_lower(green,orange)
         1       eq_prodlimit_lower(green,purple)
        -0.95    eq_prodlimit_lower(orange,green)
@@ -367,7 +360,6 @@ X(X1,green)
        -1.05    eq_prodlimit_upper(blue,green)
         1       eq_prodlimit_upper(green,yellow)
         1       eq_prodlimit_upper(green,blue)
-       -0.05    eq_prodlimit_upper(green,green)
         1       eq_prodlimit_upper(green,orange)
         1       eq_prodlimit_upper(green,purple)
        -1.05    eq_prodlimit_upper(orange,green)
@@ -381,7 +373,7 @@ Z
                 (.LO, .L, .UP, .M = -INF, 8560, +INF, 0)
         1       objfn
 
-GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/07/24 21:57:54 Page 9
+GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/09/24 21:02:54 Page 9
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 Range Statistics    SOLVE jellybeans Using LP From line 72
 
@@ -390,22 +382,22 @@ RANGE STATISTICS (ABSOLUTE NON-ZERO FINITE VALUES)
 
 RHS       [min, max] : [ 4.000E+03, 4.000E+03] - Zero values observed as well
 Bound     [min, max] : [        NA,        NA] - Zero values observed as well
-Matrix    [min, max] : [ 5.000E-02, 1.070E+00]
+Matrix    [min, max] : [ 9.000E-01, 1.070E+00]
 
-GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/07/24 21:57:54 Page 10
+GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/09/24 21:02:54 Page 10
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 Model Statistics    SOLVE jellybeans Using LP From line 72
 
 
 MODEL STATISTICS
 
-BLOCKS OF EQUATIONS           4     SINGLE EQUATIONS           53
+BLOCKS OF EQUATIONS           4     SINGLE EQUATIONS           43
 BLOCKS OF VARIABLES           2     SINGLE VARIABLES           11
-NON ZERO ELEMENTS           201
+NON ZERO ELEMENTS           181
 
 
 GENERATION TIME      =        0.001 SECONDS      4 MB  45.4.0 19dc3313 DAX-DAC
-GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/07/24 21:57:54 Page 11
+GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/09/24 21:02:54 Page 11
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 Solution Report     SOLVE jellybeans Using LP From line 72
 
@@ -420,18 +412,18 @@ Solution Report     SOLVE jellybeans Using LP From line 72
 **** MODEL STATUS      1 Optimal
 **** OBJECTIVE VALUE             7962.7184
 
- RESOURCE USAGE, LIMIT          0.003 10000000000.000
+ RESOURCE USAGE, LIMIT          0.001 10000000000.000
  ITERATION COUNT, LIMIT         8    2147483647
 *** This solver runs with a community license. No commercial use.
 --- GMO setup time: 0.00s
 --- GMO memory 0.50 Mb (peak 0.50 Mb)
 --- Dictionary memory 0.00 Mb
---- Cplex 22.1.1.0 link memory 0.00 Mb (peak 0.01 Mb)
+--- Cplex 22.1.1.0 link memory 0.00 Mb (peak 0.00 Mb)
 --- Starting Cplex
 
 
 --- LP status (1): optimal.
---- Cplex Time: 0.00sec (det. 0.20 ticks)
+--- Cplex Time: 0.00sec (det. 0.19 ticks)
 
 
 Optimal solution found
@@ -455,61 +447,51 @@ X2     -4000.0000     -4000.0000        +INF           -0.9953
 
                      LOWER          LEVEL          UPPER         MARGINAL
 
-yellow.yellow          .            81.5534        +INF             .          
 yellow.blue            .            81.5534        +INF             .          
 yellow.green           .            81.5534        +INF             .          
 yellow.orange          .           155.3398        +INF             .          
 yellow.purple          .           155.3398        +INF             .          
 blue  .yellow          .            81.5534        +INF             .          
-blue  .blue            .            81.5534        +INF             .          
 blue  .green           .            81.5534        +INF             .          
 blue  .orange          .           155.3398        +INF             .          
 blue  .purple          .           155.3398        +INF             .          
 green .yellow          .            81.5534        +INF             .          
 green .blue            .            81.5534        +INF             .          
-green .green           .            81.5534        +INF             .          
 green .orange          .           155.3398        +INF             .          
 green .purple          .           155.3398        +INF             .          
 orange.yellow          .             3.8835        +INF             .          
 orange.blue            .             3.8835        +INF             .          
 orange.green           .             3.8835        +INF             .          
-orange.orange          .            77.6699        +INF             .          
 orange.purple          .            77.6699        +INF             .          
 purple.yellow          .             3.8835        +INF             .          
 purple.blue            .             3.8835        +INF             .          
 purple.green           .             3.8835        +INF             .          
 purple.orange          .            77.6699        +INF             .          
-purple.purple          .            77.6699        +INF             .          
 
 ---- EQU eq_prodlimit_upper  production for bean b must be less than or equal to than 105% of bb
 
                      LOWER          LEVEL          UPPER         MARGINAL
 
-yellow.yellow        -INF          -81.5534          .              .          
 yellow.blue          -INF          -81.5534          .              .          
 yellow.green         -INF          -81.5534          .              .          
 yellow.orange        -INF             .              .             0.0047      
 yellow.purple        -INF             .              .              .          
 blue  .yellow        -INF          -81.5534          .              .          
-blue  .blue          -INF          -81.5534          .              .          
 blue  .green         -INF          -81.5534          .              .          
 blue  .orange        -INF             .              .              .          
 blue  .purple        -INF             .              .             0.0547      
 green .yellow        -INF          -81.5534          .              .          
 green .blue          -INF          -81.5534          .              .          
-green .green         -INF          -81.5534          .              .          
 green .orange        -INF             .              .             0.0385      
 green .purple        -INF             .              .             0.0361      
 orange.yellow        -INF         -159.2233          .              .          
 orange.blue          -INF         -159.2233          .              .          
 orange.green         -INF         -159.2233          .              .          
-orange.orange        -INF          -77.6699          .              .          
 orange.purple        -INF          -77.6699          .              .          
 purple.yellow        -INF         -159.2233          .              .          
 purple.blue          -INF         -159.2233          .              .          
 purple.green         -INF         -159.2233          .              .          
 purple.orange        -INF          -77.6699          .              .          
-purple.purple        -INF          -77.6699          .              .          
 
 ---- VAR X  quantity of jellybean b produced by machine m [beans]
 
@@ -536,9 +518,9 @@ X2.purple          .          1553.3981        +INF             .
 **** REPORT SUMMARY :        0     NONOPT
                              0 INFEASIBLE
                              0  UNBOUNDED
-GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/07/24 21:57:54 Page 12
+GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/09/24 21:02:54 Page 12
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
-Equation Listing    SOLVE jellybeans Using LP From line 86
+Equation Listing    SOLVE jellybeans Using LP From line 85
 
 
 ---- objfn  =E=  target of our optimization
@@ -548,35 +530,35 @@ objfn..  - X(X1,yellow) - 1.05*X(X1,blue) - 1.07*X(X1,green) - X(X2,yellow) - 0.
 
 ---- eq_weekly_machine_production  =G=  jellybean production limit over a week for each machine
 
-eq_weekly_machine_production(X1)..  - X(X1,yellow) - X(X1,blue) - X(X1,green) - X(X1,orange) - X(X1,purple) =G= -4000 ; (LHS = -4000)
+eq_weekly_machine_production(X1)..  - X(X1,yellow) - X(X1,blue) - X(X1,green) =G= -4000 ; (LHS = -2446.60194174757)
      
-eq_weekly_machine_production(X2)..  - X(X2,yellow) - X(X2,blue) - X(X2,green) - X(X2,orange) - X(X2,purple) =G= -4000 ; (LHS = -4000)
+eq_weekly_machine_production(X2)..  - X(X2,yellow) - X(X2,orange) - X(X2,purple) =G= -4000 ; (LHS = -3184.46601941748)
      
 
 ---- eq_prodlimit_lower  =G=  production for bean b must be greater than or equal to than 95% of bb
 
-eq_prodlimit_lower(yellow,yellow)..  0.05*X(X1,yellow) + 0.05*X(X2,yellow) =G= 0 ; (LHS = 81.5533980582525)
+eq_prodlimit_lower(yellow,blue)..  X(X1,yellow) - 0.95*X(X1,blue) + X(X2,yellow) =G= 0 ; (LHS = 81.5533980582525)
      
-eq_prodlimit_lower(yellow,blue)..  X(X1,yellow) - 0.95*X(X1,blue) + X(X2,yellow) - 0.95*X(X2,blue) =G= 0 ; (LHS = 81.5533980582525)
+eq_prodlimit_lower(yellow,green)..  X(X1,yellow) - 0.95*X(X1,green) + X(X2,yellow) =G= 0 ; (LHS = 856.31067961165)
      
-eq_prodlimit_lower(yellow,green)..  X(X1,yellow) - 0.95*X(X1,green) + X(X2,yellow) - 0.95*X(X2,green) =G= 0 ; (LHS = 81.5533980582525)
+eq_prodlimit_lower(yellow,orange)..  X(X1,yellow) + X(X2,yellow) - 0.95*X(X2,orange) =G= 0 ; (LHS = 1631.06796116505)
      
-REMAINING 22 ENTRIES SKIPPED
+REMAINING 17 ENTRIES SKIPPED
 
 
 ---- eq_prodlimit_upper  =L=  production for bean b must be less than or equal to than 105% of bb
 
-eq_prodlimit_upper(yellow,yellow)..  - 0.05*X(X1,yellow) - 0.05*X(X2,yellow) =L= 0 ; (LHS = -81.5533980582525)
+eq_prodlimit_upper(yellow,blue)..  X(X1,yellow) - 1.05*X(X1,blue) + X(X2,yellow) =L= 0 ; (LHS = -81.5533980582525)
      
-eq_prodlimit_upper(yellow,blue)..  X(X1,yellow) - 1.05*X(X1,blue) + X(X2,yellow) - 1.05*X(X2,blue) =L= 0 ; (LHS = -81.5533980582525)
+eq_prodlimit_upper(yellow,green)..  X(X1,yellow) - 1.05*X(X1,green) + X(X2,yellow) =L= 0 ; (LHS = 774.757281553398, INFES = 774.757281553398 ****)
      
-eq_prodlimit_upper(yellow,green)..  X(X1,yellow) - 1.05*X(X1,green) + X(X2,yellow) - 1.05*X(X2,green) =L= 0 ; (LHS = -81.5533980582525)
+eq_prodlimit_upper(yellow,orange)..  X(X1,yellow) + X(X2,yellow) - 1.05*X(X2,orange) =L= 0 ; (LHS = 1631.06796116505, INFES = 1631.06796116505 ****)
      
-REMAINING 22 ENTRIES SKIPPED
+REMAINING 17 ENTRIES SKIPPED
 
-GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/07/24 21:57:54 Page 13
+GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/09/24 21:02:54 Page 13
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
-Column Listing      SOLVE jellybeans Using LP From line 86
+Column Listing      SOLVE jellybeans Using LP From line 85
 
 
 ---- X  quantity of jellybean b produced by machine m [beans]
@@ -585,7 +567,6 @@ X(X1,yellow)
                 (.LO, .L, .UP, .M = 0, 0, +INF, 1.11022302462516E-16)
        -1       objfn
        -1       eq_weekly_machine_production(X1)
-        0.05    eq_prodlimit_lower(yellow,yellow)
         1       eq_prodlimit_lower(yellow,blue)
         1       eq_prodlimit_lower(yellow,green)
         1       eq_prodlimit_lower(yellow,orange)
@@ -594,7 +575,6 @@ X(X1,yellow)
        -0.95    eq_prodlimit_lower(green,yellow)
        -0.95    eq_prodlimit_lower(orange,yellow)
        -0.95    eq_prodlimit_lower(purple,yellow)
-       -0.05    eq_prodlimit_upper(yellow,yellow)
         1       eq_prodlimit_upper(yellow,blue)
         1       eq_prodlimit_upper(yellow,green)
         1       eq_prodlimit_upper(yellow,orange)
@@ -610,7 +590,6 @@ X(X1,blue)
        -1       eq_weekly_machine_production(X1)
        -0.95    eq_prodlimit_lower(yellow,blue)
         1       eq_prodlimit_lower(blue,yellow)
-        0.05    eq_prodlimit_lower(blue,blue)
         1       eq_prodlimit_lower(blue,green)
         1       eq_prodlimit_lower(blue,orange)
         1       eq_prodlimit_lower(blue,purple)
@@ -619,7 +598,6 @@ X(X1,blue)
        -0.95    eq_prodlimit_lower(purple,blue)
        -1.05    eq_prodlimit_upper(yellow,blue)
         1       eq_prodlimit_upper(blue,yellow)
-       -0.05    eq_prodlimit_upper(blue,blue)
         1       eq_prodlimit_upper(blue,green)
         1       eq_prodlimit_upper(blue,orange)
         1       eq_prodlimit_upper(blue,purple)
@@ -635,7 +613,6 @@ X(X1,green)
        -0.95    eq_prodlimit_lower(blue,green)
         1       eq_prodlimit_lower(green,yellow)
         1       eq_prodlimit_lower(green,blue)
-        0.05    eq_prodlimit_lower(green,green)
         1       eq_prodlimit_lower(green,orange)
         1       eq_prodlimit_lower(green,purple)
        -0.95    eq_prodlimit_lower(orange,green)
@@ -644,13 +621,12 @@ X(X1,green)
        -1.05    eq_prodlimit_upper(blue,green)
         1       eq_prodlimit_upper(green,yellow)
         1       eq_prodlimit_upper(green,blue)
-       -0.05    eq_prodlimit_upper(green,green)
         1       eq_prodlimit_upper(green,orange)
         1       eq_prodlimit_upper(green,purple)
        -1.05    eq_prodlimit_upper(orange,green)
        -1.05    eq_prodlimit_upper(purple,green)
 
-REMAINING 7 ENTRIES SKIPPED
+REMAINING 3 ENTRIES SKIPPED
 
 ---- Z  objective function value
 
@@ -658,40 +634,40 @@ Z
                 (.LO, .L, .UP, .M = -INF, 7962.71844660194, +INF, 0)
         1       objfn
 
-GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/07/24 21:57:54 Page 14
+GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/09/24 21:02:54 Page 14
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
-Range Statistics    SOLVE jellybeans Using LP From line 86
+Range Statistics    SOLVE jellybeans Using LP From line 85
 
 
 RANGE STATISTICS (ABSOLUTE NON-ZERO FINITE VALUES)
 
 RHS       [min, max] : [ 4.000E+03, 4.000E+03] - Zero values observed as well
 Bound     [min, max] : [        NA,        NA] - Zero values observed as well
-Matrix    [min, max] : [ 5.000E-02, 1.070E+00]
+Matrix    [min, max] : [ 9.000E-01, 1.070E+00]
 
-GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/07/24 21:57:54 Page 15
+GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/09/24 21:02:54 Page 15
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
-Model Statistics    SOLVE jellybeans Using LP From line 86
+Model Statistics    SOLVE jellybeans Using LP From line 85
 
 
 MODEL STATISTICS
 
-BLOCKS OF EQUATIONS           4     SINGLE EQUATIONS           53
-BLOCKS OF VARIABLES           2     SINGLE VARIABLES           11
-NON ZERO ELEMENTS           197
+BLOCKS OF EQUATIONS           4     SINGLE EQUATIONS           43
+BLOCKS OF VARIABLES           2     SINGLE VARIABLES            7
+NON ZERO ELEMENTS           109
 
 
 GENERATION TIME      =        0.001 SECONDS      4 MB  45.4.0 19dc3313 DAX-DAC
-GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/07/24 21:57:54 Page 16
+GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/09/24 21:02:54 Page 16
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
-Solution Report     SOLVE jellybeans Using LP From line 86
+Solution Report     SOLVE jellybeans Using LP From line 85
 
 
                S O L V E      S U M M A R Y
 
      MODEL   jellybeans          OBJECTIVE  Z
      TYPE    LP                  DIRECTION  MAXIMIZE
-     SOLVER  CPLEX               FROM LINE  86
+     SOLVER  CPLEX               FROM LINE  85
 
 **** SOLVER STATUS     1 Normal Completion
 **** MODEL STATUS      1 Optimal
@@ -703,12 +679,12 @@ Solution Report     SOLVE jellybeans Using LP From line 86
 --- GMO setup time: 0.00s
 --- GMO memory 0.50 Mb (peak 0.50 Mb)
 --- Dictionary memory 0.00 Mb
---- Cplex 22.1.1.0 link memory 0.00 Mb (peak 0.01 Mb)
+--- Cplex 22.1.1.0 link memory 0.00 Mb (peak 0.00 Mb)
 --- Starting Cplex
 
 
 --- LP status (1): optimal.
---- Cplex Time: 0.00sec (det. 0.13 ticks)
+--- Cplex Time: 0.00sec (det. 0.09 ticks)
 
 
 Optimal solution found
@@ -732,61 +708,51 @@ X2     -4000.0000     -4000.0000        +INF           -0.9953
 
                      LOWER          LEVEL          UPPER         MARGINAL
 
-yellow.yellow          .            81.5534        +INF             .          
 yellow.blue            .            81.5534        +INF             .          
 yellow.green           .            81.5534        +INF             .          
 yellow.orange          .           155.3398        +INF             .          
 yellow.purple          .           155.3398        +INF             .          
 blue  .yellow          .            81.5534        +INF             .          
-blue  .blue            .            81.5534        +INF             .          
 blue  .green           .            81.5534        +INF             .          
 blue  .orange          .           155.3398        +INF             .          
 blue  .purple          .           155.3398        +INF             .          
 green .yellow          .            81.5534        +INF             .          
 green .blue            .            81.5534        +INF             .          
-green .green           .            81.5534        +INF             .          
 green .orange          .           155.3398        +INF             .          
 green .purple          .           155.3398        +INF             .          
 orange.yellow          .             3.8835        +INF             .          
 orange.blue            .             3.8835        +INF             .          
 orange.green           .             3.8835        +INF             .          
-orange.orange          .            77.6699        +INF             .          
 orange.purple          .            77.6699        +INF             .          
 purple.yellow          .             3.8835        +INF             .          
 purple.blue            .             3.8835        +INF             .          
 purple.green           .             3.8835        +INF             .          
 purple.orange          .            77.6699        +INF             .          
-purple.purple          .            77.6699        +INF             .          
 
 ---- EQU eq_prodlimit_upper  production for bean b must be less than or equal to than 105% of bb
 
                      LOWER          LEVEL          UPPER         MARGINAL
 
-yellow.yellow        -INF          -81.5534          .              .          
 yellow.blue          -INF          -81.5534          .              .          
 yellow.green         -INF          -81.5534          .              .          
 yellow.orange        -INF      4.547474E-13          .              .          
 yellow.purple        -INF             .              .             0.0047      
 blue  .yellow        -INF          -81.5534          .              .          
-blue  .blue          -INF          -81.5534          .              .          
 blue  .green         -INF          -81.5534          .              .          
 blue  .orange        -INF      4.547474E-13          .              .          
 blue  .purple        -INF             .              .             0.0547      
 green .yellow        -INF          -81.5534          .              .          
 green .blue          -INF          -81.5534          .              .          
-green .green         -INF          -81.5534          .              .          
 green .orange        -INF             .              .             0.0432      
 green .purple        -INF             .              .             0.0315      
 orange.yellow        -INF         -159.2233          .              .          
 orange.blue          -INF         -159.2233          .              .          
 orange.green         -INF         -159.2233          .              .          
-orange.orange        -INF          -77.6699          .              .          
 orange.purple        -INF          -77.6699          .              .          
 purple.yellow        -INF         -159.2233          .              .          
 purple.blue          -INF         -159.2233          .              .          
 purple.green         -INF         -159.2233          .              .          
 purple.orange        -INF          -77.6699          .              .          
-purple.purple        -INF          -77.6699          .              .          
 
 ---- VAR X  quantity of jellybean b produced by machine m [beans]
 
@@ -795,11 +761,7 @@ purple.purple        -INF          -77.6699          .              .
 X1.yellow          .           737.8641        +INF             .          
 X1.blue            .          1631.0680        +INF             .          
 X1.green           .          1631.0680        +INF             .          
-X1.orange          .              .            +INF           -0.9500      
-X1.purple          .              .            +INF           -0.9000      
 X2.yellow          .           893.2039        +INF             .          
-X2.blue            .              .            +INF           -1.0500      
-X2.green           .              .            +INF           -1.0700      
 X2.orange          .          1553.3981        +INF             .          
 X2.purple          .          1553.3981        +INF             .          
 
@@ -813,12 +775,12 @@ X2.purple          .          1553.3981        +INF             .
 **** REPORT SUMMARY :        0     NONOPT
                              0 INFEASIBLE
                              0  UNBOUNDED
-GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/07/24 21:57:54 Page 17
+GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/09/24 21:02:54 Page 17
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 E x e c u t i o n
 
 
-EXECUTION TIME       =        0.116 SECONDS      4 MB  45.4.0 19dc3313 DAX-DAC
+EXECUTION TIME       =        0.045 SECONDS      4 MB  45.4.0 19dc3313 DAX-DAC
 
 
 USER: GAMS Community License for David Baker         G240815|0002AO-GEN
