@@ -116,6 +116,9 @@ For the counterfactual, we add the following constraint:
         variable: <Math>{(s=>s.raw)`\[b\in \mathcal{B}\]`}</Math>, 
         description: "jellybean colors",
         set:<Math>{(s=>s.raw)`\[m \in \{\text{yellow}, \text{blue}, \text{green}, \text{orange}, \text{purple}\}\]`}</Math>
+    },{
+        variable: <Math>{(s=>s.raw)`\[m, b\in \mathcal{V}\]`}</Math>, 
+        description: "valid combinations of machines and jellybeans",
     }
     ]}
 />
@@ -136,7 +139,7 @@ For the counterfactual, we add the following constraint:
 **Objective:** Maximize profits over a week [$]
 
 <TwoColumnEquations>
-    <Math>{(s=>s.raw)`\[\sum_{m \in \mathcal{M}} \sum_{b \in \mathcal{B}} (r_b) X_{mb}\]`[0]}</Math>
+    <Math>{(s=>s.raw)`\[\sum_{m, b \ \in\  \mathcal{V}} (r_b) X_{mb}\]`[0]}</Math>
       (net revenue over all beans and machines)
 </TwoColumnEquations>
 

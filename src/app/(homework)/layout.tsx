@@ -10,6 +10,7 @@ export const metadata: Metadata = {
   description: "David Baker's Personal Website",
 };
 
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -21,6 +22,7 @@ export default function RootLayout({
       <link rel="icon" href="/images/favicon.png" sizes="any" />
       <body className={inter.className}>
         <>
+          <div className="homework-print-heading">For better viewing of this document in its original form, visit <a href="https://davidbaker.is/slinging-jellybeans">https://davidbaker.is/slinging-jellybeans</a>.</div>
           {children}
         </></body>
     </html>

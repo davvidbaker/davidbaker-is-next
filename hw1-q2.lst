@@ -1,4 +1,4 @@
-GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/09/24 21:02:54 Page 1
+GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/17/24 10:45:48 Page 1
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 C o m p i l a t i o n
 
@@ -37,68 +37,61 @@ C o m p i l a t i o n
   32  scalar sw_fivepercent "boolean switch to turn on and off 5% deviation constraint" /0/ ;
   33  scalar sw_coloredmachines "boolean switch to turn on and off machine color restrictions" /0/ ;
   34   
-  35  * Some combinations are not valid
-  36  * TODO: How would I go about making this dynamic so I don't need to do this down bleow.
-  37  m_b("X1", "orange")$sw_coloredmachines = no;
-  38  m_b("X1", "purple")$sw_coloredmachines = no;
-  39  m_b("X2", "blue")$sw_coloredmachines = no;
-  40  m_b("X2", "green")$sw_coloredmachines = no;
-  41   
-  42  positive variable X(m,b) "quantity of jellybean b produced by machine m [beans]";
-  43   
-  44  variable Z "objective function value";
+  35  positive variable X(m,b) "quantity of jellybean b produced by machine m [beans]";
+  36   
+  37  variable Z "objective function value";
+  38   
+  39  equations
+  40      objfn "target of our optimization",
+  41      eq_weekly_machine_production(m) "jellybean production limit over a week for each machine"
+  42      eq_prodlimit_lower(b,bb) "production for bean b must be greater than or equal to than 95% of bb"
+  43      eq_prodlimit_upper(b,bb) "production for bean b must be less than or equal to than 105% of bb"
+  44  ;
   45   
-  46  equations
-  47      objfn "target of our optimization",
-  48      eq_weekly_machine_production(m) "jellybean production limit over a week for each machine"
-  49      eq_prodlimit_lower(b,bb) "production for bean b must be greater than or equal to than 95% of bb"
-  50      eq_prodlimit_upper(b,bb) "production for bean b must be less than or equal to than 105% of bb"
-  51  ;
+  46  objfn.. Z =e= sum((m,b)$m_b(m,b), r(b)*X(m,b));
+  47   
+  48  eq_weekly_machine_production(m).. hbar*pbar =g= sum(b$m_b(m,b), X(m,b));
+  49   
+  50  eq_prodlimit_lower(b,bb)$[sw_fivepercent$(not sameas(b,bb))].. sum(m$m_b(m,b), X(m,b)) =g= 0.95*sum(m$m_b(m,bb), X(m, bb));
+  51  eq_prodlimit_upper(b,bb)$[sw_fivepercent$(not sameas(b,bb))].. sum(m$m_b(m,b), X(m,b)) =l= 1.05*sum(m$m_b(m,bb), X(m, bb));
   52   
-  53  objfn.. Z =e= sum((m,b)$m_b(m,b), r(b)*X(m,b));
+  53  model jellybeans /all/;
   54   
-  55  eq_weekly_machine_production(m).. hbar*pbar =g= sum(b$m_b(m,b), X(m,b));
+  55  parameters rep_x, rep_z, rep_bean_totals;
   56   
-  57  eq_prodlimit_lower(b,bb)$[sw_fivepercent$(not sameas(b,bb))].. sum(m$m_b(m,b), X(m,b)) =g= 0.95*sum(m$m_b(m,bb), X(m, bb));
-  58  eq_prodlimit_upper(b,bb)$[sw_fivepercent$(not sameas(b,bb))].. sum(m$m_b(m,b), X(m,b)) =l= 1.05*sum(m$m_b(m,bb), X(m, bb));
-  59   
-  60  model jellybeans /all/;
-  61   
-  62  parameters rep_x, rep_z, rep_bean_totals;
-  63   
-  64  * CASE 1: business as usual
+  57  * CASE 1: business as usual
+  58  solve jellybeans using LP maximizing Z;
+  59  rep_bean_totals(b, "bau") = sum(m, X.l(m,b)) + 0.000001;
+  60  rep_x(m,b, "bau") = X.l(m,b) + 0.000001;
+  61  rep_z("bau") = Z.l;
+  62   
+  63  * CASE 2: all bean production within 5%
+  64  sw_fivepercent = 1;
   65  solve jellybeans using LP maximizing Z;
-  66  rep_bean_totals(b, "bau") = sum(m, X.l(m,b)) + 0.000001;
-  67  rep_x(m,b, "bau") = X.l(m,b) + 0.000001;
-  68  rep_z("bau") = Z.l;
+  66  rep_bean_totals(b, "5%") = sum(m, X.l(m,b)) + 0.000001;
+  67  rep_x(m,b, "5%") = X.l(m,b) + 0.000001;
+  68  rep_z("5%") = Z.l;
   69   
-  70  * CASE 2: all bean production within 5%
-  71  sw_fivepercent = 1;
-  72  solve jellybeans using LP maximizing Z;
-  73  rep_bean_totals(b, "5%") = sum(m, X.l(m,b)) + 0.000001;
-  74  rep_x(m,b, "5%") = X.l(m,b) + 0.000001;
-  75  rep_z("5%") = Z.l;
-  76   
-  77  * CASE 3: machines are restricted on what colors they can produce
-  78  sw_coloredmachines = 1;
-  79  * * Some combinations are not valid
-  80  m_b("X1", "orange")$sw_coloredmachines = no;
-  81  m_b("X1", "purple")$sw_coloredmachines = no;
-  82  m_b("X2", "blue")  $sw_coloredmachines = no;
-  83  m_b("X2", "green") $sw_coloredmachines = no;
-  84   
-  85  solve jellybeans using LP maximizing Z;
-  86  rep_bean_totals(b, "5% and color restrictions") = sum(m, X.l(m,b)) + 0.000001;
-  87  rep_x(m,b, "5% and color restrictions") = X.l(m,b) + 0.000001;
-  88  rep_z("5% and color restrictions") = Z.l;
-  89   
-  90  execute_unload 'gams-output/jellybeans.gdx' ;
+  70  * CASE 3: machines are restricted on what colors they can produce
+  71  sw_coloredmachines = 1;
+  72  * * Some combinations are not valid
+  73  m_b("X1", "orange")$sw_coloredmachines = no;
+  74  m_b("X1", "purple")$sw_coloredmachines = no;
+  75  m_b("X2", "blue")  $sw_coloredmachines = no;
+  76  m_b("X2", "green") $sw_coloredmachines = no;
+  77   
+  78  solve jellybeans using LP maximizing Z;
+  79  rep_bean_totals(b, "5% and color restrictions") = sum(m, X.l(m,b)) + 0.000001;
+  80  rep_x(m,b, "5% and color restrictions") = X.l(m,b) + 0.000001;
+  81  rep_z("5% and color restrictions") = Z.l;
+  82   
+  83  execute_unload 'gams-output/jellybeans.gdx' ;
 
 
 COMPILATION TIME     =        0.000 SECONDS      3 MB  45.4.0 19dc3313 DAX-DAC
-GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/09/24 21:02:54 Page 2
+GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/17/24 10:45:48 Page 2
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
-Equation Listing    SOLVE jellybeans Using LP From line 65
+Equation Listing    SOLVE jellybeans Using LP From line 58
 
 
 ---- objfn  =E=  target of our optimization
@@ -122,9 +115,9 @@ eq_weekly_machine_production(X2)..  - X(X2,yellow) - X(X2,blue) - X(X2,green) - 
 
                 NONE
 
-GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/09/24 21:02:54 Page 3
+GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/17/24 10:45:48 Page 3
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
-Column Listing      SOLVE jellybeans Using LP From line 65
+Column Listing      SOLVE jellybeans Using LP From line 58
 
 
 ---- X  quantity of jellybean b produced by machine m [beans]
@@ -152,9 +145,9 @@ Z
                 (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
         1       objfn
 
-GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/09/24 21:02:54 Page 4
+GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/17/24 10:45:48 Page 4
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
-Range Statistics    SOLVE jellybeans Using LP From line 65
+Range Statistics    SOLVE jellybeans Using LP From line 58
 
 
 RANGE STATISTICS (ABSOLUTE NON-ZERO FINITE VALUES)
@@ -163,9 +156,9 @@ RHS       [min, max] : [ 4.000E+03, 4.000E+03] - Zero values observed as well
 Bound     [min, max] : [        NA,        NA] - Zero values observed as well
 Matrix    [min, max] : [ 9.000E-01, 1.070E+00]
 
-GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/09/24 21:02:54 Page 5
+GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/17/24 10:45:48 Page 5
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
-Model Statistics    SOLVE jellybeans Using LP From line 65
+Model Statistics    SOLVE jellybeans Using LP From line 58
 
 
 MODEL STATISTICS
@@ -175,23 +168,23 @@ BLOCKS OF VARIABLES           2     SINGLE VARIABLES           11
 NON ZERO ELEMENTS            21
 
 
-GENERATION TIME      =        0.004 SECONDS      4 MB  45.4.0 19dc3313 DAX-DAC
-GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/09/24 21:02:54 Page 6
+GENERATION TIME      =        0.031 SECONDS      4 MB  45.4.0 19dc3313 DAX-DAC
+GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/17/24 10:45:48 Page 6
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
-Solution Report     SOLVE jellybeans Using LP From line 65
+Solution Report     SOLVE jellybeans Using LP From line 58
 
 
                S O L V E      S U M M A R Y
 
      MODEL   jellybeans          OBJECTIVE  Z
      TYPE    LP                  DIRECTION  MAXIMIZE
-     SOLVER  CPLEX               FROM LINE  65
+     SOLVER  CPLEX               FROM LINE  58
 
 **** SOLVER STATUS     1 Normal Completion
 **** MODEL STATUS      1 Optimal
 **** OBJECTIVE VALUE             8560.0000
 
- RESOURCE USAGE, LIMIT          0.000 10000000000.000
+ RESOURCE USAGE, LIMIT          0.002 10000000000.000
  ITERATION COUNT, LIMIT         0    2147483647
 *** This solver runs with a community license. No commercial use.
 --- GMO setup time: 0.00s
@@ -257,9 +250,9 @@ X2.purple          .              .            +INF           -0.1700
 **** REPORT SUMMARY :        0     NONOPT
                              0 INFEASIBLE
                              0  UNBOUNDED
-GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/09/24 21:02:54 Page 7
+GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/17/24 10:45:48 Page 7
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
-Equation Listing    SOLVE jellybeans Using LP From line 72
+Equation Listing    SOLVE jellybeans Using LP From line 65
 
 
 ---- objfn  =E=  target of our optimization
@@ -295,9 +288,9 @@ eq_prodlimit_upper(yellow,orange)..  X(X1,yellow) - 1.05*X(X1,orange) + X(X2,yel
      
 REMAINING 17 ENTRIES SKIPPED
 
-GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/09/24 21:02:54 Page 8
+GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/17/24 10:45:48 Page 8
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
-Column Listing      SOLVE jellybeans Using LP From line 72
+Column Listing      SOLVE jellybeans Using LP From line 65
 
 
 ---- X  quantity of jellybean b produced by machine m [beans]
@@ -373,9 +366,9 @@ Z
                 (.LO, .L, .UP, .M = -INF, 8560, +INF, 0)
         1       objfn
 
-GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/09/24 21:02:54 Page 9
+GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/17/24 10:45:48 Page 9
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
-Range Statistics    SOLVE jellybeans Using LP From line 72
+Range Statistics    SOLVE jellybeans Using LP From line 65
 
 
 RANGE STATISTICS (ABSOLUTE NON-ZERO FINITE VALUES)
@@ -384,9 +377,9 @@ RHS       [min, max] : [ 4.000E+03, 4.000E+03] - Zero values observed as well
 Bound     [min, max] : [        NA,        NA] - Zero values observed as well
 Matrix    [min, max] : [ 9.000E-01, 1.070E+00]
 
-GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/09/24 21:02:54 Page 10
+GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/17/24 10:45:48 Page 10
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
-Model Statistics    SOLVE jellybeans Using LP From line 72
+Model Statistics    SOLVE jellybeans Using LP From line 65
 
 
 MODEL STATISTICS
@@ -396,17 +389,17 @@ BLOCKS OF VARIABLES           2     SINGLE VARIABLES           11
 NON ZERO ELEMENTS           181
 
 
-GENERATION TIME      =        0.001 SECONDS      4 MB  45.4.0 19dc3313 DAX-DAC
-GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/09/24 21:02:54 Page 11
+GENERATION TIME      =        0.002 SECONDS      4 MB  45.4.0 19dc3313 DAX-DAC
+GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/17/24 10:45:48 Page 11
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
-Solution Report     SOLVE jellybeans Using LP From line 72
+Solution Report     SOLVE jellybeans Using LP From line 65
 
 
                S O L V E      S U M M A R Y
 
      MODEL   jellybeans          OBJECTIVE  Z
      TYPE    LP                  DIRECTION  MAXIMIZE
-     SOLVER  CPLEX               FROM LINE  72
+     SOLVER  CPLEX               FROM LINE  65
 
 **** SOLVER STATUS     1 Normal Completion
 **** MODEL STATUS      1 Optimal
@@ -518,9 +511,9 @@ X2.purple          .          1553.3981        +INF             .
 **** REPORT SUMMARY :        0     NONOPT
                              0 INFEASIBLE
                              0  UNBOUNDED
-GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/09/24 21:02:54 Page 12
+GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/17/24 10:45:48 Page 12
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
-Equation Listing    SOLVE jellybeans Using LP From line 85
+Equation Listing    SOLVE jellybeans Using LP From line 78
 
 
 ---- objfn  =E=  target of our optimization
@@ -556,9 +549,9 @@ eq_prodlimit_upper(yellow,orange)..  X(X1,yellow) + X(X2,yellow) - 1.05*X(X2,ora
      
 REMAINING 17 ENTRIES SKIPPED
 
-GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/09/24 21:02:54 Page 13
+GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/17/24 10:45:48 Page 13
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
-Column Listing      SOLVE jellybeans Using LP From line 85
+Column Listing      SOLVE jellybeans Using LP From line 78
 
 
 ---- X  quantity of jellybean b produced by machine m [beans]
@@ -634,9 +627,9 @@ Z
                 (.LO, .L, .UP, .M = -INF, 7962.71844660194, +INF, 0)
         1       objfn
 
-GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/09/24 21:02:54 Page 14
+GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/17/24 10:45:48 Page 14
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
-Range Statistics    SOLVE jellybeans Using LP From line 85
+Range Statistics    SOLVE jellybeans Using LP From line 78
 
 
 RANGE STATISTICS (ABSOLUTE NON-ZERO FINITE VALUES)
@@ -645,9 +638,9 @@ RHS       [min, max] : [ 4.000E+03, 4.000E+03] - Zero values observed as well
 Bound     [min, max] : [        NA,        NA] - Zero values observed as well
 Matrix    [min, max] : [ 9.000E-01, 1.070E+00]
 
-GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/09/24 21:02:54 Page 15
+GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/17/24 10:45:48 Page 15
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
-Model Statistics    SOLVE jellybeans Using LP From line 85
+Model Statistics    SOLVE jellybeans Using LP From line 78
 
 
 MODEL STATISTICS
@@ -658,16 +651,16 @@ NON ZERO ELEMENTS           109
 
 
 GENERATION TIME      =        0.001 SECONDS      4 MB  45.4.0 19dc3313 DAX-DAC
-GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/09/24 21:02:54 Page 16
+GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/17/24 10:45:48 Page 16
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
-Solution Report     SOLVE jellybeans Using LP From line 85
+Solution Report     SOLVE jellybeans Using LP From line 78
 
 
                S O L V E      S U M M A R Y
 
      MODEL   jellybeans          OBJECTIVE  Z
      TYPE    LP                  DIRECTION  MAXIMIZE
-     SOLVER  CPLEX               FROM LINE  85
+     SOLVER  CPLEX               FROM LINE  78
 
 **** SOLVER STATUS     1 Normal Completion
 **** MODEL STATUS      1 Optimal
@@ -775,12 +768,12 @@ X2.purple          .          1553.3981        +INF             .
 **** REPORT SUMMARY :        0     NONOPT
                              0 INFEASIBLE
                              0  UNBOUNDED
-GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/09/24 21:02:54 Page 17
+GAMS 45.4.0  19dc3313 Nov 27, 2023          DAX-DAC arm 64bit/macOS - 09/17/24 10:45:48 Page 17
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 E x e c u t i o n
 
 
-EXECUTION TIME       =        0.045 SECONDS      4 MB  45.4.0 19dc3313 DAX-DAC
+EXECUTION TIME       =        0.282 SECONDS      4 MB  45.4.0 19dc3313 DAX-DAC
 
 
 USER: GAMS Community License for David Baker         G240815|0002AO-GEN

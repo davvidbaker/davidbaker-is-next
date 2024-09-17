@@ -32,13 +32,6 @@ scalars
 scalar sw_fivepercent "boolean switch to turn on and off 5% deviation constraint" /0/ ; 
 scalar sw_coloredmachines "boolean switch to turn on and off machine color restrictions" /0/ ; 
 
-* Some combinations are not valid
-* TODO: How would I go about making this dynamic so I don't need to do this down bleow.
-m_b("X1", "orange")$sw_coloredmachines = no;
-m_b("X1", "purple")$sw_coloredmachines = no;
-m_b("X2", "blue")$sw_coloredmachines = no;
-m_b("X2", "green")$sw_coloredmachines = no;
-
 positive variable X(m,b) "quantity of jellybean b produced by machine m [beans]";
 
 variable Z "objective function value";

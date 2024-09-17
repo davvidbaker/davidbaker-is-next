@@ -52,3 +52,15 @@ mtext {
 mjx-container {
   display: inline !important;
 }
+
+
+.homework-print-heading {
+  display: none;
+
+  font-size: smaller;
+  margin-bottom: 12px;
+
+  @media print {
+    display: block;
+  }
+}

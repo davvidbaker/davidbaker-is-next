@@ -15,6 +15,10 @@ margin-bottom: 4px;
 padding: 10px;
 grid-row-gap: 10px;
 
+> div {
+    margin-right: 10px;
+}
+
 h4 {
 margin-top: 4px;
 }
