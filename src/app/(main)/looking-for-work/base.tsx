@@ -6,6 +6,8 @@ import Link from 'next/link'
 
 
 const Div = styled.div`
+    font-size: 14px;
+
     h1, h2, h3 {
         font-weight: bold;
     }
@@ -38,8 +40,8 @@ const Div = styled.div`
 
   .subtitle {
     position: absolute;
-    top: 0;
-    right: 40px;
+    top: 0.5in;
+    right: 0.5in;
     text-align: right;
     font-size: small;
     color: #888;
@@ -60,6 +62,11 @@ const Div = styled.div`
     color: #888;
     font-weight: normal;
   }
+
+  .tech { 
+    color: #888;
+    font-style: italic;
+    }
 
   ul {
     list-style: disc;
@@ -188,12 +195,37 @@ const Div = styled.div`
   }
 
   @media print {
+    main {
+        flex-direction: column;
+    }
+    .left {
+        margin-right: unset;
+    }
 
-    
+    .right {
+        max-width: unset;
+        width: unset;
+        padding-left: unset;
+        border-left: unset;
+     }
+
+
+     #skills ul {
+        display: block;
+     }
+  
+    font-size: 12px;
+
     h3 {
         margin-bottom: 0.1rem;
         margin-top: 0.1rem;
     }
+    h3 span {
+            font-size: 0.7rem;
+            margin-left: 5px;
+            color: #888;
+            font-weight: normal;
+        }
     ul {
         margin-top: 0.1rem;
         margin-bottom: 0.1rem;
@@ -201,8 +233,9 @@ const Div = styled.div`
 
     .name {
       text-align: left !important;
-      margin: 0;
-      left: 40px !important;
+      margin-left: 0.2in;
+      margin-top: 0.5in;
+      font-size: 32px;
     }
 
     .print-hide,
@@ -220,13 +253,32 @@ const Div = styled.div`
     }
 
     #skills ul {
+      width: unset;
+      padding-left: 0px;
+      margin-top: 5px;
+      display: flex;
+      flex-wrap: wrap;
       list-style: none;
-      padding-left: 0;
+
+
+      li {
+        margin-right: 12px;
+        background: #eee;
+        padding-left: 3px;
+        padding-right: 3px;
+        border-radius: 5px;
+
+        p {
+            margin-top: 0px;
+            margin-bottom: 0px;
+        }
+      }
+        
     }
+
 
     #skills div {
       min-width: 20% !important;
-      max-width: 30% !important;
     }
 
     .left {
@@ -242,10 +294,13 @@ interface Props {
     relevantCoursework?: string
 }
 
-const baseObjective = "Experienced software engineer seeking position in energy system modeling, planning, and analysis."
+const baseObjective = `
+Advanced Energy Systems master's student seeking a position in power systems modeling, planning, and analysis.
+Professional experience in developing flexible enterprise software solutions and skilled in data analysis.
+Eager to contribute to cutting-edge projects by leveraging technical skills and a passion for innovative energy solutions.`
 
 
-const baseCoursework = "Power Systems Analysis, Power Quality, Energy for Transportation, Data Science, Computational Economics"
+const baseCoursework = "Power Systems Analysis, Power Quality, Energy for Transportation, Linear Optimization, Data Science, Computational Economics"
 export const Resume = ({ objective = baseObjective, relevantCoursework = baseCoursework }: Props) => (
     <Div>
         <Head>
@@ -288,14 +343,21 @@ export const Resume = ({ objective = baseObjective, relevantCoursework = baseCou
                         <h3>
                             <a href="https://www.upenn.edu">University of Pennsylvania</a>
                             <span>[2011 - 2015]</span><span>— <a title="transcript" href="/images/unofficial-transcript.png">GPA: 3.78/4.00
-                                    </a>
-                                </span>
+                            </a>
+                            </span>
                         </h3>
                         <ul>
                             <li>
                                 <p>
                                     Bachelor of Science in Engineering, Systems Science and
                                     Engineering, <em>magna cum laude</em>
+                                </p>
+                            </li>
+
+                            <li>
+                                <p className="print-show">
+                                    Frederick Ketterer Memorial Award for Outstanding Creativity in Engineering Design for senior design project{' '}
+                                    <Link href="/a-haptics-engineer">ForceField</Link>
                                 </p>
                             </li>
                         </ul>
@@ -307,7 +369,7 @@ export const Resume = ({ objective = baseObjective, relevantCoursework = baseCou
                         </h3>
                         <ul>
                             <li>
-                                <p>Performed detailed design work on utility substation projects, including design calculations, drawing review, and outage sequencing.</p>
+                                <p>Performed physical design work on utility substation projects, including design calculations, drawing review, and outage sequencing.</p>
                             </li>
                         </ul>
                         <h3>
@@ -315,9 +377,11 @@ export const Resume = ({ objective = baseObjective, relevantCoursework = baseCou
                         </h3>
                         <ul>
                             <li>
-                                <p>Analyzed generation outage schedules to aid analysts in preparing for the MISO Planning Resource Auction.</p>
+                                <p>Analyzed generation outage schedules to aid analysts in preparing for the MISO Planning Resource Auction.
+                                    <span className="tech">{' '}MySQL, Python.</span></p>
                             </li>
-                            <li><p>Developed metrics tool in Databricks for exploring real time desk performance based on operations log.
+                            <li><p>Developed metrics tool exploring real time desk performance based on operations log.
+                                <span className="tech">{' '}Databricks, MySQL, Python.</span>
                             </p>
                             </li>
                         </ul>
@@ -328,6 +392,7 @@ export const Resume = ({ objective = baseObjective, relevantCoursework = baseCou
                             <li>
                                 <p>Worked within and across (mostly) client-centric teams focused on collaborative productivity-driving applications,
                                     ie a data visualization/charting library, a text editor used across the platform, a WYSIWYG email designer.
+                                    <span className="tech">TypeScript, React, HTML, CSS, Java.</span>
                                 </p>
                             </li>
                         </ul>
@@ -363,7 +428,7 @@ export const Resume = ({ objective = baseObjective, relevantCoursework = baseCou
                         <ul className='print-hide'>
                             <li>
                                 <p>
-                                    Worked on a really wide variety of client projects varying
+                                    Worked on a wide variety of client projects varying
                                     from your classic web stack to cross-platform game
                                     development, VR dev for Oculus Rift, and Three.js and WebGL
                                     experiences.
@@ -503,7 +568,7 @@ export const Resume = ({ objective = baseObjective, relevantCoursework = baseCou
                     </section>
                 </div>
 
-                <div className="right print-hide">
+                <div className="right">
                     <section className="print-hide">
                         <h2>Contact Info</h2>
                         <ul>
@@ -553,38 +618,41 @@ export const Resume = ({ objective = baseObjective, relevantCoursework = baseCou
                         </h3>
                     </section>
 
-                    <section className="print-hide">
-                        <h2>Skills</h2>
+                    <section>
+                        <h2><span className="print-hide">Skills</span></h2>
                         <div id="skills">
                             <div>
                                 <h3 className='print-hide'>Software</h3>
+                                <h3 className='print-show'>Software Skills</h3>
                                 <ul>
-                                    <li><p>GAMS</p></li>
+                                    <li><p>GAMS, GAMSPy</p></li>
+                                    <li><p>Julia, JuMP</p></li>
                                     <li><p>Python</p></li>
                                     <li><p>Matlab, Simulink</p></li>
                                     <li>
-                                        <p>JavaScript, HTML, CSS</p>
+                                        <p>TypeScript, React, JavaScript, HTML, CSS</p>
                                     </li>
-                                    <li>
+                                    <li><p>Plot.js, D3</p></li>
+                                    <li className='print-hide'>
                                         <p>Node.js</p>
                                     </li>
-                                    <li>
+                                    <li className='print-hide'>
                                         <p>Elixir and Phoenix</p>
                                     </li>
                                     <li>
-                                        <p>Postgres</p>
+                                        <p>MySQL, Postgres</p>
                                     </li>
                                     <li className='print-hide'>
                                         <p>C# (for Unity)</p>
                                     </li>
-                                    <li>
+                                    <li className='print-hide'>
                                         <p>MongoDB</p>
                                     </li>
                                 </ul>
                             </div>
 
-                            <div>
-                                <h3 className='print-hide'>Hardware/Electronics</h3>
+                            <div className='print-hide'>
+                                <h3>Hardware/Electronics</h3>
                                 <ul>
                                     <li>
                                         <p>Breadboarding, PCB Design, SPICE</p>
@@ -601,8 +669,8 @@ export const Resume = ({ objective = baseObjective, relevantCoursework = baseCou
                                 </ul>
                             </div>
 
-                            <div>
-                                <h3 className='print-hide'>Other</h3>
+                            <div className='print-hide'>
+                                <h3>Other</h3>
                                 <ul>
                                     <li>
                                         <p>

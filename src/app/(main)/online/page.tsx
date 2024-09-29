@@ -130,6 +130,7 @@ const IndexPage = () => <div>
           // @ts-ignore
           start="I am interested in"
           items={[
+            'power system modeling.',
             'distributed energy resources.',
             'pumped hydro storage.',
             'power electronics.',
@@ -140,6 +141,7 @@ const IndexPage = () => <div>
             'batteries.',
             'electricity and magnetism.',
             'sustainability.',
+            'linear optimization',
             'the future of the internet 🌐.',
             'education.',
           ]}
