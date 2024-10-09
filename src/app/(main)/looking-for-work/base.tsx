@@ -377,7 +377,7 @@ export const Resume = ({ objective = baseObjective, relevantCoursework = baseCou
                         </h3>
                         <ul>
                             <li>
-                                <p>Analyzed generation outage schedules to aid analysts in preparing for the MISO Planning Resource Auction.
+                                <p>Analyzed generation outage schedules to aid analysts in preparation for Northern States Power Company's participation in the MISO Planning Resource Auction.
                                     <span className="tech">{' '}MySQL, Python.</span></p>
                             </li>
                             <li><p>Developed metrics tool exploring real time desk performance based on operations log.
@@ -390,8 +390,11 @@ export const Resume = ({ objective = baseObjective, relevantCoursework = baseCou
                         </h3>
                         <ul>
                             <li>
-                                <p>Worked within and across (mostly) client-centric teams focused on collaborative productivity-driving applications,
-                                    ie a data visualization/charting library, a text editor used across the platform, a WYSIWYG email designer.
+                                <p>Led a team of engineers developing a modular, data-aware text editor used by many products across the company <span className="tech">ProseMirror, TypeScript</span></p>
+                            </li>
+                            <li>
+                                <p>Developed client solutions for collaborative productivity-driving applications,
+                                    including a data visualization/charting library and a WYSIWYG email designer.
                                     <span className="tech">TypeScript, React, HTML, CSS, Java.</span>
                                 </p>
                             </li>
