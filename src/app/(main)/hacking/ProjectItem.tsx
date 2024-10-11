@@ -21,6 +21,7 @@ const LI = styled.li<{ $gridColumn?: string, $gridRow?: string }>`
   flex-direction: column;
   border: solid #cecece 1px;
   padding: 10px;
+  background: #f3f2cc;
   background: white;
   position: relative;
 

@@ -23,7 +23,7 @@ const Div = styled.div`
   padding: 1rem;
   max-width: 50rem;
   margin: 0 auto;
-  width: 100%;
+  // width: 100%;
 
   code {
     font-size: large;
@@ -181,6 +181,10 @@ const Div = styled.div`
     opacity: 0;
   }
 
+   .flex-list {
+      flex-flow: row wrap;
+    }
+
   @media (min-width: 75rem) {
     #additional-info {
       max-width: 75rem;
@@ -219,6 +223,7 @@ const Div = styled.div`
     .gallery video {
       max-width: 55rem;
     }
+    
 
     .flex-list:last-of-type::after {
       content: '';
@@ -228,142 +233,153 @@ const Div = styled.div`
 `;
 
 export const ProjectPage = (props: Project) => {
-    console.log('props', props)
+  console.log('props', props)
 
-    const {
-        name = '[Name Here]',
-        status,
-        description,
-        year,
-        link,
-        linkToSource,
-        linkToTrello,
-        callToAction = 'Check it out',
-        videos,
-        images,
-        keywords,
-        teammates,
-        logo,
-        agency,
-    } = props
+  const {
+    name = '[Name Here]',
+    status,
+    description,
+    year,
+    link,
+    linkToSource,
+    linkToTrello,
+    callToAction = 'Check it out',
+    videos,
+    images,
+    keywords,
+    teammates,
+    logo,
+    agency,
+    pdfs,
+    pdfText,
+  } = props
 
-    return (
-        <Div id="additional-info" >
-            <div className="heading">
-                <div>
-                    <h1 style={{ marginRight: '5px', transform: 'translateY(3px)' }}>
-                        {name} <span>{year && formatYears(year)}</span>
-                    </h1>
-                </div>
-                <div
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'flex-end',
-                    }}
-                >
-                    {status && <Status status={status} />}
+  return (
+    <Div id="additional-info" >
+      <div className="heading">
+        <div>
+          <h1 style={{ marginRight: '5px', transform: 'translateY(3px)' }}>
+            {name} <span>{year && formatYears(year)}</span>
+          </h1>
+        </div>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'flex-end',
+          }}
+        >
+          {status && <Status status={status} />}
 
-                    <ExternalLinks
-                        {...{ link, linkToSource, linkToTrello, callToAction }}
-                    />
-                </div>
+          <ExternalLinks
+            {...{ link, linkToSource, linkToTrello, callToAction }}
+          />
+        </div>
+      </div>
+
+
+      <section className="about-project">
+        <div className="description-and-gallery">
+          {description ? (
+            <p className="description">
+              {logo && <img className="logo" src={logo} alt={`${name} logo`} />}
+              <span
+                className="markdown"
+                dangerouslySetInnerHTML={{ __html: marked(description) }}
+              />
+            </p>
+          ) : null}
+          {pdfs &&
+            pdfs.map((pdf, i) => (
+              pdfText?.[i] ?
+                <p key={pdf}><a href={`/pdfs/${pdf}`}>{pdfText[i]}</a></p>
+                :
+                <p key={pdf}>See the report <a href={`/pdfs/${pdf}`}>here</a>.</p>
+            ))}
+
+          <div className="gallery" style={{ position: 'relative' }}>
+            {images &&
+              images.map(image => (
+                <Image
+                  className="w-full h-auto"
+                  width="0"
+                  height="0"
+                  sizes="50vw"
+                  key={image}
+                  src={`/images/${image.replace('-noShadow', '')}`}
+                  alt={image}
+                  style={{
+                    ...(image.match(/-noShadow$/) ? { boxShadow: '0 0 white' } : undefined),
+                    objectFit: 'contain'
+                  }}
+                />
+              ))}
+            {videos &&
+              videos.map(video => (
+                <video
+                  loop
+                  controls
+                  muted
+                  autoPlay
+                  src={`/images/${video}`}
+                  key={video}
+                />
+              ))}
+
+          </div>
+        </div>
+        <div className="bonus-blocks">
+          {keywords && (
+            <div className="bonus-block keywords-container">
+              <h3>Buzz Words 🐝</h3>
+              <ul className="keywords flex-list">
+                {keywords.map(word => (
+                  <li key={word}>
+                    <span>{word.replace(/\s/, ' ')}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
-
-            <section className="about-project">
-                <div className="description-and-gallery">
-                    {description ? (
-                        <p className="description">
-                            {logo && <img className="logo" src={logo} alt={`${name} logo`} />}
-                            <span
-                                className="markdown"
-                                dangerouslySetInnerHTML={{ __html: marked(description) }}
-                            />
-                        </p>
-                    ) : null}
-
-                    <div className="gallery" style={{ position: 'relative' }}>
-                        {images &&
-                            images.map(image => (
-                                <Image
-                                    className="w-full h-auto" 
-                                    width="0"
-                                    height="0"
-                                    sizes="50vw"
-                                    key={image}
-                                    src={`/images/${image.replace('-noShadow', '')}`}
-                                    alt={image}
-                                    style={{
-                                        ...(image.match(/-noShadow$/) ? { boxShadow: '0 0 white' } : undefined),
-                                        objectFit: 'contain'
-                                    }}
-                                />
-                            ))}
-                        {videos &&
-                            videos.map(video => (
-                                <video
-                                    loop
-                                    controls
-                                    muted
-                                    autoPlay
-                                    src={`/images/${video}`}
-                                    key={video}
-                                />
-                            ))}
-                    </div>
-                </div>
-                <div className="bonus-blocks">
-                    {keywords && (
-                        <div className="bonus-block keywords-container">
-                            <h3>Buzz Words 🐝</h3>
-                            <ul className="keywords flex-list">
-                                {keywords.map(word => (
-                                    <li key={word}>
-                                        <span>{word.replace(/\s/, ' ')}</span>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    )}
-                    {teammates && (
-                        <div className="bonus-block teammates-container">
-                            <h3>Teammates 🍻</h3>
-                            <ul className="teammates flex-list">
-                                {teammates.map(teammate => (
-                                    <li key={teammate.name}>
-                                        <a href={teammate.link}>
-                                            <span>{teammate.name.replace(/\s/, ' ')}</span>
-                                        </a>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    )}
-                    {agency && (
-                        <div className="bonus-block agency-container">
-                            <h3>Agency 🏢</h3>
-                            <ul className="agency flex-list">
-                                <li>
-                                    <a href={agency.link}>
-                                        <span>{agency.name.replace(/\s/, ' ')}</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    )}
-                </div>
-            </section>
-        </Div >
-    )
+          )}
+          {teammates && (
+            <div className="bonus-block teammates-container">
+              <h3>Teammates 🍻</h3>
+              <ul className="teammates flex-list">
+                {teammates.map(teammate => (
+                  <li key={teammate.name}>
+                    <a href={teammate.link}>
+                      <span>{teammate.name.replace(/\s/, ' ')}</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+          {agency && (
+            <div className="bonus-block agency-container">
+              <h3>Agency 🏢</h3>
+              <ul className="agency flex-list">
+                <li>
+                  <a href={agency.link}>
+                    <span>{agency.name.replace(/\s/, ' ')}</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          )}
+        </div>
+      </section>
+    </Div >
+  )
 }
 ProjectPage.propTypes = {
-    name: PropTypes.string.isRequired,
-    tagline: PropTypes.string,
-    status: PropTypes.arrayOf(PropTypes.string),
-    description: PropTypes.string,
-    year: PropTypes.array,
-    callToAction: PropTypes.string,
-    link: PropTypes.string,
-    linkToSource: PropTypes.string,
-    linkToTrello: PropTypes.string,
+  name: PropTypes.string.isRequired,
+  tagline: PropTypes.string,
+  status: PropTypes.arrayOf(PropTypes.string),
+  description: PropTypes.string,
+  year: PropTypes.array,
+  callToAction: PropTypes.string,
+  link: PropTypes.string,
+  linkToSource: PropTypes.string,
+  linkToTrello: PropTypes.string,
 };

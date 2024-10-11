@@ -17,8 +17,11 @@ export interface Project {
     linkToSource?: string,
     callToAction?: string,
     videos?: string[]
+    pdfs?: string[]
+    pdfText?: string[]
     keywords?: string[],
     images?: string[]
+    imageWidths?: number[],
     teammates?: { name: string, link: string }[]
     logo?: string,
     agency?: { name: string, link: string }

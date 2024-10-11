@@ -1,8 +1,86 @@
 [
+  {
+    "name": "Downconversion and Upconversion in Photovoltaics",
+    "path": "not-used-dc",
+    "status": ["shipped", "green"],
+    "tagline":"A report on a potential pathway to PV efficiency improvements",
+    "year": [2024],
+    "callToAction": "Read report",
+    "linkToSource": "https://github.com/davvidbaker/aes-hw-s24/blob/main/solar/downconversion.ipynb",
+    "link": "/pdfs/dc-uc.pdf"
+  },
+  {
+    "name": "Clustering and Classification of Utility Customers",
+    "path": "highly-classified",
+    "status": ["shipped", "green"],
+    "tagline":"Exploring energy consumption patterns",
+    "pdfs": ["customer-classification-desc.pdf", "customer-classification-report.pdf", "equity-in-healthcare.pdf"],
+    "pdfText": ["Project description", "Our report", "Another project where we used principal component analysis to compute social vulnerability level based on census data."],
+    "description": "Data science project where we applied clustering and classification techniques to a group of hypothetical utility customers based on energy consumption patterns. Analysis done in Python.",
+    "year": [2024],
+    "linkToSource": "https://github.com/davvidbaker/aes-hw-s24/blob/main/data-science/customer-classification-project.ipynb",
+    "teammates": [
+      { "name": "Paulina Nelson", "link": "https://www.linkedin.com/in/paulina-r-nelson/" },
+      { "name": "Zephyr Zink", "link": "https://www.linkedin.com/in/zephyr-zink-611247107/" },
+      { "name": "Morgan Shepherd", "link": "https://www.linkedin.com/in/morgan--shepherd/"},
+      { "name": "Isaac Torres Marchand"},
+      { "name": "Addison Thalhamer", "link": "https://www.linkedin.com/in/addison-thalhamer-7454b8134/"}
+    ]
+  },
+  {
+    "name": "Transportation Sector GHG Reduction Pathway",
+    "path": "not-used-transport-sector",
+    "status": ["shipped", "green"],
+    "tagline":"Analyzing commuter mode choice policies and autonomous vehicle adoption",
+    "year": [2024],
+    "callToAction": "Read report",
+    "link": "/pdfs/transportation-ghg-reductions.pdf"
+  },
+  {
+    "name": "Power Quality Modeling",
+    "path": "filtering-out-harmonics",
+    "status": ["shipped", "green"],
+    "tagline":"Modeling and mitigating various power quality issues",
+    "description": "Simulated a small 4.16 kV distribution system with power quality issues. Proposed and implemented mitigation solutions.",
+    "images": ["pq.png"],
+    "pdfText": ["Project description"],
+    "pdfs": ["power-quality-desc.pdf", "power-quality-report.pdf"],
+    "year": [2024]
+  },
+  {
+    "name": "Demand Response in 34-bus Distribution System",
+    "path": "distributed",
+    "status": ["shipped", "green"],
+    "tagline":"Distribution system modeling",
+    "year": [2023],
+    "images":["demand-response.png"],
+    "pdfs": [
+      "demand-response/final-proj.pdf",
+      "demand-response/503-final-report.pdf"],
+    "pdfText": ["Project description", "Our report"],
+    "description": "A distribution system modeling project where we had to simulate variable PV generation, EV demand, and demand response. Simulation was done in Matlab/Simulink.",
+    "teammates": [
+      { "name": "Zoe Karnisky", "link": "https://www.linkedin.com/in/zoe-karnisky/" },
+      { "name": "Kristian Jorgensen", "link": "https://www.linkedin.com/in/kristian-jorgensen/" },
+      { "name": "Isaac Torres Marchand"}
+    ]
+  },
+  {
+    "name": "Solar Futures Study Report",
+    "path": "not-used-sfs",
+    "status": ["shipped", "green"],
+    "tagline":"A report on the NREL study",
+    "year": [2023],
+    "callToAction": "Read report",
+    "link": "/pdfs/sfs-final-final.pdf",
+    "teammates": [
+      { "name": "Zephyr Zink", "link": "https://www.linkedin.com/in/zephyr-zink-611247107/" }
+    ]
+  },
     {
       "name": "flambé",
       "path": "a-busy-bee",
-      "status": ["maybe I'll be back", "darkmagenta"],
+      "status": ["maybe I'll be back one day", "darkmagenta"],
       "tagline":
         "Chrome DevTools-inspired flame charts for keeping track of all your projects.",
       "year": [2017, 2018],
