@@ -195,6 +195,8 @@ const Div = styled.div`
   }
 
   @media print {
+    font-size: 12px;
+
     main {
         flex-direction: column;
     }
@@ -214,8 +216,10 @@ const Div = styled.div`
         display: block;
      }
   
-    font-size: 12px;
 
+    h2 {
+        margin: 0.8rem 0 0.5rem 0;
+    }
     h3 {
         margin-bottom: 0.1rem;
         margin-top: 0.1rem;
@@ -246,6 +250,10 @@ const Div = styled.div`
 
     .print-show {
       display: block !important;
+    }
+
+    li.print-show {
+        display: list-item !important;
     }
 
     #skills p {
@@ -339,6 +347,8 @@ export const Resume = ({ objective = baseObjective, relevantCoursework = baseCou
                         <ul>
                             <li><p>Master of Science in Advanced Energy Systems</p></li>
                             <li><p>Relevant coursework includes {relevantCoursework}</p></li>
+                            <li><p><strong>Projects:</strong> Developed production cost and capacity expansion models with a focus on integrating renweable energy sources and improving system efficiency.
+                                <span className="tech">{' '}JuMP/Julia, GAMSPy, Sienna, OpenDSS</span></p></li>
                         </ul>
                         <h3>
                             <a href="https://www.upenn.edu">University of Pennsylvania</a>
@@ -353,9 +363,8 @@ export const Resume = ({ objective = baseObjective, relevantCoursework = baseCou
                                     Engineering, <em>magna cum laude</em>
                                 </p>
                             </li>
-
-                            <li>
-                                <p className="print-show">
+                            <li className="print-show">
+                                <p>
                                     Frederick Ketterer Memorial Award for Outstanding Creativity in Engineering Design for senior design project{' '}
                                     <Link href="/a-haptics-engineer">ForceField</Link>
                                 </p>
@@ -390,11 +399,10 @@ export const Resume = ({ objective = baseObjective, relevantCoursework = baseCou
                         </h3>
                         <ul>
                             <li>
-                                <p>Led a team of engineers developing a modular, data-aware text editor used by many products across the company <span className="tech">ProseMirror, TypeScript</span></p>
+                                <p>Led a team of engineers developing a modular, data-aware text editor used by many products across the company. <span className="tech">ProseMirror, TypeScript</span></p>
                             </li>
                             <li>
-                                <p>Developed client solutions for collaborative productivity-driving applications,
-                                    including a data visualization/charting library and a WYSIWYG email designer.
+                                <p>Contributed to large codebases for collaborative productivity applications, including developing a data visualization and charting library, as well as a WYSIWYG email designer.
                                     <span className="tech">TypeScript, React, HTML, CSS, Java.</span>
                                 </p>
                             </li>
@@ -630,10 +638,10 @@ export const Resume = ({ objective = baseObjective, relevantCoursework = baseCou
                                 <ul>
                                     <li><p>GAMS, GAMSPy</p></li>
                                     <li><p>Julia, JuMP</p></li>
-                                    <li><p>Python</p></li>
+                                    <li><p>Python, pandas, numpy</p></li>
                                     <li><p>Matlab, Simulink</p></li>
                                     <li>
-                                        <p>TypeScript, React, JavaScript, HTML, CSS</p>
+                                        <p>TypeScript, React, <span className="print-hide">HTML, </span>, CSS</p>
                                     </li>
                                     <li><p>Plot.js, D3</p></li>
                                     <li className='print-hide'>
@@ -644,6 +652,9 @@ export const Resume = ({ objective = baseObjective, relevantCoursework = baseCou
                                     </li>
                                     <li>
                                         <p>MySQL, Postgres</p>
+                                    </li>
+                                    <li className='print-hide'>
+                                        <p>Git, GitHub</p>
                                     </li>
                                     <li className='print-hide'>
                                         <p>C# (for Unity)</p>
