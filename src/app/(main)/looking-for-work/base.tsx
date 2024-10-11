@@ -641,7 +641,7 @@ export const Resume = ({ objective = baseObjective, relevantCoursework = baseCou
                                     <li><p>Python, pandas, numpy</p></li>
                                     <li><p>Matlab, Simulink</p></li>
                                     <li>
-                                        <p>TypeScript, React, <span className="print-hide">HTML, </span>, CSS</p>
+                                        <p>TypeScript, React, <span className="print-hide">HTML, </span>CSS</p>
                                     </li>
                                     <li><p>Plot.js, D3</p></li>
                                     <li className='print-hide'>
