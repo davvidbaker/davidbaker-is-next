@@ -22,7 +22,7 @@ export interface Project {
     keywords?: string[],
     images?: string[]
     imageWidths?: number[],
-    teammates?: { name: string, link: string }[]
+    teammates?: { name: string, link?: string }[]
     logo?: string,
     agency?: { name: string, link: string }
     tagline?: string
