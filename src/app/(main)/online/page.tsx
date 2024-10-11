@@ -91,11 +91,11 @@ const IndexPage = () => <div>
       </p>
 
       <p>
-        You can find some old projects—mostly software—on the{' '}
+        You can find some recent school projects—and a bunch of dusty old stuff—on the{' '}
         <Link href="/hacking">
           projects page
         </Link>.{' '}
-        You'll find a mix of old client work and
+        The old stuff is a mix of old client work and
         (unpolished) personal projects.
       </p>
 
