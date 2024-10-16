@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "../globals.css";
 import Nav from './nav';
 import 'highlight.js/styles/github-dark.css';
+import { Analytics } from "@vercel/analytics/react"
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,6 +25,7 @@ export default function RootLayout({
         <Nav />
         <>
           {children}
+          <Analytics />
         </></body>
     </html>
   );
