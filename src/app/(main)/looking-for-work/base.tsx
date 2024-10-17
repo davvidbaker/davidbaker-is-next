@@ -303,7 +303,7 @@ interface Props {
 }
 
 const baseObjective = `
-Advanced Energy Systems master's student seeking a position in power systems modeling, planning, and analysis.
+Advanced Energy Systems master's student seeking a position in power systems tooling.
 Professional experience in developing flexible enterprise software solutions and skilled in data analysis.
 Eager to contribute to cutting-edge projects by leveraging technical skills and a passion for innovative energy solutions.`
 
@@ -342,17 +342,17 @@ export const Resume = ({ objective = baseObjective, relevantCoursework = baseCou
                     <section>
                         <h2>Education</h2>
                         <h3><a href="https://www.mines.edu/">Colorado School of Mines</a>
-                            <span>[2023 - graduating December 2024]</span><span>— <a title="transcript" href="/images/mines-unofficial-transcript.png">GPA: 4.00/4.00
+                            <span>[2023 - graduating December 2024]</span><span>— <a title="transcript" href="https://davidbaker.is/images/mines-unofficial-transcript.png">GPA: 4.00/4.00
                             </a></span></h3>
                         <ul>
                             <li><p>Master of Science in Advanced Energy Systems</p></li>
                             <li><p>Relevant coursework includes {relevantCoursework}</p></li>
-                            <li><p><strong>Projects:</strong> Developed production cost and capacity expansion models with a focus on integrating renweable energy sources and improving system efficiency.
+                            <li><p><strong>Projects:</strong> Developed production cost and capacity expansion models with a focus on integrating renewable energy sources and improving system efficiency.
                                 <span className="tech">{' '}JuMP/Julia, GAMSPy, Sienna, OpenDSS</span></p></li>
                         </ul>
                         <h3>
                             <a href="https://www.upenn.edu">University of Pennsylvania</a>
-                            <span>[2011 - 2015]</span><span>— <a title="transcript" href="/images/unofficial-transcript.png">GPA: 3.78/4.00
+                            <span>[2011 - 2015]</span><span>— <a title="transcript" href="https://davidbaker.is/images/unofficial-transcript.png">GPA: 3.78/4.00
                             </a>
                             </span>
                         </h3>
