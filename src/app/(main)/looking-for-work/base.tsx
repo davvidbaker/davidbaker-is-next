@@ -303,7 +303,7 @@ interface Props {
 }
 
 const baseObjective = `
-Advanced Energy Systems master's student seeking a position in power systems tooling.
+Advanced Energy Systems master's student seeking a position in power systems modeling, planning, and analysis.
 Professional experience in developing flexible enterprise software solutions and skilled in data analysis.
 Eager to contribute to cutting-edge projects by leveraging technical skills and a passion for innovative energy solutions.`
 
