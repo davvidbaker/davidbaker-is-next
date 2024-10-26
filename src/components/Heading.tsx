@@ -19,13 +19,18 @@ text-align: right;
 const Left = styled.div`
 `
 
-export const Heading = () =>
+interface Texts {
+    leftText: string,
+    centerText: string,
+    rightText: string
+}
+export const Heading = ({ leftText, centerText, rightText }: Texts) =>
 
     <>
         <Grid>
-            <Left>Fall 2024</Left>
-            <Center>EBGN645 Computational Economics - HW 1</Center>
-            <Right>David Baker</Right>
+            <Left>{leftText}</Left>
+            <Center>{centerText}</Center>
+            <Right>{rightText}</Right>
         </Grid>
         <hr />
     </>

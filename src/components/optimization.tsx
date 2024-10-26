@@ -1,11 +1,14 @@
 "use client"
-import { PropsWithChildren, ReactNode } from "react"
+import { Children, PropsWithChildren, ReactNode, useContext, useEffect } from "react"
 import styled from "styled-components"
 import hljs from "highlight.js"
 import { TemplateString } from "next/dist/lib/metadata/types/metadata-types"
 // @ts-ignore
 import { get_color as xkcd } from 'xkcd-colors'
 import { MathJax } from "better-react-mathjax"
+import { EquationContext } from "./mdx-layout"
+import { indexOf } from "@observablehq/plot"
+import { log } from "console"
 
 const Grid = styled.div`
 display: grid;
@@ -44,9 +47,11 @@ export const Parameters = ({ params }: { params: { variable: ReactNode, descript
     </Grid>
 </>
 
-export const DecisionVariables = ({ params }: { params: { variable: ReactNode, description: ReactNode, units: ReactNode }[] }) => <>
+interface VariableParams { variable: ReactNode, description: ReactNode, units: ReactNode }
+
+const Variables = ({ title, params }: { title: string, params: VariableParams[] }) => <>
     <Grid>
-        <h4 style={{ borderBottom: "1px solid darkgrey", marginBottom: "4px", gridColumn: "1  / span 2" }}>Decision Variables</h4>
+        <h4 style={{ borderBottom: "1px solid darkgrey", marginBottom: "4px", gridColumn: "1  / span 2" }}>{title}</h4>
         <h4 style={{ borderBottom: "1px solid darkgrey", marginBottom: "4px", gridColumn: "3" }}>Units</h4>
         {params.map(({ variable, description, units }, idx) =>
             [
@@ -56,6 +61,18 @@ export const DecisionVariables = ({ params }: { params: { variable: ReactNode, d
             ])}
     </Grid>
 </>
+
+export const DecisionVariables = ({ params }: { params: VariableParams[] }) => (
+    <Variables title="Decision Variables" params={params} />
+)
+
+export const DerivedVariables = ({ params }: { params: VariableParams[] }) => (
+    <Variables title="Derived Variables/Expressions" params={params} />
+)
+
+
+
+
 
 
 
@@ -82,15 +99,42 @@ export const Math = ({ children }: PropsWithChildren) => {
 
 export const TwoColumnEquations = styled.div`
 display: grid;
-grid-template-columns: 1fr 2fr;
+grid-template-columns: 1fr 2fr 20px;
 grid-row-gap: 10px;
 grid-column-gap: 10px;
-margin: 0 100px;
+margin: 0 50px;
 
 p {
 margin: 0;
 }
 `
+// export const TwoColumnEquations = ({ children, eqkey }: PropsWithChildren) => {
+
+
+//     return <TwoColumnEquationsDiv>{children}<p>({index})</p></TwoColumnEquationsDiv>
+// }
+
+export const Equation = ({ children, eqkey }: PropsWithChildren<{ eqkey: string }>) => {
+    const { equationKeys, registerEquation } = useContext(EquationContext)
+    const index = (equationKeys?.indexOf(eqkey) ?? 0) + 1
+
+    console.log('❤️‍🔥 equationKeys', equationKeys);
+
+
+    const child = Children.toArray(children)[1]
+    // @ts-ignore
+    const alignIndex = child?.props?.style?.alignSelf ?? "start"
+
+
+
+    useEffect(() => {
+        if (equationKeys.indexOf(eqkey) === -1) {
+            registerEquation([eqkey, ...equationKeys])
+        }
+    }, [eqkey, equationKeys, registerEquation]);
+
+    return <>{children}<p style={{ alignSelf: alignIndex }}>({index})</p></>
+}
 
 const Pre = styled.pre`
 margin: 10px;

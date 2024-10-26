@@ -1,6 +1,6 @@
 import MdxLayout from '@/components/mdx-layout'
 import { Heading } from '@/components/Heading'
-import { Math, Helper, TwoColumnEquations, k, Parameters, DecisionVariables, SetsAndIndices, CodeSnippet } from '@/components/optimization'
+import { Equation, Math, Helper, TwoColumnEquations, k, Parameters, DecisionVariables, SetsAndIndices, CodeSnippet } from '@/components/optimization'
 import q1code from "@/../public/gams/hw1-q1.gms"
 import q2code from "@/../public/gams/hw1-q2.gms"
 import Image from 'next/image'
@@ -8,7 +8,11 @@ import { Figure1, Figure2 } from './q1-figures'
 import { Figure1 as BeansFigure1, Figure2 as BeansFigure2, FigureProfits } from './q2-figures'
 
 
-<Heading />
+<Heading 
+    leftText="Fall 2024" 
+    centerText="EBGN645 Computational Economics - HW 1"
+    rightText="David Baker"
+/>
 
 <div>
 # Problem 1
@@ -45,18 +49,24 @@ import { Figure1 as BeansFigure1, Figure2 as BeansFigure2, FigureProfits } from 
 **Objective:** Maximize profits over a week [$]
 
 <TwoColumnEquations>
-    <Math>{(s=>s.raw)`\[\sum_{i \in \mathcal{I}} (r_i - c_i) X_i\]`[0]}</Math>
-      (profit per item times number of that item)
+    <Equation eqkey="profitbakery">
+        <Math>{(s=>s.raw)`\[\sum_{i \in \mathcal{I}} (r_i - c_i) X_i\]`[0]}</Math>
+        (profit per item times number of that item)
+    </Equation>
 </TwoColumnEquations>
 
 
 Subject to the following constraints:
 
 <TwoColumnEquations>
-    <Math>{(s=>s.raw)`\[\sum_{i \in \mathcal{I}} h_i  X_i \leq \bar{h}\]`[0]}</Math>
-      (working hours in a week)
-    <Math>{(s=>s.raw)`\[X_i \geq 0 \quad \forall \ i \in \mathcal{I}\]`[0]}</Math>
-    (non-negativity)
+    <Equation eqkey="working-hours">
+        <Math>{(s=>s.raw)`\[\sum_{i \in \mathcal{I}} h_i  X_i \leq \bar{h}\]`[0]}</Math>
+        (working hours in a week)
+    </Equation>
+    <Equation eqkey="nnn1">
+        <Math>{(s=>s.raw)`\[X_i \geq 0 \quad \forall \ i \in \mathcal{I}\]`[0]}</Math>
+        (non-negativity)
+    </Equation>
 </TwoColumnEquations>
 
 
@@ -71,8 +81,10 @@ Subject to the following constraints:
 For the counterfactual, we add the following constraint:
 
 <TwoColumnEquations>
-    <Math>{(s=>s.raw)`\[X_{rolls} \geq X_{croissants}\]`[0]}</Math>
-      (roll-croissant combo)
+    <Equation eqkey="rc-combo">
+        <Math>{(s=>s.raw)`\[X_{rolls} \geq X_{croissants}\]`[0]}</Math>
+        (roll-croissant combo)
+    </Equation>
 </TwoColumnEquations>
 
 
@@ -139,17 +151,22 @@ For the counterfactual, we add the following constraint:
 **Objective:** Maximize profits over a week [$]
 
 <TwoColumnEquations>
-    <Math>{(s=>s.raw)`\[\sum_{m, b \ \in\  \mathcal{V}} (r_b) X_{mb}\]`[0]}</Math>
+    <Equation eqkey="bean-revenue"><Math>{(s=>s.raw)`\[\sum_{m, b \ \in\  \mathcal{V}} (r_b) X_{mb}\]`[0]}</Math>
       (net revenue over all beans and machines)
+    </Equation>
 </TwoColumnEquations>
 
 Subject to the following constraints:
 
 <TwoColumnEquations>
-    <Math>{(s=>s.raw)`\[\bar{h}\bar{p} \geq \sum_{b \in \mathcal{B}} X_{mb} \quad \forall \ m \in \mathcal{M}\]`[0]}</Math>
-      (jellybean production limit over a week for each machine)
-    <Math>{(s=>s.raw)`\[X_{mb} \geq 0 \quad \forall \ m \in \mathcal{M}, b \in \mathcal{B}\]`[0]}</Math>
-    (non-negativity)
+    <Equation eqkey="bean-prod">
+        <Math>{(s=>s.raw)`\[\bar{h}\bar{p} \geq \sum_{b \in \mathcal{B}} X_{mb} \quad \forall \ m \in \mathcal{M}\]`[0]}</Math>
+        (jellybean production limit over a week for each machine)
+    </Equation>
+    <Equation eqkey="bean-nonn">  
+        <Math>{(s=>s.raw)`\[X_{mb} \geq 0 \quad \forall \ m \in \mathcal{M}, b \in \mathcal{B}\]`[0]}</Math>
+        (non-negativity)
+    </Equation>
 </TwoColumnEquations>
 
 <br />
