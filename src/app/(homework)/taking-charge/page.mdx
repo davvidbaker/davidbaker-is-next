@@ -139,16 +139,28 @@ Finally, in phase 3, we go back to our original PCM (again using `PowerSimulatio
 # Data
 For charging and discharging efficiencies, I will defer to similar energy storage modeling studies which have used 80% as a typical round-trip efficiency (Guerra et al., 2024).
 
-I had originally hoped to use the [RTS-GMLC test system](https://github.com/GridMod/RTS-GMLC) for this study, but I do not think I will have the computing power to run transmission-constrained UC and ED for 8760 hours. Instead I will do my modeling with a simple, but widely used, modified PJM 5-bus test system (Li & Bo, 2010). This system has 5 buses, 3 load centers, 6 transmission lines, 5 thermal generators, 2 solar PV facilities, and 1 wind facility. I may modify the system further by increasing the capacity of the renewables. NREL/Sienna's [`PowerSystemCaseBuilder.jl`](https://github.com/NREL-Sienna/PowerSystemCaseBuilder.jl) library has this system as a test case. It comes with a week of solar and wind output timeseries data as well as load timeseries. I plan to modify this data in a few ways:
+I had originally hoped to use the [RTS-GMLC test system](https://github.com/GridMod/RTS-GMLC) for this study, but I do not think I will have the computing power to run transmission-constrained UC and ED for 8760 hours. Instead I will do my modeling with a simple, but widely used, modified PJM 5-bus test system (Li & Bo, 2010). This system has 5 buses, 3 load centers, 6 transmission lines, 5 thermal generators, 1 solar PV facilities, and 1 wind facility. I may modify the system further by increasing the capacity of the renewables. NREL/Sienna's [`PowerSystemCaseBuilder.jl`](https://github.com/NREL-Sienna/PowerSystemCaseBuilder.jl) library has this system as a test case. It comes with a week of solar and wind output timeseries data as well as load timeseries. I plan to modify this data in a few ways:
 - Modify the solar output timeseries to correspond with real solar data from the [National Solar Radiation Database](https://nsrdb.nrel.gov/).
 - Modify the wind output timeseries to correspond with real wind data from the [Wind Resource Database](https://wrdb.nrel.gov/).
-- Modify the load profiles to resemble load profiles from [NREL's Electrification Futures Study](https://data.nrel.gov/submissions/126).
+- Modify the load profiles to match monthly trends, using the tool [Standard Last Profile](https://flrd.github.io/standardlastprofile/) tool from the German Association of Energy and Water Industries.
 
 It is important that the solar, wind, and load data differ seasonally.
 
 At one point, I thought I might only end up doing the price-taker model and not doing the multi-model approach. I found LMP data for hubs of different US electricity markets at [Energy Online](http://www.energyonline.com/Data/GenericData.aspx?DataId=20). Using this data, I validated that my price-taker model was producing sensible results.
 
+Below I am plotting a week (January 1-7) of the irradiance and wind speed data from these sources. I am using the location of Solitude, Utah because that is where the synthetic PJM 5-bus grid is located.
+<img
+    sizes="100vw"
+    width={600}
+    src={"/images/irradiance-and-wind.svg"}
+/>
 
+Below this I am plotting a week of load data for one of the load centers in the given PJM 5-bus test system. I have not yet modified this data to have seasonal trends.
+<img
+    sizes="100vw"
+    width={550}
+    src={"/images/load_profile.svg"}
+/>
 
 <CodeSnippet rawStr={model} language="julia" filename="price-taker-model.jl"/>
 
