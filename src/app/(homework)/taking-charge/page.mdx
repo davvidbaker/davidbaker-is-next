@@ -3,8 +3,6 @@ import { Heading } from '@/components/Heading'
 import { Equation, Math, TwoColumnEquations, k, Parameters, DerivedVariables, DecisionVariables, SetsAndIndices, CodeSnippet } from '@/components/optimization'
 import model from "@/../public/price-taker-model.jl"
 import Image from 'next/image'
-// import { Figure1, Figure2 } from './q1-figures'
-// import { Figure1 as BeansFigure1, Figure2 as BeansFigure2, FigureProfits } from './q2-figures'
 
 
 <Heading 
@@ -13,32 +11,32 @@ import Image from 'next/image'
     rightText="David Baker"
 />
 
-<div>
+<div style={{fontSize:"12px"}}>
 <div style={{display:"flex", flexDirection: 'column', marginBottom:"12px"}}>
 <img
     sizes="100vw"
-    width={200}
-    style={{ alignSelf: "end", height: 'auto', maxWidth: "80vw", borderRadius: "12px" }}
+    width={80}
+    style={{ marginRight: "200px", alignSelf: "end", height: 'auto', maxWidth: "80vw", borderRadius: "12px" }}
     src={"/images/duck-only.png"}
 />
 
 <h1 style={{marginLeft: "12px", alignSelf: 'center'}}>Energy Storage Price-Taker Model</h1>
 <img
     sizes="100vw"
-    width={500}
-    style={{ height: 'auto', maxWidth: "80vw", borderRadius: "12px" }}
+    width={300}
+    style={{ marginLeft: "200px",height: 'auto', maxWidth: "80vw", borderRadius: "12px" }}
     src={"/images/battery-chest.png"}
 />
 </div>
 
-I am taking a multi-model approach to explore the production cost impact of long duration enery storage systems, following the example set by some other studies. **REFERENCE to 29, 29, Mchperson.** This involves three phases, with select information passed from one phase to the next. 
+I am taking a multi-model approach to explore the production cost impact of long duration enery storage systems, following the example set by some other studies (Guerra et al., 2020; Zhang et al., 2020; McPherson et al., 2020). This involves three phases, with select information passed from one phase to the next. 
 
 ## Phase 1: PCM without energy storage
 We start with a production cost model (PCM) simulation of a power system *without energy storage* over 365 days. It is important to have a long enough model horizon to capture potential benefits of seasonal storage. I have modeled a very simple version of a copperplate economic dispatch problem [here](https://github.com/davvidbaker/computational-economics/blob/main/project/economic_dispatch.jl), to show I *could* do a simple implementation of this myself, but for this project I will be using NREL's Sienna modeling framework for the PCM, specifically [`PowerSimulations.jl`](https://nrel-sienna.github.io/PowerSimulations.jl/stable/). This PCM includes two stages: a day-ahead unit commitment (UC) mixed integer program and a real-time economic dispatch (ED) linear program. 
 
 The UC problem considers a 48 hour optimization horizon and runs daily (every 24 hours) and solves at an hourly resolution. It passes on/off decision variable results for the thermal generators to the ED problem. The ED problem optimizes generation dispatch over a 1 hour horizon, recalculating the optimal solution every 15 minutes. Both of these problems require a forecast for renewable generation and demand at each node. I will discuss this data more later on, but for simplicity, these forecasts will be "deterministic"—perfect forecasts based on historical measurements.
 
-While it would be less computationally demanding to use a copperplate network formulation for these UC and ED, avoiding transmission constraints would avoid congestion and price spikes [MCPHESRON] and only provide a single price of electricity for the whole network. Therefore we will use a DC power flow formulation for the network, which adds transmission constraints while considering active power balance. With this formulation, the dual variable of the nodal active power balance constraint is the locational marginal price (LMP). The LMP outputs are then passed to phase 2.
+While it would be less computationally demanding to use a copperplate network formulation for these UC and ED, avoiding transmission constraints would avoid congestion and price spikes (McPherson et al., 2020) and only provide a single price of electricity for the whole network. Therefore we will use a DC power flow formulation for the network, which adds transmission constraints while considering active power balance. With this formulation, the dual variable of the nodal active power balance constraint is the locational marginal price (LMP). The LMP outputs are then passed to phase 2.
 
 ## Phase 2: Price-taker model
 The LMPs over the year are then used as exogenous variables for the price-taker model I develop below. Because this project is not considering the (dis)advantages of different types of energy storage, we will consider at most, a single energy storage unit at each node of the network, so each LMP can then correspond to each storage unit.
@@ -136,12 +134,12 @@ You will find the code for this model toward the end of this document.
 While the price-taker model maximizes profits, we do not actually care about the value of those profits. What we care about is the realized energy levels of the storage units. These levels will be used as targets in phase 3.
 
 ## Phase 3: PCM with energy storage
-Finally, in phase 3, we go back to our original PCM (again using `PowerSimulations.jl`). This time, we add energy storage to our network, using characterics consistent with what we used in phase 2. We supply the PCM with a timeseries of storage targets for the end of each day for each unit, and we re-run our year-long simulation. (I have not yet totally figured out how to set up a timeseries of storage targets in Sienna. I know it's possible because [Guerra et al] allude to it an upcoming paper, but I may hit a wall here.) We can then compare the total production cost of this model with the one from phase 1 and assess to what extent adding the energy storage has increased social welfare.
+Finally, in phase 3, we go back to our original PCM (again using `PowerSimulations.jl`). This time, we add energy storage to our network, using characterics consistent with what we used in phase 2. We supply the PCM with a timeseries of storage targets for the end of each day for each unit, and we re-run our year-long simulation. (I have not yet totally figured out how to set up a timeseries of storage targets in Sienna. I know it's possible because Guerra et al. allude to it an upcoming paper (2024), but I may hit a wall here.) We can then compare the total production cost of this model with the one from phase 1 and assess to what extent adding the energy storage has increased social welfare.
 
 # Data
-For charging and discharging efficiencies, I will defer to similar energy storage modeling studies which have used 80% as a typical round-trip efficiency [Guerra, 29 REF].
+For charging and discharging efficiencies, I will defer to similar energy storage modeling studies which have used 80% as a typical round-trip efficiency (Guerra et al., 2024).
 
-I had originally hoped to use the [RTS-GMLC test system](https://github.com/GridMod/RTS-GMLC) for this study, but I do not think I will have the computing power to run transmission-constrained UC and ED for 8760 hours. Instead I will do my modeling with a simple, but widely used, modified PJM 5-bus test system [Fangxi REFERENCE]. This system has 5 buses, 3 load centers, 6 transmission lines, 5 thermal generators, 2 solar PV facilities, and 1 wind facility. I may modify the system further by increasing the capacity of the renewables. NREL/Sienna's [`PowerSystemCaseBuilder.jl`](https://github.com/NREL-Sienna/PowerSystemCaseBuilder.jl) library has this system as a test case. It comes with a week of solar and wind output timeseries data as well as load timeseries. I plan to modify this data in a few ways:
+I had originally hoped to use the [RTS-GMLC test system](https://github.com/GridMod/RTS-GMLC) for this study, but I do not think I will have the computing power to run transmission-constrained UC and ED for 8760 hours. Instead I will do my modeling with a simple, but widely used, modified PJM 5-bus test system (Li & Bo, 2010). This system has 5 buses, 3 load centers, 6 transmission lines, 5 thermal generators, 2 solar PV facilities, and 1 wind facility. I may modify the system further by increasing the capacity of the renewables. NREL/Sienna's [`PowerSystemCaseBuilder.jl`](https://github.com/NREL-Sienna/PowerSystemCaseBuilder.jl) library has this system as a test case. It comes with a week of solar and wind output timeseries data as well as load timeseries. I plan to modify this data in a few ways:
 - Modify the solar output timeseries to correspond with real solar data from the [National Solar Radiation Database](https://nsrdb.nrel.gov/).
 - Modify the wind output timeseries to correspond with real wind data from the [Wind Resource Database](https://wrdb.nrel.gov/).
 - Modify the load profiles to resemble load profiles from [NREL's Electrification Futures Study](https://data.nrel.gov/submissions/126).
@@ -156,136 +154,20 @@ At one point, I thought I might only end up doing the price-taker model and not 
 
 # References
 
-Fangxing Li & Rui Bo. Small test systems for power system economic studies. in IEEE PES
-General Meeting 1–4 (IEEE, 2010). doi:10.1109/PES.2010.5589973.
+<div style={{marginLeft:"3em", textIndent: "-3em"}}>
 
+Guerra, O. J., Dalvi, S., Thatte, A. A., Cowiestoll, B., Jorgenson, J., & Hodge, B.-M. (2024). *Towards robust and scalable dispatch modeling of long-duration energy storage* (arXiv:2401.16605). arXiv. https://doi.org/10.48550/arXiv.2401.16605
+
+Guerra, O. J., Zhang, J., Eichman, J., Denholm, P., Kurtz, J., & Hodge, B.-M. (2020). The value of seasonal energy storage technologies for the integration of wind and solar power. *Energy & Environmental Science*, 13(7), 1909–1922. https://doi.org/10.1039/D0EE00771D
+
+Li, F., & Bo, R. (2010). Small test systems for power system economic studies. *IEEE PES General Meeting*, 1–4. https://doi.org/10.1109/PES.2010.5589973
+
+McPherson, M., McBennett, B., Sigler, D., & Denholm, P. (2020). Impacts of storage dispatch on revenue in electricity markets. *Journal of Energy Storage*, 31, 101573. https://doi.org/10.1016/j.est.2020.101573
+
+Zhang, J., Guerra, O. J., Eichman, J., & Pellow, M. A. (2020). Benefit analysis of long-duration energy storage in power systems with high renewable energy shares. *Frontiers in Energy Research, 8*, 527910. https://doi.org/10.3389/fenrg.2020.527910
 
 </div>
-{/* 
-<br />
-<img
-    sizes="100vw"
-    width={700}
-    style={{ height: 'auto', maxWidth: "80vw" }}
-    src={"/images/comp-econ-hw1/p1b.png"}
-/>
-
-For the counterfactual, we add the following constraint:
-
-<TwoColumnEquations>
-    <Math>{(s=>s.raw)`\[X_{rolls} \geq X_{croissants}\]`[0]}</Math>
-      (roll-croissant combo)
-</TwoColumnEquations>
-
-
-<br />
-
-<img
-    sizes="100vw"
-    width={700}
-    style={{ height: 'auto', maxWidth: "80vw" }}
-    src={"/images/comp-econ-hw1/p1c.png"}
-/>
-
-<div style={{display: 'flex'}}>
-<Figure1 /><Figure2 />
 </div>
-
-- **Business as usual:** 20 croissants are produced with a profit of $60.
-- **Combo:** 13.3 croissants and 13.3 rolls are produced with a profit of $46.67.
-
-
-<CodeSnippet rawStr={q1code} filename="q1.gms"/>
-
-# Problem 2
-
-<img
-    sizes="100vw"
-    width={300}
-    style={{ height: 'auto', maxWidth: "80vw", borderRadius: "20px"}}
-    src={"/images/comp-econ-hw1/june.webp"}
-/>
-
-![](/images/comp-econ-hw1/p2.png)
-
-<SetsAndIndices params={[
-    {
-        variable: <Math>{(s=>s.raw)`\[m\in \mathcal{M}\]`}</Math>, 
-        description: "machines",
-        set:<Math>{(s=>s.raw)`\[m \in \{\text{X1}, \text{X2}\}\]`}</Math>
-    },
-    {
-        variable: <Math>{(s=>s.raw)`\[b\in \mathcal{B}\]`}</Math>, 
-        description: "jellybean colors",
-        set:<Math>{(s=>s.raw)`\[m \in \{\text{yellow}, \text{blue}, \text{green}, \text{orange}, \text{purple}\}\]`}</Math>
-    },{
-        variable: <Math>{(s=>s.raw)`\[m, b\in \mathcal{V}\]`}</Math>, 
-        description: "valid combinations of machines and jellybeans",
-    }
-    ]}
-/>
-
-<Parameters params={[
-    { variable: <Math>\[r_b\]</Math>, description: <div>Net revenue per jellybean of color  <Math>\[b\]</Math></div>, units: "$/bean" },
-    { variable: <Math>{(s=>s.raw)`\[\bar{h}\]`}</Math>, description: <div>Maximum hours a machine can run in a week</div>, units: "hours" },
-    { variable: <Math>{(s=>s.raw)`\[\bar{p}\]`}</Math>, description: <div>Maximum number of jellybeans produced by a machine over an hour</div>, units: "beans/hour" },
-]}
-/>
-
-<DecisionVariables params={
-    [{ variable: <Math>{(s=>s.raw)`\[X_{mb}\]`}</Math>, 
-    description: <div>Quantity of jellybean <Math>\[b\]</Math> produced by machine <Math>\[m\]</Math></div>, 
-    units: "beans" }]
-} />
-
-**Objective:** Maximize profits over a week [$]
-
-<TwoColumnEquations>
-    <Math>{(s=>s.raw)`\[\sum_{m, b \ \in\  \mathcal{V}} (r_b) X_{mb}\]`[0]}</Math>
-      (net revenue over all beans and machines)
-</TwoColumnEquations>
-
-Subject to the following constraints:
-
-<TwoColumnEquations>
-    <Math>{(s=>s.raw)`\[\bar{h}\bar{p} \geq \sum_{b \in \mathcal{B}} X_{mb} \quad \forall \ m \in \mathcal{M}\]`[0]}</Math>
-      (jellybean production limit over a week for each machine)
-    <Math>{(s=>s.raw)`\[X_{mb} \geq 0 \quad \forall \ m \in \mathcal{M}, b \in \mathcal{B}\]`[0]}</Math>
-    (non-negativity)
-</TwoColumnEquations>
-
-<br />
-<img
-    sizes="100vw"
-    width={700}
-    style={{ height: 'auto', maxWidth: "80vw" }}
-    src={"/images/comp-econ-hw1/p2b.png"}
-/>
-
-As we would expect, the profit maximizing production profile is for both machines to exclusively produdce green jellybeans. The profit is $8560.
-
-*(Code is at the end of this problem.)*
-
-![](/images/comp-econ-hw1/p2c.png)
-
-I am calling this case *5%*. Profits have dropped to $7962.72. June still produces 8000 jellybeans but as can be seen in the figures below, 
-machine X1 now produces blue, orange, and green jellybeans, while machine X2 produces yellow, purple, and green.
-
-<div style={{display: 'flex'}}>
-<BeansFigure1 /><BeansFigure2 />
-</div>
-
-<FigureProfits />
-
-![](/images/comp-econ-hw1/p2d.png)
-
-I am calling this case *5% and color restrictions*. Profits are the same as in the *5%* case, and total jellybeans by color has also not changed.
-The only difference is that the machine production profile has changed slightly, as shown above.
-
-<CodeSnippet rawStr={q2code} filename="q2.gms"/>
-
-
-</div> */}
 
 export default function MDXPage({ children }) {
     return <MdxLayout>{children}</MdxLayout>

@@ -4,11 +4,11 @@ import { MathJaxContext } from "better-react-mathjax"
 import { createContext, useContext, useState } from "react"
 
 // @ts-ignore
-export const EquationContext = createContext()
+export const EquationContext = createContext<{ equationKeys: string[], registerEquation: (arr: string[]) => void }>()
 
 export default function MdxLayout({ children }: { children: React.ReactNode }) {
 
-    const [equationKeys, registerEquation] = useState([])
+    const [equationKeys, registerEquation] = useState<string[]>([])
 
     // Create any shared layout or styles here
     return <EquationContext.Provider value={{ equationKeys, registerEquation }}>

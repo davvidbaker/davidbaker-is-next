@@ -2,13 +2,10 @@
 import { Children, PropsWithChildren, ReactNode, useContext, useEffect } from "react"
 import styled from "styled-components"
 import hljs from "highlight.js"
-import { TemplateString } from "next/dist/lib/metadata/types/metadata-types"
 // @ts-ignore
 import { get_color as xkcd } from 'xkcd-colors'
 import { MathJax } from "better-react-mathjax"
 import { EquationContext } from "./mdx-layout"
-import { indexOf } from "@observablehq/plot"
-import { log } from "console"
 
 const Grid = styled.div`
 display: grid;
@@ -108,24 +105,13 @@ p {
 margin: 0;
 }
 `
-// export const TwoColumnEquations = ({ children, eqkey }: PropsWithChildren) => {
-
-
-//     return <TwoColumnEquationsDiv>{children}<p>({index})</p></TwoColumnEquationsDiv>
-// }
-
 export const Equation = ({ children, eqkey }: PropsWithChildren<{ eqkey: string }>) => {
     const { equationKeys, registerEquation } = useContext(EquationContext)
     const index = (equationKeys?.indexOf(eqkey) ?? 0) + 1
 
-    console.log('❤️‍🔥 equationKeys', equationKeys);
-
-
     const child = Children.toArray(children)[1]
     // @ts-ignore
     const alignIndex = child?.props?.style?.alignSelf ?? "start"
-
-
 
     useEffect(() => {
         if (equationKeys.indexOf(eqkey) === -1) {
@@ -141,7 +127,7 @@ margin: 10px;
 padding: 1rem;
 overflow-x: scroll;
 border-radius: 10px;
-
+font-size: 10px
 `;
 
 
@@ -160,9 +146,7 @@ border-radius: 10px;
 margin: 12px;
 `
 
-const Filename = styled.span`
-
-`
+const Filename = styled.span``
 
 const FileInfo = styled.div`
 font-family: monospace;
@@ -173,9 +157,6 @@ padding: 12px;
 display: flex;
 justify-content: space-between;
 align-items: center;
-
-
-
 `
 export const CodeSnippet = ({ rawStr, filename, language }: { rawStr: string, filename: string, language: string } = { rawStr: "", filename: "", language: "GAMS" }) => {
     const html = hljs.highlight(rawStr, { language }).value
