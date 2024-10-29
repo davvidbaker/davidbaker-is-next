@@ -23,7 +23,7 @@ export default function RootLayout({
       <link rel="icon" href="/images/favicon.png" sizes="any" />
       <body className={inter.className}>
         <>
-          <div className="homework-print-heading">For better viewing of this document in its original form, visit <a href="https://davidbaker.is/slinging-jellybeans">https://davidbaker.is/slinging-jellybeans</a>.</div>
+          <div className="homework-print-heading">For better viewing of this document in its original form, visit <a href="https://davidbaker.is/taking-charge">https://davidbaker.is/taking-charge</a>.</div>
           {children}
           <Analytics />
         </></body>

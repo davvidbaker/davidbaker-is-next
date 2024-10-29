@@ -5,7 +5,7 @@ const nextConfig = {
 
     webpack: (config, options) => {
         config.module.rules.push({
-            test: /\.gms/,
+            test: /\.(gms|jl)$/,
             use: 'raw-loader'
         })
         config.module.rules.push({

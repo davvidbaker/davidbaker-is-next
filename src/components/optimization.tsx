@@ -177,17 +177,17 @@ align-items: center;
 
 
 `
-export const CodeSnippet = ({ rawStr, filename }: { rawStr: string, filename: string }) => {
-    const html = hljs.highlight(rawStr, { language: "GAMS" }).value
+export const CodeSnippet = ({ rawStr, filename, language }: { rawStr: string, filename: string, language: string } = { rawStr: "", filename: "", language: "GAMS" }) => {
+    const html = hljs.highlight(rawStr, { language }).value
 
 
     return (
         <Wrapper>
             <FileInfo>
                 <Filename>{filename}</Filename>
-                <Language>GAMS</Language>
+                <Language>{language}</Language>
             </FileInfo>
-            <Pre className="hljs theme-github-dark"><code className="language-gams" dangerouslySetInnerHTML={{ __html: html }}></code></Pre>
+            <Pre className="hljs theme-github-dark"><code className={`language-${language.toLowerCase()}`} dangerouslySetInnerHTML={{ __html: html }}></code></Pre>
         </Wrapper>
     )
 }

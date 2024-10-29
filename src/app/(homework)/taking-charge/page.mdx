@@ -1,8 +1,7 @@
 import MdxLayout from '@/components/mdx-layout'
 import { Heading } from '@/components/Heading'
 import { Equation, Math, TwoColumnEquations, k, Parameters, DerivedVariables, DecisionVariables, SetsAndIndices, CodeSnippet } from '@/components/optimization'
-import q1code from "@/../public/gams/hw1-q1.gms"
-import q2code from "@/../public/gams/hw1-q2.gms"
+import model from "@/../public/price-taker-model.jl"
 import Image from 'next/image'
 // import { Figure1, Figure2 } from './q1-figures'
 // import { Figure1 as BeansFigure1, Figure2 as BeansFigure2, FigureProfits } from './q2-figures'
@@ -23,7 +22,7 @@ import Image from 'next/image'
     src={"/images/duck-only.png"}
 />
 
-<h1 style={{marginLeft: "12px", alignSelf: 'center'}}>Energy Storage Price Taker Model</h1>
+<h1 style={{marginLeft: "12px", alignSelf: 'center'}}>Energy Storage Price-Taker Model</h1>
 <img
     sizes="100vw"
     width={500}
@@ -32,6 +31,23 @@ import Image from 'next/image'
 />
 </div>
 
+I am taking a multi-model approach to explore the production cost impact of long duration enery storage systems, following the example set by some other studies. **REFERENCE to 29, 29, Mchperson.** This involves three phases, with select information passed from one phase to the next. 
+
+## Phase 1: PCM without energy storage
+We start with a production cost model (PCM) simulation of a power system *without energy storage* over 365 days. It is important to have a long enough model horizon to capture potential benefits of seasonal storage. I have modeled a very simple version of a copperplate economic dispatch problem [here](https://github.com/davvidbaker/computational-economics/blob/main/project/economic_dispatch.jl), to show I *could* do a simple implementation of this myself, but for this project I will be using NREL's Sienna modeling framework for the PCM, specifically [`PowerSimulations.jl`](https://nrel-sienna.github.io/PowerSimulations.jl/stable/). This PCM includes two stages: a day-ahead unit commitment (UC) mixed integer program and a real-time economic dispatch (ED) linear program. 
+
+The UC problem considers a 48 hour optimization horizon and runs daily (every 24 hours) and solves at an hourly resolution. It passes on/off decision variable results for the thermal generators to the ED problem. The ED problem optimizes generation dispatch over a 1 hour horizon, recalculating the optimal solution every 15 minutes. Both of these problems require a forecast for renewable generation and demand at each node. I will discuss this data more later on, but for simplicity, these forecasts will be "deterministic"—perfect forecasts based on historical measurements.
+
+While it would be less computationally demanding to use a copperplate network formulation for these UC and ED, avoiding transmission constraints would avoid congestion and price spikes [MCPHESRON] and only provide a single price of electricity for the whole network. Therefore we will use a DC power flow formulation for the network, which adds transmission constraints while considering active power balance. With this formulation, the dual variable of the nodal active power balance constraint is the locational marginal price (LMP). The LMP outputs are then passed to phase 2.
+
+## Phase 2: Price-taker model
+The LMPs over the year are then used as exogenous variables for the price-taker model I develop below. Because this project is not considering the (dis)advantages of different types of energy storage, we will consider at most, a single energy storage unit at each node of the network, so each LMP can then correspond to each storage unit.
+
+The price-taker formulation is relatively straight forward. Energy storage units can arbitrage energy by charging (buying) when the price of electricity is low and discharging (selling) when the price is high. The objective (1) is to maximize profits in the optimization window over all storage units.
+
+One noteworthy part of the formulation is the binary variable <Math>{(s=>s.raw)`\[B_{st}\]`}</Math> which indicates whether the unit is charging or not at hour <Math>{(s=>s.raw)`\[t\]`}</Math>. Without this, the model could try to charge and discharge a unit at the same time, which is physically impossible. I had also tried accomplishing this with a constraint like <Math>{(s=>s.raw)`\[E^c_{st}\cdot E^d_{st} = 0\]`}</Math>, but that makes the problem non-convex, and I didn't want to go there.
+
+The constraint that deserves the most attention is the energy balance (4). When charging, a portion of the energy will be lost, so the <Math>{(s=>s.raw)`\[E^{level}\]`}</Math> can only increase by the amount of energy purchased for charging mutiplied by a charging efficiency factor (<Math>{(s=>s.raw)`\[\eta^c E^c\]`}</Math>). On the flipside, when discharging, the amount of energy sold to the market is the energy discharged from the unit multiplied by an efficiency factor, so to back out how much the <Math>{(s=>s.raw)`\[E^{level}\]`}</Math> changes, we divide <Math>{(s=>s.raw)`\[ \tfrac{E^d}{\eta^d}\]`}</Math>.
 
 <SetsAndIndices params={[
     {
@@ -48,7 +64,7 @@ import Image from 'next/image'
 
 
 <Parameters params={[
-    { variable: <Math>\[c_t\]</Math>, description: <div>electricity price at hour <Math>\[t\]</Math></div>, units: "$/MW" },
+    { variable: <Math>{(s=>s.raw)`\[c_{st}\]`}</Math>, description: <div>electricity price at hour <Math>\[t\]</Math> for unit <Math>\[s\]</Math></div>, units: "$/MW" },
     { variable: <Math>{(s =>s.raw)`\[e^{level}_{s1}\]`}</Math>, description: <div>initial energy level of storage unit <Math>\[s\]</Math></div>, units: "MWh" },
     { variable: <Math>{(s =>s.raw)`\[\bar{e}^{level}_s\]`}</Math>, description: <div>maximum energy level of storage unit <Math>\[s\]</Math></div>, units: "MWh" },
     { variable: <Math>{(s =>s.raw)`\[\underline{e}^{level}_s\]`}</Math>, description: <div>minimum energy level of storage unit <Math>\[s\]</Math></div>, units: "MWh" },
@@ -64,13 +80,14 @@ import Image from 'next/image'
     { variable: <Math>{(s=>s.raw)`\[E^d_{st}\]`}</Math>, description: <div>energy discharged (sold) from unit <Math>\[s\]</Math> at hour <Math>\[t\]</Math></div>, units: "MWh" },
     { variable: <Math>{(s=>s.raw)`\[E^c_{st}\]`}</Math>, description: <div>energy charged (purchased) by unit <Math>\[s\]</Math> at hour <Math>\[t\]</Math></div>, units: "MWh" },
     { variable: <Math>{(s=>s.raw)`\[E^{level}_{st}\]`}</Math>, description: <div>energy level of unit <Math>\[s\]</Math> at hour <Math>\[t\]</Math>—equivalent to state of charge but using the MWh value instead of a percent</div>, units: "MWh" },
+    { variable: <Math>{(s=>s.raw)`\[B_{st}\]`}</Math>, description: <div>binary variable to indicate whether unit <Math>\[s\]</Math> is charging <Math>\[(=1)\]</Math> or not <Math>\[(=0)\]</Math> at hour <Math>\[t\]</Math></div>, units: "—" },
 ]} />
 
 **Objective:** Maximize profits over the model horizon [$]
 
 <TwoColumnEquations>
     <Equation  eqkey="profit-max">
-        <Math>{(s=>s.raw)`\[\max_{E^d_{st}, E^c_{st}} \sum_{s \in \mathcal{S},t \in \mathcal{T}}  c_t E^d_{st} - c_t E^c_{st} \]`[0]}</Math>
+        <Math>{(s=>s.raw)`\[\max_{E^d_{st}, E^c_{st}} \sum_{s \in \mathcal{S},t \in \mathcal{T}}  c_{st} E^d_{st} - c_{st} E^c_{st} \]`[0]}</Math>
         <p>storage profit from buying and selling electricity</p>
       </Equation>
 </TwoColumnEquations>
@@ -88,30 +105,61 @@ Subject to the following constraints:
         <p style={{alignSelf:"center"}}>initial condition</p>
     </Equation>
     <Equation eqkey="energy-balance">
-        <Math>{(s=>s.raw)`\[E^{level}_{s,t+1} = E^{level}_{st} + \eta^c_s E^c_{st} - \frac{E^d_{st}}{\eta_d}  \quad \forall \ s \in \mathcal{S}, \ t \in \mathcal{T}\]`[0]}</Math>
+        <Math>{(s=>s.raw)`\[E^{level}_{s,t+1} = E^{level}_{st} + \eta^c_s E^c_{st} - \frac{E^d_{st}}{\eta^d_s}  \quad \forall \ s \in \mathcal{S}, \ t \in \mathcal{T}\]`[0]}</Math>
         <p style={{alignSelf:"center"}}>energy balance</p>
     </Equation>
     <Equation eqkey="charge-limits">
-        <Math>{(s=>s.raw)`\[E^{level}_{s,t+1} - E^{level}_{st} \leq \bar{\Delta}_s^c \quad \forall \ s \in \mathcal{S}, \ t \in \mathcal{T}\]`[0]}</Math>
+        <Math>{(s=>s.raw)`\[E^c_{st} \leq \bar{\Delta}_s^c B_{st} \quad \forall \ s \in \mathcal{S}, \ t \in \mathcal{T}\]`[0]}</Math>
         <p style={{alignSelf:"center"}}>charging limit</p>
     </Equation>
     <Equation eqkey="discharge-limits">
-        <Math>{(s=>s.raw)`\[E^{level}_{st} - E^{level}_{s,t+1} \leq \bar{\Delta}_s^d \quad \forall \ s \in \mathcal{S}, \ t \in \mathcal{T}\]`[0]}</Math>
+        <Math>{(s=>s.raw)`\[E^d_{st} \leq \bar{\Delta}_s^d (1-B_{st}) \quad \forall \ s \in \mathcal{S}, \ t \in \mathcal{T}\]`[0]}</Math>
         <p style={{alignSelf:"center"}}>discharging limit</p>
-    </Equation>
-    <Equation eqkey="simul">
-        <Math>{(s=>s.raw)`\[E^c_{st} \cdot E^d_{st} = 0 \quad \forall \ s \in \mathcal{S}, \ t \in \mathcal{T}\]`[0]}</Math>
-        <p style={{alignSelf:"center"}}>no simultaneous charging and discharging</p>
     </Equation>
     <Equation eqkey="n-n">
         <Math>{(s=>s.raw)`\[E^d_{st}, E^c_{st}, E^{level}_{st} \geq 0 \quad \forall \ s \in \mathcal{S},\ t \in \mathcal{T}\]`[0]}</Math>
         <p>non-negativity</p>
     </Equation>
 </TwoColumnEquations>
+<br />
+---
+
+There are a number of simplifications I will most likely make to to ease the comparison of different scenarios:
+
+- Discharging and charging efficiencies will not vary between units.
+- All units will start with the same initial storage level.
+- The maximum charge rate will equal the maximum discharge rate.
+- Storage unit ratings ((dis)charge rates) will not vary between scenarios. The parameter that will vary is their duration (capacity).
+
+You will find the code for this model toward the end of this document.
+
+While the price-taker model maximizes profits, we do not actually care about the value of those profits. What we care about is the realized energy levels of the storage units. These levels will be used as targets in phase 3.
+
+## Phase 3: PCM with energy storage
+Finally, in phase 3, we go back to our original PCM (again using `PowerSimulations.jl`). This time, we add energy storage to our network, using characterics consistent with what we used in phase 2. We supply the PCM with a timeseries of storage targets for the end of each day for each unit, and we re-run our year-long simulation. (I have not yet totally figured out how to set up a timeseries of storage targets in Sienna. I know it's possible because [Guerra et al] allude to it an upcoming paper, but I may hit a wall here.) We can then compare the total production cost of this model with the one from phase 1 and assess to what extent adding the energy storage has increased social welfare.
+
+# Data
+For charging and discharging efficiencies, I will defer to similar energy storage modeling studies which have used 80% as a typical round-trip efficiency [Guerra, 29 REF].
+
+I had originally hoped to use the [RTS-GMLC test system](https://github.com/GridMod/RTS-GMLC) for this study, but I do not think I will have the computing power to run transmission-constrained UC and ED for 8760 hours. Instead I will do my modeling with a simple, but widely used, modified PJM 5-bus test system [Fangxi REFERENCE]. This system has 5 buses, 3 load centers, 6 transmission lines, 5 thermal generators, 2 solar PV facilities, and 1 wind facility. I may modify the system further by increasing the capacity of the renewables. NREL/Sienna's [`PowerSystemCaseBuilder.jl`](https://github.com/NREL-Sienna/PowerSystemCaseBuilder.jl) library has this system as a test case. It comes with a week of solar and wind output timeseries data as well as load timeseries. I plan to modify this data in a few ways:
+- Modify the solar output timeseries to correspond with real solar data from the [National Solar Radiation Database](https://nsrdb.nrel.gov/).
+- Modify the wind output timeseries to correspond with real wind data from the [Wind Resource Database](https://wrdb.nrel.gov/).
+- Modify the load profiles to resemble load profiles from [NREL's Electrification Futures Study](https://data.nrel.gov/submissions/126).
+
+It is important that the solar, wind, and load data differ seasonally.
+
+At one point, I thought I might only end up doing the price-taker model and not doing the multi-model approach. I found LMP data for hubs of different US electricity markets at [Energy Online](http://www.energyonline.com/Data/GenericData.aspx?DataId=20). Using this data, I validated that my price-taker model was producing sensible results.
 
 
-Assumptions:
-- All storage units start at empty.
+
+<CodeSnippet rawStr={model} language="julia" filename="price-taker-model.jl"/>
+
+# References
+
+Fangxing Li & Rui Bo. Small test systems for power system economic studies. in IEEE PES
+General Meeting 1–4 (IEEE, 2010). doi:10.1109/PES.2010.5589973.
+
+
 </div>
 {/* 
 <br />
