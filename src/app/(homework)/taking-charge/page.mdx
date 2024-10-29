@@ -146,7 +146,6 @@ I had originally hoped to use the [RTS-GMLC test system](https://github.com/Grid
 
 It is important that the solar, wind, and load data differ seasonally.
 
-At one point, I thought I might only end up doing the price-taker model and not doing the multi-model approach. I found LMP data for hubs of different US electricity markets at [Energy Online](http://www.energyonline.com/Data/GenericData.aspx?DataId=20). Using this data, I validated that my price-taker model was producing sensible results.
 
 Below I am plotting a week (January 1-7) of the irradiance and wind speed data from these sources. I am using the location of Solitude, Utah because that is where the synthetic PJM 5-bus grid is located.
 <img
@@ -160,6 +159,13 @@ Below this I am plotting a week of load data for one of the load centers in the 
     sizes="100vw"
     width={550}
     src={"/images/load_profile.svg"}
+/>
+
+At one point, I thought I might only end up doing the price-taker model and not doing the multi-model approach. I found LMP data for hubs of different US electricity markets at [Energy Online](http://www.energyonline.com/Data/GenericData.aspx?DataId=20). Using this data, I validated that my price-taker model was producing sensible results. Below is a plot for a week of LMP data (end of January) and the results of my price-taker model for the corresponding time period (for one storage unit).
+<img
+    sizes="100vw"
+    width={550}
+    src={"/images/lmps-charging.svg"}
 />
 
 <CodeSnippet rawStr={model} language="julia" filename="price-taker-model.jl"/>
