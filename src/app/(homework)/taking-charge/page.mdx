@@ -185,6 +185,87 @@ McPherson, M., McBennett, B., Sigler, D., & Denholm, P. (2020). Impacts of stora
 Zhang, J., Guerra, O. J., Eichman, J., & Pellow, M. A. (2020). Benefit analysis of long-duration energy storage in power systems with high renewable energy shares. *Frontiers in Energy Research, 8*, 527910. https://doi.org/10.3389/fenrg.2020.527910
 
 </div>
+
+
+---
+# <span style={{color: "red"}}>Revisions</span>
+
+Did not need the binary variable to prevent simultaneous charge and discharge.
+
+
+<SetsAndIndices params={[
+    {
+        variable: <Math>{(s=>s.raw)`\[s\in \mathcal{S}\]`}</Math>, 
+        description: "storage units",
+    },
+    {
+        variable: <Math>{(s=>s.raw)`\[t\in \mathcal{T}\]`}</Math>, 
+        description: "time steps—hours of the model horizon (1 year)",
+        set:<Math>{(s=>s.raw)`\[t \in \{1,2,3,...,8760\}\]`}</Math>
+    }
+    ]}
+/>
+
+
+<Parameters params={[
+    { variable: <Math>{(s=>s.raw)`\[c_{st}\]`}</Math>, description: <div>electricity price at hour <Math>\[t\]</Math> for unit <Math>\[s\]</Math></div>, units: "$/MW" },
+    { variable: <Math>{(s =>s.raw)`\[e^{level}_{s1}\]`}</Math>, description: <div>initial energy level of storage unit <Math>\[s\]</Math></div>, units: "MWh" },
+    { variable: <Math>{(s =>s.raw)`\[\bar{e}^{level}_s\]`}</Math>, description: <div>maximum energy level of storage unit <Math>\[s\]</Math></div>, units: "MWh" },
+    { variable: <Math>{(s =>s.raw)`\[\underline{e}^{level}_s\]`}</Math>, description: <div>minimum energy level of storage unit <Math>\[s\]</Math></div>, units: "MWh" },
+    { variable: <Math>{(s=>s.raw)`\[\bar{\Delta}^{d}_{s}\]`}</Math>, description: <div>maximum energy discharge of unit <Math>\[s\]</Math> in a timestep </div>, units: "MWh" },
+    { variable: <Math>{(s=>s.raw)`\[\bar{\Delta}^{c}_{s}\]`}</Math>, description: <div>maximum energy charge of unit <Math>\[s\]</Math> in a timestep </div>, units: "MWh" },
+    { variable: <Math>{(s=>s.raw)`\[\eta^{d}_{s}\]`}</Math>, description: <div>discharging efficiency of unit <Math>\[s\]</Math></div>, units: "—" },
+    { variable: <Math>{(s=>s.raw)`\[\eta^{c}_{s}\]`}</Math>, description: <div>charging efficiency of unit <Math>\[s\]</Math></div>, units: "—" },
+    ]}
+/>
+
+
+<DecisionVariables params={[
+    { variable: <Math>{(s=>s.raw)`\[E^d_{st}\]`}</Math>, description: <div>energy discharged (sold) from unit <Math>\[s\]</Math> at hour <Math>\[t\]</Math></div>, units: "MWh" },
+    { variable: <Math>{(s=>s.raw)`\[E^c_{st}\]`}</Math>, description: <div>energy charged (purchased) by unit <Math>\[s\]</Math> at hour <Math>\[t\]</Math></div>, units: "MWh" },
+    { variable: <Math>{(s=>s.raw)`\[E^{level}_{st}\]`}</Math>, description: <div>energy level of unit <Math>\[s\]</Math> at hour <Math>\[t\]</Math>—equivalent to state of charge but using the MWh value instead of a percent</div>, units: "MWh" },
+]} />
+
+**Objective:** Maximize profits over the model horizon [$]
+
+<TwoColumnEquations>
+    <Equation  eqkey="profit-max">
+        <Math>{(s=>s.raw)`\[\max_{E^d_{st}, E^c_{st}} \sum_{s \in \mathcal{S},t \in \mathcal{T}}  c_{st} E^d_{st} - c_{st} E^c_{st} \]`[0]}</Math>
+        <p>storage profit from buying and selling electricity</p>
+      </Equation>
+</TwoColumnEquations>
+
+
+Subject to the following constraints:
+
+<TwoColumnEquations>
+    <Equation eqkey="energy-level-bounds">
+        <Math>{(s=>s.raw)`\[\underline{e}^{level}_s \leq E^{level}_{st} \leq \bar{e}^{level}_s \quad \forall \ s \in \mathcal{S}, \ t \in \mathcal{T}\]`[0]}</Math>
+        <p>energy level bounds</p>
+    </Equation>
+    <Equation eqkey="initial-condition">
+        <Math>{(s=>s.raw)`\[E^{level}_{s1} = e^{level}_{s1}  \quad \forall \ s \in \mathcal{S}\]`[0]}</Math>
+        <p style={{alignSelf:"center"}}>initial condition</p>
+    </Equation>
+    <Equation eqkey="energy-balance">
+        <Math>{(s=>s.raw)`\[E^{level}_{s,t+1} = E^{level}_{st} + \eta^c_s E^c_{st} - \frac{E^d_{st}}{\eta^d_s}  \quad \forall \ s \in \mathcal{S}, \ t \in \mathcal{T}\]`[0]}</Math>
+        <p style={{alignSelf:"center"}}>energy balance</p>
+    </Equation>
+    <Equation eqkey="charge-limits">
+        <Math>{(s=>s.raw)`\[E^c_{st} \leq \bar{\Delta}_s^c \quad \forall \ s \in \mathcal{S}, \ t \in \mathcal{T}\]`[0]}</Math>
+        <p style={{alignSelf:"center"}}>charging limit</p>
+    </Equation>
+    <Equation eqkey="discharge-limits">
+        <Math>{(s=>s.raw)`\[E^d_{st} \leq \bar{\Delta}_s^d \quad \forall \ s \in \mathcal{S}, \ t \in \mathcal{T}\]`[0]}</Math>
+        <p style={{alignSelf:"center"}}>discharging limit</p>
+    </Equation>
+    <Equation eqkey="n-n">
+        <Math>{(s=>s.raw)`\[E^d_{st}, E^c_{st}, E^{level}_{st} \geq 0 \quad \forall \ s \in \mathcal{S},\ t \in \mathcal{T}\]`[0]}</Math>
+        <p>non-negativity</p>
+    </Equation>
+</TwoColumnEquations>
+
+<br />
 </div>
 
 export default function MDXPage({ children }) {
