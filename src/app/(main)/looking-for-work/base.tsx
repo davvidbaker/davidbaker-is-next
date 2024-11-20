@@ -303,7 +303,7 @@ interface Props {
 }
 
 const baseObjective = `
-Advanced Energy Systems master's student seeking a position in power systems modeling, planning, and analysis.
+Recent graduate with a Master of Science in Advanced Energy Systems seeking a position in power systems modeling, planning, and analysis.
 Professional experience in developing flexible enterprise software solutions and skilled in data analysis.
 Eager to contribute to cutting-edge projects by leveraging technical skills and a passion for innovative energy solutions.`
 
@@ -382,7 +382,7 @@ export const Resume = ({ objective = baseObjective, relevantCoursework = baseCou
                             </li>
                         </ul>
                         <h3>
-                            <a href="https://my.xcelenergy.com/s/">Xcel</a> - Power Operations Technical Intern <span>[January 2024 - May 2024]</span>
+                            <a href="https://my.xcelenergy.com/s/">Xcel Energy</a> - Power Operations Technical Intern <span>[January 2024 - May 2024]</span>
                         </h3>
                         <ul>
                             <li>
