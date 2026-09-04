@@ -10,6 +10,9 @@ import profitsRaw from './q2-profits.csv'
 import { get_color as xkcd } from 'xkcd-colors'
 import styled from "styled-components";
 
+import combined_d from './combined_dataframes.csv'
+import { log } from "console";
+
 
 const colormap = {
     blue: xkcd('bright blue'),
@@ -125,7 +128,7 @@ export const Figure2 = () => {
 
 const profits = d3.csvParseRows(profitsRaw, (d) => ({
     case: d[0],
-    value:Number(d[1])
+    value: Number(d[1])
 }));
 
 
@@ -148,9 +151,9 @@ export const FigureProfits = () => {
                 tickRotate: 90,
             },
             marks: [
-                Plot.barY(profits, { x: 'case', y: 'value', fill: xkcd('green blue')}),
+                Plot.barY(profits, { x: 'case', y: 'value', fill: xkcd('green blue') }),
                 Plot.text(profits, {
-                    x: 'case', y: d=>d.value + 140,
+                    x: 'case', y: d => d.value + 140,
                     fill: 'black', text: 'value',
                 }),
                 Plot.axisX({ label: null }),
@@ -158,6 +161,64 @@ export const FigureProfits = () => {
 
             ]
         });
+        // @ts-ignore
+        containerRef?.current.append(plot);
+        return () => plot.remove();
+    }, [data]);
+
+    return <Container><div ref={containerRef} /></Container>;
+}
+
+
+let stacks = d3.csvParse(combined_d).map((obj) => ({ ...obj, DateTime: new Date(obj.DateTime) }))
+stacks = stacks.flatMap(d => 
+    Object.keys(d)
+      .filter(key => key !== "DateTime")
+      .map(key => ({
+        DateTime: d.DateTime,
+        Location: key,
+        Value: d[key]
+      }))
+  );
+console.log('❤️‍🔥 stacks', stacks);
+
+
+export const FigureStacks = () => {
+    const containerRef = useRef(null);
+    const [data, setData] = useState(stacks);
+
+    useEffect(() => {
+        setData(stacks)
+    }, []);
+
+
+    useEffect(() => {
+        if (data === undefined) return;
+        const plot = Plot.plot({
+            x: {
+                domain: [new Date("2017-01-20T00:00:00.0"), new Date("2017-01-27T00:00:00.0")]
+            },
+            y: {
+                grid: true,
+                label: "↑ Annual revenue (billions, adj.)",
+                transform: (d) => d // convert millions to billions
+            },
+            color: { legend: true },
+            marks: [
+                // Plot.areaY(data, { x: "DateTime", y: "Alta", fill: "yellow",  }),
+                // Plot.areaY(data, { x: "DateTime", y: "Brighton", fill: "blue",   stack: "zero"}),
+                // Plot.areaY(data, { x: "DateTime", y: "Solitude", fill: "green",   stack: "zero" }),
+
+                Plot.areaY(
+                    data,
+                    Plot.stackY(
+                        // { order, reverse },
+                        { x: "DateTime", y: "Value",  z: "Location", fill: "Location"  },
+                    )
+                ),
+                Plot.ruleY([0])
+            ]
+        })
         // @ts-ignore
         containerRef?.current.append(plot);
         return () => plot.remove();
