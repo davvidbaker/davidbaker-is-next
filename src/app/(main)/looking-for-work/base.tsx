@@ -348,7 +348,7 @@ export const Resume = ({ objective = baseObjective, relevantCoursework = baseCou
                             <li><p>Master of Science in Advanced Energy Systems</p></li>
                             <li><p>Relevant coursework includes {relevantCoursework}</p></li>
                             <li><p><strong>Projects:</strong> Developed production cost and capacity expansion models with a focus on integrating renewable energy sources and improving system efficiency.
-                                <span className="tech">{' '}JuMP/Julia, GAMSPy, Sienna, OpenDSS</span></p></li>
+                                <span className="tech">{' '}JuMP/Julia, GAMSPy, Sienna, OpenDSS, R</span></p></li>
                         </ul>
                         <h3>
                             <a href="https://www.upenn.edu">University of Pennsylvania</a>
@@ -638,7 +638,7 @@ export const Resume = ({ objective = baseObjective, relevantCoursework = baseCou
                                 <ul>
                                     <li><p>GAMS, GAMSPy</p></li>
                                     <li><p>Julia, JuMP</p></li>
-                                    <li><p>Python, pandas, numpy</p></li>
+                                    <li><p>Python, pandas, numpy, R</p></li>
                                     <li><p>Matlab, Simulink</p></li>
                                     <li>
                                         <p>TypeScript, React, <span className="print-hide">HTML, </span>CSS</p>
