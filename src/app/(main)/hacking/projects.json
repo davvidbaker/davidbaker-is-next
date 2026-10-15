@@ -1,5 +1,29 @@
 [
   {
+    "name": "Kat with Bow Golf",
+    "path": "kat-with-bow-golf",
+    "status": ["shipped", "green"],
+    "tagline": "Archery golf with a Karl-Anthony Towns ragdoll, a stretchy tether, and questionable landings.",
+    "year": [2026],
+    "description": "Launch a Karl-Anthony Towns ragdoll across nine floating golf courses with a bow and stretchy tether. Shoot again in midair, recover from wild shots with the out-of-bounds catcher, and hit the bullseye in as few shots as possible. Built with JavaScript and Canvas.\n\nBased on **Cat with Bow Golf** by **D of I (Dofi)**. The original game and reference-photo rights belong to their respective owners.",
+    "callToAction": "Play Kat with Bow Golf",
+    "link": "https://davvidbaker.github.io/kat-with-bow-golf/",
+    "linkToSource": "https://github.com/davvidbaker/kat-with-bow-golf",
+    "keywords": ["JavaScript", "Canvas", "Physics", "Game"]
+  },
+  {
+    "name": "Coconut Run",
+    "path": "coconut-run",
+    "status": ["shipped", "green"],
+    "tagline": "A vibe-coded rip-off of a Flash classic: build ridiculous machines and deliver 15 coconuts.",
+    "year": [2026],
+    "description": "Build improbable contraptions, then try to keep 15 coconuts aboard across hanging bridges, seesaws, roller beds and lunar winds. A browser physics game with articulated trains, swinging baskets and rolling cages, built with Vite, Canvas and Matter.js.\n\nA vibe-coded rip-off of the original **Coconut Run**, developed by **Jason K. Smith** for **Johnson Controls**, with digital production by **Colossal Squid Industries** and **Fallon** as agency. This recreation is not affiliated with or endorsed by the original creators.",
+    "callToAction": "Play Coconut Run",
+    "link": "https://davvidbaker.github.io/coconut-run/",
+    "linkToSource": "https://github.com/davvidbaker/coconut-run",
+    "keywords": ["JavaScript", "Canvas", "Matter.js", "Vite", "Physics", "Game"]
+  },
+  {
     "name": "Downconversion and Upconversion in Photovoltaics",
     "path": "not-used-dc",
     "status": ["shipped", "green"],
