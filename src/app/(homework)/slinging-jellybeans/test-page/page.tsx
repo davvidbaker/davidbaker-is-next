@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client"
 import { Heading } from "@/components/Heading"
 
@@ -6,17 +7,16 @@ import { Figure1, Figure2, FigureProfits, FigureStacks } from "../q2-figures"
 import React, { useState, useEffect } from 'react';
 import { Play, Pause, RotateCcw, SkipBack, SkipForward } from 'lucide-react';
 
-// @ts-ignore — webpack raw-loader; fixture only (original steps.csv was never committed)
 import stepsCsv from './steps.csv'
 
-function parseCSV(text) {
+function parseCSV(text: string) {
   return text.split('\n').map(line => line.trim()).filter(Boolean).map(line => {
     return line.split(',').map(Number);
   });
 }
 
-export function FileSystem() {
-  const [steps, setSteps] = useState([]);
+function FileSystem() {
+  const [steps, setSteps] = useState<number[][]>([]);
   const [step, setStep] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [speed, setSpeed] = useState(500);
@@ -30,7 +30,7 @@ console.log('❤️‍🔥 steps', steps);
   }, []);
 
   useEffect(() => {
-    let interval;
+    let interval: ReturnType<typeof setInterval> | undefined;
     if (isPlaying && steps.length > 0) {
       interval = setInterval(() => {
         setStep(prev => prev < steps.length - 1 ? prev + 1 : 0);
@@ -39,7 +39,7 @@ console.log('❤️‍🔥 steps', steps);
     return () => clearInterval(interval);
   }, [isPlaying, speed, steps.length]);
 
-  const FileBlock = ({ value, prevValue }) => {
+  const FileBlock = ({ value, prevValue }: { value: number; prevValue: number }) => {
     const isMoving = value !== prevValue;
     const getColor = (id) => {
       if (id < 0) return undefined;

@@ -177,7 +177,7 @@ stacks = stacks.flatMap(d =>
       .map(key => ({
         DateTime: d.DateTime,
         Location: key,
-        Value: d[key]
+        Value: (d as Record<string, unknown>)[key]
       }))
   );
 console.log('❤️‍🔥 stacks', stacks);
