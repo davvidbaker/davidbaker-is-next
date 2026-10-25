@@ -69,7 +69,7 @@ const Main = styled.main`
 const IndexPage = () => <div>
   <Main><header>
     <h1>David Baker</h1>
-    <h2>graduate student in advanced energy systems</h2>
+    <h2>energy systems, after a decade of software</h2>
     <ul>
       <li>
         <a href="https://github.com/davvidbaker">
@@ -80,23 +80,20 @@ const IndexPage = () => <div>
   </header>
     <article>
       <h2>Hello!</h2>
-      <p>You're probably here because I am applying for a job!</p>
-      <p>I am currently pursuing my master's in <a href="https://energysystems.mines.edu/">Advanced Energy Systems at Colorado School of Mines</a>, where I am specializing in power systems engineering.</p>
+      <p>I spent almost ten years building production software. Then I finished an M.S. in <a href="https://energysystems.mines.edu/">Advanced Energy Systems at Colorado School of Mines</a> and moved over to energy systems: power markets, grid modeling, optimization, and data engineering.</p>
+
+      <p>Electrification, and actually decarbonizing the grid, are among the most important things we can do about the climate crisis. The next few decades need a much bigger grid, and a different one. Planning that well depends on good data, good models, and tools that hold up.</p>
+
+      <p>These days I work on capacity expansion and production cost modeling, using Enelytix, PSO, and EnCompass, plus Python, SQL, optimization, and data engineering.</p>
+
+      <p>What I want is for that modeling to scale, to be reproducible, and to be useful when the decision is a real one about the grid we end up building.</p>
 
       <p>
-
-        I spent the last eight years as a software engineer, mostly doing frontend work, most recently at <a href="https://www.workday.com/">Workday</a>. I ❤️ making stuff, and I love how quickly you can turn ideas into reality with modern tools.
-        My career experiences in the enterprise software industry have taught me how to work collaboratively across large organizations to build creative, sustainable solutions.
-        Now I am applying my skills to fighting climate change via increased electrification and integrating distributed energy resources.
-      </p>
-
-      <p>
-        You can find some recent school projects—and a bunch of dusty old stuff—on the{' '}
+        Recent work, and a bunch of older stuff, is on the{' '}
         <Link href="/hacking">
           projects page
         </Link>.{' '}
-        The old stuff is a mix of old client work and
-        (unpolished) personal projects.
+        The old stuff is a mix of client work and personal projects.
       </p>
 
       <hr />

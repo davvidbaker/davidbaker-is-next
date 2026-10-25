@@ -6,6 +6,7 @@ import { Figure1, Figure2, FigureProfits, FigureStacks } from "../q2-figures"
 import React, { useState, useEffect } from 'react';
 import { Play, Pause, RotateCcw, SkipBack, SkipForward } from 'lucide-react';
 
+// @ts-ignore — webpack raw-loader; fixture only (original steps.csv was never committed)
 import stepsCsv from './steps.csv'
 
 function parseCSV(text) {

@@ -104,11 +104,13 @@
     {
       "name": "flambé",
       "path": "a-busy-bee",
-      "status": ["maybe I'll be back one day", "darkmagenta"],
+      "status": ["shipped", "green"],
       "tagline":
-        "Chrome DevTools-inspired flame charts for keeping track of all your projects.",
-      "year": [2017, 2018],
-      "linkToSource": "https://github.com/davvidbaker/stitch",
+        "Chrome DevTools-inspired flame charts for keeping track of all your projects. Back in action as of 2026.",
+      "year": [2017, 2026],
+      "link": "/flambe",
+      "callToAction": "See a demo chart",
+      "linkToSource": "https://github.com/davvidbaker/flambe",
       "keywords": [],
       "gridColumn": "span 2"
     },
@@ -127,7 +129,7 @@
     {
       "name": "Whoa",
       "path": "aghast",
-      "status": ["mostly aborted", "darkmagenta"],
+      "status": ["mostly abandoned", "darkmagenta"],
       "tagline": "An exploration of writing with custom markup and components.",
       "year": [2017],
       "callToAction": "See it in action!",
@@ -141,12 +143,12 @@
     {
       "name": "Swyzzle",
       "path": "leading-the-screensaver-revolution",
-      "year": [2016],
+      "year": [2016, 2026],
       "tagline": "The screensaver revolution has begun.",
-      "status": ["i'll be back", "midnightblue"],
+      "status": ["shipped", "green"],
       "callToAction": "Get swyzzling!",
       "description":
-        "Swyzzle is a screensaver that **melts your screen**. \n\n Back when I was working in the Click 3X office in New York, I would activate the screen melting when I went out for lunch or to meetings, to make it look like my screen was fucked up. To my surprise, *no one ever said anything.*\n\n~Right now **it only works on macOS and Linux** (Ubuntu, not sure about other distros). And it does not yet support multiple displays.~ Sadly, as of 2024, it is currently broken.",
+        "Swyzzle is a screensaver that **melts your screen**. \n\n Back when I was working in the Click 3X office in New York, I would activate the screen melting when I went out for lunch or to meetings, to make it look like my screen was fucked up. To my surprise, *no one ever said anything.*\n\nIt is working again as of 2026, as a macOS menu-bar app and a web package.",
       "keywords": ["Electron", "WebGL"],
       "link": "https://davvidbaker.github.io/Swyzzle/",
       "linkToSource": "https://github.com/davvidbaker/Swyzzle",

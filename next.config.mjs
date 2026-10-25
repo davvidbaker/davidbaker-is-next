@@ -19,6 +19,7 @@ const nextConfig = {
     compiler: {
         styledComponents: true
     },
+    transpilePackages: ['@davvidbaker/flame-chart'],
     // Configure `pageExtensions` to include markdown and MDX files
     pageExtensions: ['js', 'jsx', 'md', 'mdx', 'ts', 'tsx'],
 
