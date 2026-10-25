@@ -1,10 +1,25 @@
 "use client"
 import React from 'react';
 import Link from 'next/link';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import Image from "next/image";
 
 import CycleItems from '../../../components/CycleItems';
+
+const wave = keyframes`
+  0%, 100% { transform: rotate(-8deg); }
+  50% { transform: rotate(12deg); }
+`;
+
+const WavingHand = styled.span`
+  display: inline-block;
+  transform-origin: 70% 80%;
+  animation: ${wave} 1.2s ease-in-out infinite;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+`;
 
 const Main = styled.main`
   max-width: 50rem;
@@ -69,7 +84,7 @@ const Main = styled.main`
 const IndexPage = () => <div>
   <Main><header>
     <h1>David Baker</h1>
-    <h2>energy systems, after a decade of software</h2>
+    <h2>software and data for energy systems</h2>
     <ul>
       <li>
         <a href="https://github.com/davvidbaker">
@@ -79,8 +94,8 @@ const IndexPage = () => <div>
     </ul>
   </header>
     <article>
-      <h2>Hello!</h2>
-      <p>I spent almost ten years building production software. Then I finished an M.S. in <a href="https://energysystems.mines.edu/">Advanced Energy Systems at Colorado School of Mines</a> and moved over to energy systems: power markets, grid modeling, optimization, and data engineering.</p>
+      <h2><WavingHand>👋</WavingHand> Hello!</h2>
+      <p>I spent almost ten years building production enterprise software for productivity technologies. Then I went back to school to get an M.S. in <a href="https://energysystems.mines.edu/">Advanced Energy Systems at Colorado School of Mines</a> and moved my domain of focus to energy systems: power markets, grid modeling, optimization, and data engineering.</p>
 
       <p>Electrification, and actually decarbonizing the grid, are among the most important things we can do about the climate crisis. The next few decades need a much bigger grid, and a different one. Planning that well depends on good data, good models, and tools that hold up.</p>
 
@@ -89,11 +104,11 @@ const IndexPage = () => <div>
       <p>What I want is for that modeling to scale, to be reproducible, and to be useful when the decision is a real one about the grid we end up building.</p>
 
       <p>
-        Recent work, and a bunch of older stuff, is on the{' '}
+        Recent personal projects, and a bunch of older stuff, is on the{' '}
         <Link href="/hacking">
           projects page
         </Link>.{' '}
-        The old stuff is a mix of client work and personal projects.
+        The old stuff is a mix of client work and personal projects. I can't post much detail about what I work on now for my job, but trust me it's really good 😉.
       </p>
 
       <hr />
