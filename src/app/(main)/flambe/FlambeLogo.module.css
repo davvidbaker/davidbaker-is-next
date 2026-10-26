@@ -14,13 +14,14 @@
 .accent::after {
   content: "";
   background: url("/flambe-mark.png") center / contain no-repeat;
-  width: 0.26em;
-  height: 0.26em;
+  width: 0.5em;
+  height: 0.5em;
   position: absolute;
-  left: 0.235em;
+  left: 0.24em;
   top: 0.49em;
   transform: translate(-50%, -55%) rotate(30deg);
   animation: flicker 1s infinite alternate;
+  z-index: -1
 }
 
 .logo:hover .accent::after {
