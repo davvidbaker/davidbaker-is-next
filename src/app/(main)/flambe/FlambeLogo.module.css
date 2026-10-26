@@ -1,0 +1,44 @@
+.logo {
+  position: relative;
+  width: max-content;
+  margin: 0 0 0.25rem;
+  font-weight: normal;
+  line-height: 1.2;
+  z-index: 0;
+}
+
+.logo::after {
+  content: "";
+  background: url("/flambe-mark.png") center / contain no-repeat;
+  width: 1em;
+  height: 1em;
+  position: absolute;
+  right: 0;
+  transform-origin: top right;
+  transform: translate(27%, 23%) scale(0.5);
+  z-index: -1;
+  animation: flicker 1s infinite alternate;
+}
+
+.logo:hover::after {
+  animation: bluer 0.5s infinite alternate linear;
+}
+
+@keyframes flicker {
+  to {
+    filter: hue-rotate(-45deg);
+  }
+}
+
+@keyframes bluer {
+  to {
+    filter: hue-rotate(-180deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .logo::after,
+  .logo:hover::after {
+    animation: none;
+  }
+}

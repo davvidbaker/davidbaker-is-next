@@ -1,4 +1,5 @@
 import DemoChart from "./ClientDemoChart";
+import FlambeLogo from "./FlambeLogo";
 
 export const metadata = {
   title: "Flambé demo — David Baker",
@@ -8,7 +9,7 @@ export const metadata = {
 export default function FlambePage() {
   return (
     <main style={{ maxWidth: "72rem", margin: "0 auto", padding: "0 20px 3rem" }}>
-      <h1 style={{ fontSize: "1.75rem", marginBottom: "0.25rem" }}>Flambé</h1>
+      <FlambeLogo />
       <p style={{ color: "#666", marginTop: 0 }}>
         Flambé&apos;s real flame chart, embedded from{" "}
         <a href="https://www.npmjs.com/package/@davvidbaker/flame-chart">
