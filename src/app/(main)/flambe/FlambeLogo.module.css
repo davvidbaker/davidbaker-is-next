@@ -7,20 +7,23 @@
   z-index: 0;
 }
 
-.logo::after {
+.accent {
+  position: relative;
+}
+
+.accent::after {
   content: "";
   background: url("/flambe-mark.png") center / contain no-repeat;
-  width: 1em;
-  height: 1em;
+  width: 0.26em;
+  height: 0.26em;
   position: absolute;
-  right: 0;
-  transform-origin: top right;
-  transform: translate(27%, 23%) scale(0.5);
-  z-index: -1;
+  left: 0.235em;
+  top: 0.49em;
+  transform: translate(-50%, -55%) rotate(30deg);
   animation: flicker 1s infinite alternate;
 }
 
-.logo:hover::after {
+.logo:hover .accent::after {
   animation: bluer 0.5s infinite alternate linear;
 }
 
@@ -37,8 +40,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .logo::after,
-  .logo:hover::after {
+  .accent::after,
+  .logo:hover .accent::after {
     animation: none;
   }
 }
